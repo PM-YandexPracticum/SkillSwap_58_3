@@ -15,6 +15,26 @@ npm run dev
 
 ---
 
+## Storybook
+
+Для разработки и просмотра UI-компонентов в изоляции используется Storybook.
+
+Для запуска Storybook:
+
+```bash
+npm run storybook
+```
+
+Сборка статической версии Storybook (для деплоя):
+
+```bash
+npm run build-storybook
+```
+
+Открой [http://localhost:6006](http://localhost:6006)
+
+---
+
 ## State management
 
 Проект использует **Redux Toolkit**. Store настроен в `src/store/index.ts`.
