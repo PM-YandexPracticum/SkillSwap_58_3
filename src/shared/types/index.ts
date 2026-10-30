@@ -31,12 +31,12 @@ export interface User {
   login: string
   password: string
   town: string
-  age: number
+  age: string
   likedCount: number
   description: string
   gender: Gender
   learn: string[]
-  canTeach: string | null
+  canTeach: Skill
   favorites: User[]
 }
 
