@@ -1,0 +1,10 @@
+[
+  { "id": "moscow", "name": "Москва" },
+  { "id": "saint-petersburg", "name": "Санкт-Петербург" },
+  { "id": "novosibirsk", "name": "Новосибирск" },
+  { "id": "yekaterinburg", "name": "Екатеринбург" },
+  { "id": "kazan", "name": "Казань" },
+  { "id": "omsk", "name": "Омск" },
+  { "id": "rostov-on-don", "name": "Ростов‑на‑Дону" },
+  { "id": "volgograd", "name": "Волгоград" }
+]

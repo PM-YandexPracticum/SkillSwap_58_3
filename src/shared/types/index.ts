@@ -13,6 +13,12 @@ export interface Skill {
   createdAt: string
 }
 
+// ─── City ────────────────────────────────────────────────
+export interface City {
+  id: string
+  name: string
+}
+
 // ─── User ────────────────────────────────────────────────
 export interface User {
   id: string
