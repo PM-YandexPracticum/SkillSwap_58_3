@@ -20,12 +20,24 @@ export interface City {
 }
 
 // ─── User ────────────────────────────────────────────────
+export type Gender = 'male' | 'female' | 'unspecified'
+
 export interface User {
   id: string
   name: string
   email: string
   avatarUrl: string | null
   createdAt: string
+  login: string
+  password: string
+  town: string
+  age: number
+  likedCount: number
+  description: string
+  gender: Gender
+  learn: string[]
+  canTeach: string | null
+  favorites: User[]
 }
 
 // ─── Request ─────────────────────────────────────────────
