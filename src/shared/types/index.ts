@@ -14,8 +14,9 @@ export interface Skill {
 }
 
 // ─── City ────────────────────────────────────────────────
+export type cityId = string
 export interface City {
-  id: string
+  id: cityId
   name: string
 }
 

@@ -10,5 +10,5 @@ export async function fetchCities(): Promise<City[]> {
 
 export async function fetchCitiesById(id: string): Promise<City | undefined> {
   const cities = await fetchCities()
-  return cities.find((skill) => skill.id === id)
+  return cities.find((city) => city.id === id)
 }
