@@ -10,5 +10,10 @@ export async function fetchCities(): Promise<City[]> {
 
 export async function fetchCitiesById(id: string): Promise<City | undefined> {
   const cities = await fetchCities()
-  return cities.find((city) => city.id === id)
+  const foundCity = cities.find((city) => city.id === id)
+  if (!foundCity) {
+    throw new Error(`Город с id "${id}" не найден`)
+  }
+
+  return foundCity
 }
