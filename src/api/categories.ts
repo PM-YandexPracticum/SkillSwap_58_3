@@ -7,3 +7,8 @@ export async function fetchCategories(): Promise<Category[]> {
   if (!response.ok) throw new Error('Failed to fetch categories')
   return response.json()
 }
+
+export async function fetchCategoryById(id: string): Promise<Category | undefined> {
+  const categories = await fetchCategories()
+  return categories.find((category) => category.id === id)
+}
