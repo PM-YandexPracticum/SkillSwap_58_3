@@ -63,13 +63,17 @@ export interface AuthUser {
 }
 
 // ─── Category ────────────────────────────────────────────
+export type SubcategoryId = string
+
+export type CategoryId = string
+
 export interface Subcategory {
-  id: string
+  id: SubcategoryId
   name: string
 }
 
 export interface Category {
-  id: string
+  id: CategoryId
   name: string
   subcategories: Subcategory[]
 }
