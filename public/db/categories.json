@@ -1,0 +1,206 @@
+[
+  {
+    "id": "business",
+    "name": "Бизнес и карьера",
+    "subcategories": [
+      {
+        "id": "business-team-management",
+        "name": "Управление командой"
+      },
+      {
+        "id": "business-marketing-and-advertising",
+        "name": "Маркетинг и реклама"
+      },
+      {
+        "id": "business-sales-and-negotiation",
+        "name": "Продажи и переговоры"
+      },
+      {
+        "id": "business-personal-brand",
+        "name": "Личный бренд"
+      },
+      {
+        "id": "business-resume-and-interview",
+        "name": "Резюме и собеседование"
+      },
+      {
+        "id": "business-time-management",
+        "name": "Тайм-менеджмент"
+      },
+      {
+        "id": "business-project-management",
+        "name": "Проектное управление"
+      },
+      {
+        "id": "business-entrepreneurship",
+        "name": "Предпринимательство"
+      }
+    ]
+  },
+  {
+    "id": "languages",
+    "name": "Иностранные языки",
+    "subcategories": [
+      {
+        "id": "languages-english",
+        "name": "Английский"
+      },
+      {
+        "id": "languages-french",
+        "name": "Французский"
+      },
+      {
+        "id": "languages-spanish",
+        "name": "Испанский"
+      },
+      {
+        "id": "languages-german",
+        "name": "Немецкий"
+      },
+      {
+        "id": "languages-chinese",
+        "name": "Китайский"
+      },
+      {
+        "id": "languages-japanese",
+        "name": "Японский"
+      },
+      {
+        "id": "languages-exam-preparation",
+        "name": "Подготовка к экзаменам (IELTS, TOEFL)"
+      }
+    ]
+  },
+  {
+    "id": "home",
+    "name": "Дом и уют",
+    "subcategories": [
+      {
+        "id": "home-cleaning-and-organization",
+        "name": "Уборка и организация"
+      },
+      {
+        "id": "home-finances",
+        "name": "Домашние финансы"
+      },
+      {
+        "id": "home-cooking",
+        "name": "Приготовление еды"
+      },
+      {
+        "id": "home-houseplants",
+        "name": "Домашние растения"
+      },
+      {
+        "id": "home-repairs",
+        "name": "Ремонт"
+      },
+      {
+        "id": "home-storage",
+        "name": "Хранение вещей"
+      }
+    ]
+  },
+  {
+    "id": "creativity",
+    "name": "Творчество и искусство",
+    "subcategories": [
+      {
+        "id": "creativity-drawing-and-illustration",
+        "name": "Рисование и иллюстрация"
+      },
+      {
+        "id": "creativity-photography",
+        "name": "Фотография"
+      },
+      {
+        "id": "creativity-video-editing",
+        "name": "Видеомонтаж"
+      },
+      {
+        "id": "creativity-music-and-sound",
+        "name": "Музыка и звук"
+      },
+      {
+        "id": "creativity-acting",
+        "name": "Актёрское мастерство"
+      },
+      {
+        "id": "creativity-creative-writing",
+        "name": "Креативное письмо"
+      },
+      {
+        "id": "creativity-art-therapy",
+        "name": "Арт-терапия"
+      },
+      {
+        "id": "creativity-decor-and-diy",
+        "name": "Декор и DIY"
+      }
+    ]
+  },
+  {
+    "id": "education",
+    "name": "Образование и развитие",
+    "subcategories": [
+      {
+        "id": "education-personal-development",
+        "name": "Личностное развитие"
+      },
+      {
+        "id": "education-learning-skills",
+        "name": "Навыки обучения"
+      },
+      {
+        "id": "education-cognitive-techniques",
+        "name": "Когнитивные техники"
+      },
+      {
+        "id": "education-speed-reading",
+        "name": "Скорочтение"
+      },
+      {
+        "id": "education-teaching-skills",
+        "name": "Навыки преподавания"
+      },
+      {
+        "id": "education-coaching",
+        "name": "Коучинг"
+      }
+    ]
+  },
+  {
+    "id": "health",
+    "name": "Здоровье и лайфстайл",
+    "subcategories": [
+      {
+        "id": "health-yoga-and-meditation",
+        "name": "Йога и медитация"
+      },
+      {
+        "id": "health-nutrition-and-healthy-living",
+        "name": "Питание и ЗОЖ"
+      },
+      {
+        "id": "health-mental-health",
+        "name": "Ментальное здоровье"
+      },
+      {
+        "id": "health-mindfulness",
+        "name": "Осознанность"
+      },
+      {
+        "id": "health-physical-training",
+        "name": "Физические тренировки"
+      },
+      {
+        "id": "health-sleep-and-recovery",
+        "name": "Сон и восстановление"
+      },
+      {
+        "id": "health-work-life-balance",
+        "name": "Баланс жизни и работы"
+      }
+    ]
+  }
+]
