@@ -13,13 +13,32 @@ export interface Skill {
   createdAt: string
 }
 
+// ─── City ────────────────────────────────────────────────
+export type cityId = string
+export interface City {
+  id: cityId
+  name: string
+}
+
 // ─── User ────────────────────────────────────────────────
+export type Gender = 'male' | 'female' | 'unspecified'
+
 export interface User {
   id: string
   name: string
   email: string
   avatarUrl: string | null
   createdAt: string
+  login: string
+  password: string
+  town: string
+  age: string
+  likedCount: number
+  description: string
+  gender: Gender
+  learn: string[]
+  canTeach: Skill
+  favorites: User[]
 }
 
 // ─── Request ─────────────────────────────────────────────
