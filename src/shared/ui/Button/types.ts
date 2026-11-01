@@ -3,7 +3,8 @@ import { ButtonHTMLAttributes, ReactNode } from 'react'
 export type ButtonVariant = 'primary' | 'outline'
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: ButtonVariant
+  variant: ButtonVariant
   className?: string
   children?: ReactNode
 }
+
