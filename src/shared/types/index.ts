@@ -32,12 +32,11 @@ export interface User {
   createdAt: string
   password: string
   town: CityId
-  birthday: () => string
+  birthday: string
   likedCount: number
   description: string
   gender: Gender
   learn: SubcategoryId[]
-  canTeach: Skill
   favourites: UserId[]
 }
 
