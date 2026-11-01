@@ -35,3 +35,7 @@ pnpm-debug.log*
 # OS
 .DS_Store
 Thumbs.db
+
+# storybook
+*storybook.log
+storybook-static

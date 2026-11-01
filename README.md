@@ -15,6 +15,26 @@ npm run dev
 
 ---
 
+## Storybook
+
+Для разработки и просмотра UI-компонентов в изоляции используется Storybook.
+
+Для запуска Storybook:
+
+```bash
+npm run storybook
+```
+
+Сборка статической версии Storybook (для деплоя):
+
+```bash
+npm run build-storybook
+```
+
+Открой [http://localhost:6006](http://localhost:6006)
+
+---
+
 ## State management
 
 Проект использует **Redux Toolkit**. Store настроен в `src/store/index.ts`.
@@ -147,3 +167,25 @@ GitHub Actions запускается на каждый push и PR:
 
 Если CI красный — PR не мержится.
 
+---
+
+## Соглашения по коду
+
+В процессе разработки команда придерживается следующих правил:
+
+- **Стили**: используем CSS Modules для компонентов. Общие стили только в `src/app/styles/global.css`
+- **Структура** проекта по FSD: слои app, pages, widgets, features, entities, shared. Импортировать можно только из нижних слоёв, из верхних нельзя. 
+
+```
+  app - Инициализация: провайдеры, роутер, глобальные стили
+  pages - Страницы приложения
+  widgets - Крупные блоки интерфейса
+  features - Действия пользователя
+  entities - Бизнес-сущности
+  shared - Общий переиспользуемый код
+```
+
+- **Файлы компонента**: в папке `Button/` кладём `Button.tsx`, `Button.module.css`, `Button.stories.tsx` и `index.ts` (в нём реэкспорт)
+- **Нейминг**: компоненты и типы PascalCase, переменные и функции camelCase,
+  функции начинаются с глагола, массивы во множественном числе
+- **Типы** лежат в `src/shared/types/index.ts`, в entities их реэкспорт
