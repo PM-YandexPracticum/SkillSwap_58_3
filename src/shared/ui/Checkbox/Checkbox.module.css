@@ -34,7 +34,7 @@
   height: 20px;
   border: var(--border-main, 1px solid #69775d);
   border-radius: 6px;
-  background-color: var(--color-bg-card, #ffffff);
+  background-color: var(--color-bg-card, #fff);
   flex-shrink: 0;
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }
