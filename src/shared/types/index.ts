@@ -14,31 +14,30 @@ export interface Skill {
 }
 
 // ─── City ────────────────────────────────────────────────
-export type cityId = string
+export type CityId = string
 export interface City {
-  id: cityId
+  id: CityId
   name: string
 }
 
 // ─── User ────────────────────────────────────────────────
 export type Gender = 'male' | 'female' | 'unspecified'
+export type UserId = 'string'
 
 export interface User {
-  id: string
+  id: UserId
   name: string
   email: string
   avatarUrl: string | null
   createdAt: string
-  login: string
   password: string
-  town: string
-  age: string
+  town: CityId
+  birthday: string
   likedCount: number
   description: string
   gender: Gender
-  learn: string[]
-  canTeach: Skill
-  favorites: User[]
+  learn: SubcategoryId[]
+  favourites: UserId[]
 }
 
 // ─── Request ─────────────────────────────────────────────
