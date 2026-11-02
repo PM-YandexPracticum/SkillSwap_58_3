@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
+import '@/app/styles/global.css'
 import { Button } from './Button'
 
 const meta: Meta<typeof Button> = {

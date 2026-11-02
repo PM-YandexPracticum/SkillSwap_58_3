@@ -4,7 +4,7 @@ import { ButtonProps } from './types'
 import styles from './Button.module.css'
 
 export const Button: FC<ButtonProps> = ({
-  variant,
+  variant = 'primary',
   className,
   children,
   type = 'button',
@@ -19,4 +19,3 @@ export const Button: FC<ButtonProps> = ({
     </button>
   )
 }
-
