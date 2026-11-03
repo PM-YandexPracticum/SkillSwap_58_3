@@ -1,0 +1,48 @@
+.likeButton {
+  border: 0;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  position: relative;
+}
+
+.likeButton:focus {
+  outline: 0;
+}
+
+.likeButton:focus-visible {
+  outline: 1px solid var(--color-text-main, #253017);
+}
+
+.heartIcon {
+  width: 24px;
+  height: 24px;
+  stroke: var(--color-text-main, #253017);
+  fill: transparent;
+}
+
+.likeButton.isLiked .heartIcon {
+  stroke: var(--color-accent-main, #abd27a);
+  fill: var(--color-accent-main, #abd27a);
+}
+
+.likeButton:hover {
+  transform: scale(1.2);
+}
+
+.likeCount {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-main, #253017);
+  background-color: transparent;
+  font-family: var(--font-roboto, sans-serif);
+  font-weight: var(--font-weight-regular, 400);
+  font-size: 10px;
+}
