@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import type { KeyboardEvent } from 'react'
+import clsx from 'clsx'
 import type { SelectOption, SelectProps } from '@/shared/types'
 import { ChevronDownIcon, ChevronUpIcon } from '@/shared/ui/icons'
 import styles from './Select.module.css'
@@ -20,7 +21,7 @@ export function Select({
   const [activeIndex, setActiveIndex] = useState(-1)
   const selectedIndex = options.findIndex((option) => option.value === value)
   const selected = options[selectedIndex]
-  const highlightedIndex = Math.min(activeIndex, options.length - 1)
+  const highlightedIndex = Math.max(0, Math.min(activeIndex, options.length - 1))
   const active = options[highlightedIndex]
 
   useEffect(() => {
@@ -90,7 +91,7 @@ export function Select({
         aria-expanded={isOpen}
         aria-controls={isOpen ? listId : undefined}
         aria-activedescendant={isOpen && active ? `${listId}-${highlightedIndex}` : undefined}
-        className={`${styles.control} ${isOpen ? styles.expanded : ''}`}
+        className={clsx(styles.control, { [styles.expanded]: isOpen })}
         onClick={() => {
           if (isOpen) setIsOpen(false)
           else open()
@@ -122,7 +123,10 @@ export function Select({
                 ref={index === highlightedIndex ? activeRef : undefined}
                 role="option"
                 aria-selected={option.value === value}
-                className={`${styles.option} ${option.value === value ? styles.selected : ''} ${index === highlightedIndex ? styles.active : ''}`}
+                className={clsx(styles.option, {
+                  [styles.selected]: option.value === value,
+                  [styles.active]: index === highlightedIndex,
+                })}
                 onPointerDown={(event) => event.preventDefault()}
                 onPointerMove={() => setActiveIndex(index)}
                 onClick={() => choose(option)}

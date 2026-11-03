@@ -25,7 +25,7 @@ describe('Select', () => {
     expect(control).toHaveTextContent('Выберите пол')
     expect(control).toHaveAttribute('aria-expanded', 'false')
     rerender(<Select {...props} value="female" />)
-    expect(control).toHaveTextContent('Женский')
+    expect(screen.getByRole('combobox', { name: 'Пол' })).toHaveTextContent('Женский')
   })
 
   it('передаёт value выбранного пункта один раз и закрывает список', async () => {
@@ -44,9 +44,28 @@ describe('Select', () => {
     const onChange = vi.fn()
     render(<Select options={options} value="" onChange={onChange} label="Пол" />)
     await user.tab()
-    await user.keyboard('{ArrowDown}{ArrowDown}{Enter}')
+    await user.keyboard('{ArrowDown}')
+    expect(await screen.findByRole('listbox')).toBeVisible()
+    await user.keyboard('{ArrowDown}{Enter}')
     expect(onChange).toHaveBeenCalledTimes(1)
     expect(onChange).toHaveBeenCalledWith('male')
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument()
+  })
+
+  it('выбирает первый вариант после заполнения открытого пустого списка', async () => {
+    const user = userEvent.setup()
+    const onChange = vi.fn()
+    const props = { value: '', onChange, label: 'Пол' }
+    const { rerender } = render(<Select {...props} options={[]} />)
+    await user.tab()
+    await user.keyboard('{ArrowUp}')
+    rerender(<Select {...props} options={options} />)
+    const control = screen.getByRole('combobox', { name: 'Пол' })
+    const firstOption = screen.getByRole('option', { name: 'Не указан' })
+    expect(control).toHaveAttribute('aria-activedescendant', firstOption.id)
+    await user.keyboard('{Enter}')
+    expect(onChange).toHaveBeenCalledTimes(1)
+    expect(onChange).toHaveBeenCalledWith('unspecified')
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument()
   })
 
