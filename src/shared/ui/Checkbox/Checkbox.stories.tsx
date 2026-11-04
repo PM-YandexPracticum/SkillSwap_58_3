@@ -41,11 +41,3 @@ export const WithLabel: Story = {
     checked: true,
   },
 }
-
-export const Disabled: Story = {
-  args: {
-    label: 'Неактивный чекбокс',
-    disabled: true,
-    checked: false,
-  },
-}
