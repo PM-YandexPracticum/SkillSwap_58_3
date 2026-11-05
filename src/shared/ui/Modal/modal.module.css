@@ -1,0 +1,49 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-16, 16px);
+  background: rgb(142 142 142 / 60%);
+  backdrop-filter: blur(2px);
+}
+
+.panel {
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: auto;
+  overscroll-behavior: contain;
+  border-radius: var(--border-radius-main, 12px);
+  background: var(--color-bg-card, #fff);
+  color: var(--color-text-main, #253017);
+  overflow-wrap: anywhere;
+}
+
+.panel:focus-visible {
+  outline: 2px solid var(--color-links, #508826);
+  outline-offset: 2px;
+}
+
+.preview {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-24, 24px);
+  min-height: 100%;
+  padding: var(--space-40, 40px);
+  text-align: center;
+}
+
+.preview h2 {
+  font: var(--heading-filter-font, 500 24px 'Jost', sans-serif);
+  line-height: 28px;
+}
+
+.offer {
+  max-height: calc(100% - 44px);
+  transform: translateY(-22px);
+}
