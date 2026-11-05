@@ -1,5 +1,4 @@
 import { Input } from './Input'
-import eyeIcon from '@/assets/eye.svg'
 
 export default {
   title: 'Components/Input',
@@ -52,7 +51,7 @@ export const WithLeftIcon = {
     ...Default.args,
     label: 'Левая иконка тут',
     placeholder: 'Что нового?',
-    iconLeft: eyeIcon,
+    iconLeft: 'view-password',
   },
 }
 
@@ -62,7 +61,7 @@ export const WithRightIcon = {
     ...Default.args,
     label: 'Ссылка',
     placeholder: 'Вставьте URL',
-    iconRight: eyeIcon,
+    iconRight: 'view-password',
     type: 'text', // важно: не 'password', иначе компонент сам заменит иконку
   },
 }
