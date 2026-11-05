@@ -21,13 +21,11 @@
 .heartIcon {
   width: 24px;
   height: 24px;
-  stroke: var(--color-text-main, #253017);
-  fill: transparent;
+  color: var(--color-text-main, #253017);
 }
 
 .likeButton.isLiked .heartIcon {
-  stroke: var(--color-accent-main, #abd27a);
-  fill: var(--color-accent-main, #abd27a);
+  color: var(--color-accent-main, #abd27a);
 }
 
 .likeButton:hover {

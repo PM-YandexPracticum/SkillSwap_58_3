@@ -1,7 +1,7 @@
-import React from 'react'
+import type { MouseEvent } from 'react'
 
 export interface LikeButtonProps {
   isLiked: boolean
   count?: number
-  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void
+  onClick: (e: MouseEvent<HTMLButtonElement>) => void
 }
