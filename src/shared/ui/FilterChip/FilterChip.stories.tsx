@@ -8,12 +8,6 @@ export default {
 export const Default = {
   args: {
     label: 'Hello',
-  },
-}
-
-export const WithIcon = {
-  args: {
-    label: 'Hello',
-    onRemove: () => {},
+    onRemove: () => {}
   },
 }
