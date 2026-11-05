@@ -1,8 +1,8 @@
 import { useId, useState } from 'react'
 import styles from './Input.module.css'
-import eyeIcon from '@/assets/eye.svg'
 import { InputProps } from './types'
 import clsx from 'clsx'
+import { Icon } from '../icons'
 
 export const Input = ({
   id,
@@ -20,7 +20,7 @@ export const Input = ({
 }: InputProps) => {
   const [isVisiblePassword, setIsVisiblePassword] = useState(false)
 
-  const currentIconRight = type === 'password' ? eyeIcon : iconRight
+  const currentIconRight = type === 'password' ? 'view-password' : iconRight
 
   const handleRightIconClick = () => {
     if (type === 'password') {
@@ -52,7 +52,7 @@ export const Input = ({
       )}
 
       <div className={styles.iconsContainerInput}>
-        {iconLeft && <img className={styles.iconLeft} src={iconLeft} />}
+        {iconLeft && <Icon className={styles.iconLeft} name={iconLeft} />}
 
         <input
           id={genId}
@@ -67,7 +67,14 @@ export const Input = ({
           placeholder={placeholder}
         />
         {currentIconRight && (
-          <img onClick={handleRightIconClick} className={styles.iconRight} src={currentIconRight} />
+          <button
+            className={styles.buttonIconRight}
+            type="button"
+            aria-label="Правая иконка"
+            onClick={handleRightIconClick}
+          >
+            <Icon name={currentIconRight} />
+          </button>
         )}
       </div>
 

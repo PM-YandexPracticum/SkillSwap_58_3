@@ -39,15 +39,10 @@
 }
 
 .iconLeft,
-.iconRight {
-  width: 24px;
-  height: 24px;
+.buttonIconRight {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .iconsContainerInput {
@@ -58,9 +53,8 @@
   left: 12px;
 }
 
-.iconRight {
+.buttonIconRight {
   right: 20px;
-  cursor: pointer;
 }
 
 .errorText {
