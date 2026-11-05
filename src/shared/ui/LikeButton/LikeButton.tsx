@@ -1,6 +1,7 @@
 import { LikeButtonProps } from './interface'
 import styles from './LikeButton.module.css'
 import clsx from 'clsx'
+import { Icon } from '../icons'
 
 export const LikeButton = ({ count = 0, isLiked, onClick }: LikeButtonProps) => {
   const renderCount = () => {
@@ -11,18 +12,16 @@ export const LikeButton = ({ count = 0, isLiked, onClick }: LikeButtonProps) => 
 
   const countLabel = renderCount()
 
-  const iconId = isLiked ? 'heart-filled' : 'heart'
+  const iconName = isLiked ? 'heart-filled' : 'heart'
 
   return (
     <button
       type="button"
       onClick={onClick}
       className={clsx(styles.likeButton, { [styles.isLiked]: isLiked })}
-      aria-label={`поставить лайк. Лайков: ${count}`}
+      aria-label={!isLiked ? `поставить лайк. Лайков: ${count}` : 'убрать лайк'}
     >
-      <svg className={styles.heartIcon} width="24" height="24">
-        <use href={`/icons/sprite.svg#${iconId}`} />
-      </svg>
+      <Icon name={iconName} className={styles.heartIcon} />
       {countLabel && <span className={styles.likeCount}>{countLabel}</span>}
     </button>
   )
