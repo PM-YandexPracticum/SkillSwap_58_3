@@ -1,7 +1,7 @@
 import { FilterChip } from './FilterChip'
 
 export default {
-  title: 'Components/FilterChip',
+  title: 'Shared/FilterChip',
   component: FilterChip,
 }
 
@@ -14,8 +14,6 @@ export const Default = {
 export const WithIcon = {
   args: {
     label: 'Hello',
-    onRemove: () => {
-      console.log('call')
-    },
+    onRemove: () => {},
   },
 }

@@ -2,8 +2,16 @@
   display: inline-flex;
   gap: 8px;
   padding: 12px 24px;
+  justify-content: center;
+  align-items: center;
   border-radius: 12px;
   background-color: var(--color-bg-card, #fff);
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .label {
