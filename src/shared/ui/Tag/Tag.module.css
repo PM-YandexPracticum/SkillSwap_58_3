@@ -1,0 +1,53 @@
+.tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8, 8px);
+  padding: var(--space-8, 8px) var(--space-12, 12px);
+  border-radius: var(--border-radius-tags, 20px);
+  font: var(--main-font, 400 16px 'Roboto', sans-serif);
+  color: var(--color-text-main, #253017);
+  background-color: var(--color-category-education, #e7f2f6);
+  user-select: none;
+}
+
+.business {
+  background-color: var(--color-category-business, #eee7f7);
+}
+
+.languages {
+  background-color: var(--color-category-languages, #ebe5c5);
+}
+
+.home {
+  background-color: var(--color-category-home, #f7ebe5);
+}
+
+.creativity {
+  background-color: var(--color-category-creative, #f7e7f2);
+}
+
+.education {
+  background-color: var(--color-category-education, #e7f2f6);
+}
+
+.health {
+  background-color: var(--color-category-health, #e9f7e7);
+}
+
+.more {
+  background-color: var(--color-category-more, #e8ecf7);
+}
+
+.removeButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  color: var(--color-text-main, #253017);
+}
+
+.removeButton:hover {
+  opacity: 0.7;
+}
