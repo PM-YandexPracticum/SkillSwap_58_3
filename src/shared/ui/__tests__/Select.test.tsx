@@ -32,11 +32,15 @@ describe('Select', () => {
     const user = userEvent.setup()
     const onChange = vi.fn()
     render(<Select options={options} value="" onChange={onChange} label="Пол" />)
-    await user.click(screen.getByRole('combobox'))
+    const control = screen.getByRole('combobox')
+    expect(control.querySelector('use')).toHaveAttribute('href', '/icons/sprite.svg#chevron-down')
+    await user.click(control)
+    expect(control.querySelector('use')).toHaveAttribute('href', '/icons/sprite.svg#chevron-up')
     await user.click(screen.getByRole('option', { name: 'Мужской' }))
     expect(onChange).toHaveBeenCalledTimes(1)
     expect(onChange).toHaveBeenCalledWith('male')
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument()
+    expect(control.querySelector('use')).toHaveAttribute('href', '/icons/sprite.svg#chevron-down')
   })
 
   it('открывает список стрелками и выбирает активный пункт через Enter', async () => {

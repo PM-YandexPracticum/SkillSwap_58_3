@@ -2,7 +2,7 @@ import { useEffect, useId, useRef, useState } from 'react'
 import type { KeyboardEvent } from 'react'
 import clsx from 'clsx'
 import type { SelectOption, SelectProps } from '@/shared/types'
-import { ChevronDownIcon, ChevronUpIcon } from '@/shared/ui/icons'
+import { Icon } from '@/shared/ui/icons'
 import styles from './Select.module.css'
 
 export function Select({
@@ -101,11 +101,7 @@ export function Select({
         <span className={selected ? undefined : styles.placeholder}>
           {selected?.label ?? placeholder}
         </span>
-        {isOpen ? (
-          <ChevronUpIcon size={24} aria-hidden="true" focusable="false" />
-        ) : (
-          <ChevronDownIcon size={24} aria-hidden="true" focusable="false" />
-        )}
+        <Icon name={isOpen ? 'chevron-up' : 'chevron-down'} size={24} focusable="false" />
       </button>
       {isOpen && (
         <ul
