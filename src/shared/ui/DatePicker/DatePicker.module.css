@@ -1,0 +1,199 @@
+/* стили библиотеки react-datepicker глобальные, поэтому :global */
+/* stylelint-disable selector-pseudo-class-no-unknown */
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4, 4px);
+}
+
+.label {
+  font: var(--main-font, 400 16px 'Roboto', sans-serif);
+  color: var(--color-text-main, #253017);
+}
+
+.pickerWrapper {
+  display: block;
+  width: 100%;
+}
+
+.pickerWrapper :global(.react-datepicker__input-container) {
+  display: block;
+}
+
+.field {
+  position: relative;
+}
+
+.input {
+  width: 100%;
+  min-height: 48px;
+  padding: var(--input-margin, 12px 20px);
+  padding-right: 52px;
+  border: 1px solid var(--color-text-additional, #69735d);
+  border-radius: var(--border-radius-main, 12px);
+  background-color: var(--color-bg-card, #fff);
+  color: var(--color-text-main, #253017);
+  font-size: var(--font-size-16, 16px);
+}
+
+.input::placeholder {
+  color: var(--color-text-additional, #69735d);
+  font-size: var(--font-size-16, 16px);
+}
+
+.input:focus {
+  outline: none;
+}
+
+.input:focus-visible {
+  border-color: var(--color-text-main, #253017);
+}
+
+.error {
+  border-color: var(--color-error, #bf3920);
+}
+
+.icon {
+  position: absolute;
+  top: 50%;
+  right: var(--space-20, 20px);
+  transform: translateY(-50%);
+  color: var(--color-text-main, #253017);
+  pointer-events: none;
+}
+
+.errorText {
+  color: var(--color-error, #bf3920);
+  font-size: 12px;
+}
+
+/* ─── Календарь ─────────────────────────────────────────── */
+
+.popper {
+  z-index: 10;
+}
+
+.calendar {
+  width: 296px;
+  padding: var(--space-16, 16px) var(--space-12, 12px) var(--space-12, 12px);
+  border: var(--border-main, 1px solid #69775d);
+  border-radius: var(--border-radius-side-profile, 24px);
+  background-color: var(--color-bg-card, #fff);
+  color: var(--color-text-main, #253017);
+  font: var(--main-font, 400 16px 'Roboto', sans-serif);
+}
+
+.calendar :global(.react-datepicker__month-container) {
+  float: none;
+  width: 100%;
+}
+
+.calendar :global(.react-datepicker__header) {
+  padding: 0;
+  border: none;
+  background: none;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-16, 16px);
+  margin-bottom: var(--space-12, 12px);
+}
+
+.selectWrapper {
+  position: relative;
+}
+
+.select {
+  appearance: none;
+  padding: var(--space-4, 4px) var(--space-24, 24px) var(--space-4, 4px) var(--space-4, 4px);
+  border: none;
+  background: none;
+  color: var(--color-text-main, #253017);
+  font: var(--main-font, 400 16px 'Roboto', sans-serif);
+  cursor: pointer;
+}
+
+.select:focus-visible {
+  outline: 2px solid var(--color-links, #508826);
+  border-radius: var(--space-4, 4px);
+}
+
+.selectIcon {
+  position: absolute;
+  top: 50%;
+  right: var(--space-4, 4px);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.calendar :global(.react-datepicker__day-names) {
+  margin: 0;
+}
+
+.calendar :global(.react-datepicker__day-name) {
+  width: 32px;
+  margin: 0;
+  color: var(--color-links, #508826);
+  font-size: 12px;
+  line-height: 32px;
+}
+
+.calendar :global(.react-datepicker__month) {
+  margin: 0;
+}
+
+.calendar :global(.react-datepicker__day) {
+  width: 32px;
+  margin: 0;
+  border-radius: var(--border-radius-avatar, 100px);
+  color: var(--color-text-main, #253017);
+  font-size: 14px;
+  line-height: 32px;
+}
+
+.calendar :global(.react-datepicker__day:hover) {
+  background-color: var(--color-inactive-elements, #e4e8df);
+}
+
+.calendar :global(.react-datepicker__day--outside-month) {
+  color: var(--color-text-additional, #69735d);
+  opacity: 0.6;
+}
+
+.calendar :global(.react-datepicker__day--disabled) {
+  color: var(--color-text-additional, #69735d);
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.calendar :global(.react-datepicker__day--keyboard-selected) {
+  background: none;
+}
+
+.calendar :global(.react-datepicker__day--selected),
+.calendar :global(.react-datepicker__day--selected:hover) {
+  background-color: var(--color-accent-main, #abd27a);
+  color: var(--color-text-main, #253017);
+  font-weight: var(--font-weight-medium, 500);
+}
+
+.calendar :global(.react-datepicker__children-container) {
+  width: auto;
+  margin: 0;
+  padding: 0;
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-8, 8px);
+  margin-top: var(--space-12, 12px);
+}
+
+.actions > button {
+  flex: 1;
+  min-width: 0;
+  padding-inline: var(--space-12, 12px);
+}
