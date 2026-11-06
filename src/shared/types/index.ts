@@ -79,11 +79,3 @@ export interface Category {
   name: string
   subcategories: Subcategory[]
 }
-
-// ─── Checkbox ────────────────────────────────────────────
-export interface CheckboxProps {
-  checked?: boolean
-  onChange?: (checked: boolean) => void
-  label?: string
-  indeterminate?: boolean
-}

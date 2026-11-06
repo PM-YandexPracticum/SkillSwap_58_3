@@ -1,14 +1,14 @@
-import { useEffect, useRef, type FC, type ChangeEvent } from 'react'
+import { useEffect, useRef, type ChangeEvent } from 'react'
 import clsx from 'clsx'
-import type { CheckboxProps } from '@/shared/types'
+import type { CheckboxProps } from './types'
 import styles from './Checkbox.module.css'
 
-export const Checkbox: FC<CheckboxProps> = ({
+export const Checkbox = ({
   checked = false,
   onChange,
   label,
   indeterminate = false,
-}) => {
+}: CheckboxProps) => {
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
