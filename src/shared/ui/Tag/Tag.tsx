@@ -1,10 +1,20 @@
-import { FC } from 'react'
 import clsx from 'clsx'
+import type { CategoryId } from '@/shared/types'
+import { Icon } from '../icons'
 import { TagProps } from './interface'
 import styles from './Tag.module.css'
 
-export const Tag: FC<TagProps> = ({ label, categoryId, isMore = false, onRemove }) => {
-  const categoryClass = isMore ? styles.more : categoryId ? styles[categoryId] : ''
+const CATEGORY_CLASS_MAP: Record<CategoryId, string> = {
+  business: styles.business,
+  languages: styles.languages,
+  home: styles.home,
+  creativity: styles.creativity,
+  education: styles.education,
+  health: styles.health,
+}
+
+export const Tag = ({ label, categoryId, isMore = false, onRemove }: TagProps) => {
+  const categoryClass = isMore ? styles.more : categoryId ? CATEGORY_CLASS_MAP[categoryId] : ''
 
   return (
     <span className={clsx(styles.tag, categoryClass)}>
@@ -16,21 +26,7 @@ export const Tag: FC<TagProps> = ({ label, categoryId, isMore = false, onRemove 
           className={styles.removeButton}
           aria-label="Удалить"
         >
-          <svg
-            width="10"
-            height="10"
-            viewBox="0 0 10 10"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className={styles.removeIcon}
-          >
-            <path
-              d="M1 1L9 9M9 1L1 9"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-            />
-          </svg>
+          <Icon name="close" size={10} />
         </button>
       )}
     </span>
