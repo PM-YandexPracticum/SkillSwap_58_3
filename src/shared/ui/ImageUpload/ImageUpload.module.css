@@ -1,0 +1,111 @@
+.root {
+  display: grid;
+  gap: var(--space-8, 8px);
+  width: 100%;
+  color: var(--color-text-main, #253017);
+  font: var(--main-font, 400 16px Roboto, sans-serif);
+  line-height: 1.5;
+}
+
+.dropZone {
+  position: relative;
+  display: grid;
+  min-height: calc(var(--space-24, 24px) * 4);
+  border: var(--border-image-input, 1px dashed #69735d);
+  border-radius: var(--border-radius-main, 12px);
+  background-color: var(--color-bg-card, #fff);
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8, 8px);
+  padding: var(--space-16, 16px) var(--space-20, 20px);
+  text-align: center;
+  cursor: pointer;
+}
+
+.hint {
+  color: var(--color-text-additional, #69735d);
+}
+
+.choose {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4, 4px);
+  color: color-mix(in srgb, var(--color-links, #508826) 96%, #000);
+}
+
+.choose > svg {
+  flex-shrink: 0;
+}
+
+.label:hover .choose {
+  text-decoration: underline;
+}
+
+.dragging {
+  border-color: var(--color-links, #508826);
+  background-color: var(--color-bg-overlay, #deebc5);
+}
+
+.invalid {
+  border-color: var(--color-error, #bf3920);
+}
+
+.dropZone:focus-within,
+.removeButton:focus-visible {
+  outline: 2px solid var(--color-links, #508826);
+  outline-offset: 2px;
+}
+
+.input,
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  padding: 0;
+  border: 0;
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+.fileList {
+  display: grid;
+  gap: var(--space-8, 8px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fileItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8, 8px);
+}
+
+.fileName {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.removeButton {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  color: var(--color-text-additional, #69735d);
+  background: transparent;
+  cursor: pointer;
+}
+
+.error {
+  margin: 0;
+  color: var(--color-error, #bf3920);
+  overflow-wrap: anywhere;
+}
