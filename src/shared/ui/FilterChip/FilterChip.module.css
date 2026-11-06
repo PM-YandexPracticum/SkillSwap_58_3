@@ -1,0 +1,26 @@
+.container {
+  display: inline-flex;
+  gap: 8px;
+  padding: 12px 24px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  background-color: var(--color-bg-card, #fff);
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.label {
+  font-weight: 400;
+  font-size: var(--font-size-16, 16px);
+  line-height: 24px;
+  letter-spacing: var(--letter-spacing, 2%);
+}
+
+.icon {
+  cursor: pointer;
+}
