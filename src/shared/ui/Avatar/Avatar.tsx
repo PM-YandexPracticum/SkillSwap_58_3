@@ -1,9 +1,10 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import clsx from 'clsx'
+import { Icon } from '@/shared/ui/icons'
 import type { AvatarEditAction, AvatarProps } from './interface'
 import styles from './Avatar.module.css'
 
-export function Avatar({ size = 'medium', src, alt, onAdd, onEdit }: AvatarProps) {
+export function Avatar({ size = 'medium', src, alt = '', onAdd, onEdit }: AvatarProps) {
   const popupId = useId()
   const rootRef = useRef<HTMLDivElement>(null)
   const editRef = useRef<HTMLButtonElement>(null)
@@ -48,19 +49,7 @@ export function Avatar({ size = 'medium', src, alt, onAdd, onEdit }: AvatarProps
           role={alt ? 'img' : undefined}
           aria-label={alt || undefined}
         >
-          {/* TODO(#25): заменить временную SVG общей иконкой пользователя. */}
-          <svg
-            viewBox="0 0 72 72"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            aria-hidden="true"
-            focusable="false"
-          >
-            <circle cx="36" cy="36" r="30" />
-            <circle cx="36" cy="26" r="10" />
-            <path d="M16 58c2-12 9-18 20-18s18 6 20 18" />
-          </svg>
+          <Icon name="user-circle" focusable="false" />
         </span>
       )}
       {!src && onAdd && (
@@ -70,17 +59,7 @@ export function Avatar({ size = 'medium', src, alt, onAdd, onEdit }: AvatarProps
           aria-label="Добавить фото"
           onClick={onAdd}
         >
-          {/* TODO(#25): заменить временную SVG плюса общей иконкой добавления. */}
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            aria-hidden="true"
-            focusable="false"
-          >
-            <path d="M12 5v14M5 12h14" />
-          </svg>
+          <Icon name="plus" focusable="false" />
         </button>
       )}
       {onEdit && (src || !onAdd) && (
@@ -91,36 +70,30 @@ export function Avatar({ size = 'medium', src, alt, onAdd, onEdit }: AvatarProps
             className={clsx(styles.actionButton, styles.editButton)}
             aria-label="Редактировать фото"
             aria-expanded={isOpen}
-            aria-controls={isOpen ? popupId : undefined}
+            aria-controls={popupId}
             onClick={() => setIsOpen((open) => !open)}
           >
-            {/* TODO(#25): заменить временную SVG карандаша общей иконкой редактирования. */}
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              aria-hidden="true"
-              focusable="false"
-            >
-              <path d="m4 17 13-13 3 3L7 20H4v-3Zm10-10 3 3" />
-            </svg>
+            <Icon name="edit" focusable="false" />
           </button>
-          {isOpen && (
-            <div id={popupId} className={styles.popup} role="group" aria-label="Действия с фото">
-              <button type="button" className={styles.popupButton} onClick={() => choose('edit')}>
-                Изменить
-              </button>
-              <button
-                type="button"
-                className={styles.popupButton}
-                disabled={!src}
-                onClick={() => choose('delete')}
-              >
-                Удалить
-              </button>
-            </div>
-          )}
+          <div
+            id={popupId}
+            className={styles.popup}
+            role="group"
+            aria-label="Действия с фото"
+            hidden={!isOpen}
+          >
+            <button type="button" className={styles.popupButton} onClick={() => choose('edit')}>
+              Изменить
+            </button>
+            <button
+              type="button"
+              className={styles.popupButton}
+              disabled={!src}
+              onClick={() => choose('delete')}
+            >
+              Удалить
+            </button>
+          </div>
         </>
       )}
     </div>

@@ -69,15 +69,15 @@
 }
 
 .editButton {
-  width: min(calc(var(--space-32, 32px) + var(--space-24, 24px)), 50%);
-  height: min(calc(var(--space-32, 32px) + var(--space-24, 24px)), 50%);
+  width: calc(var(--space-32, 32px) + var(--space-24, 24px));
+  height: calc(var(--space-32, 32px) + var(--space-24, 24px));
   color: inherit;
   background-color: var(--color-bg-overlay, #deebc5);
 }
 
 .editButton svg {
-  width: min(var(--space-24, 24px), 60%);
-  height: min(var(--space-24, 24px), 60%);
+  width: var(--space-24, 24px);
+  height: var(--space-24, 24px);
 }
 
 .popup {
@@ -102,6 +102,10 @@
   font: var(--main-font, 400 16px Roboto, sans-serif);
   text-align: left;
   cursor: pointer;
+}
+
+.popup[hidden] {
+  display: none;
 }
 
 .popupButton:hover:not(:disabled) {

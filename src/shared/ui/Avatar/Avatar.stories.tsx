@@ -43,17 +43,22 @@ export const Editable: Story = {
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement)
     const trigger = canvas.getByRole('button', { name: 'Редактировать фото' })
+    const popup = canvasElement.ownerDocument.getElementById(
+      trigger.getAttribute('aria-controls') ?? '',
+    )
+    await expect(popup).toBeInTheDocument()
+    await expect(popup).not.toBeVisible()
     await userEvent.click(trigger)
     await expect(canvas.getByRole('button', { name: 'Изменить' })).toBeVisible()
     await expect(canvas.getByRole('button', { name: 'Удалить' })).toBeVisible()
     await userEvent.click(canvas.getByRole('button', { name: 'Изменить' }))
     await expect(args.onEdit).toHaveBeenLastCalledWith('edit')
-    await expect(canvas.queryByRole('group', { name: 'Действия с фото' })).not.toBeInTheDocument()
+    await expect(popup).not.toBeVisible()
     await userEvent.click(trigger)
     await userEvent.click(canvas.getByRole('button', { name: 'Удалить' }))
     await expect(args.onEdit).toHaveBeenLastCalledWith('delete')
     await expect(args.onEdit).toHaveBeenCalledTimes(2)
-    await expect(canvas.queryByRole('group', { name: 'Действия с фото' })).not.toBeInTheDocument()
+    await expect(popup).not.toBeVisible()
   },
 }
 
