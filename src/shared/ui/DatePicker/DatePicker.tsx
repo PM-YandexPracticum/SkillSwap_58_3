@@ -58,6 +58,8 @@ const CalendarHeader = ({ date, changeMonth, changeYear }: ReactDatePickerCustom
   return (
     <div className={styles.header}>
       <div className={styles.selectWrapper}>
+        <span>{getMonthName(MONTHS[date.getMonth()])}</span>
+        <Icon name="chevron-down" size={16} />
         <select
           className={styles.select}
           aria-label="Месяц"
@@ -70,9 +72,10 @@ const CalendarHeader = ({ date, changeMonth, changeYear }: ReactDatePickerCustom
             </option>
           ))}
         </select>
-        <Icon className={styles.selectIcon} name="chevron-down" size={16} />
       </div>
       <div className={styles.selectWrapper}>
+        <span>{date.getFullYear()}</span>
+        <Icon name="chevron-down" size={16} />
         <select
           className={styles.select}
           aria-label="Год"
@@ -85,7 +88,6 @@ const CalendarHeader = ({ date, changeMonth, changeYear }: ReactDatePickerCustom
             </option>
           ))}
         </select>
-        <Icon className={styles.selectIcon} name="chevron-down" size={16} />
       </div>
     </div>
   )
@@ -137,6 +139,7 @@ export const DatePicker = ({ label, placeholder, value, onChange, error }: DateP
         renderCustomHeader={CalendarHeader}
         formatWeekDay={getWeekdayLabel}
         calendarStartDay={1}
+        fixedHeight
         dateFormat={DATE_FORMAT}
         locale={ru}
         placeholderText={placeholder}

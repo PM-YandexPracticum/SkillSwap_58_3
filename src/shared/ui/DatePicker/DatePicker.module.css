@@ -75,18 +75,21 @@
 }
 
 .calendar {
-  width: 296px;
-  padding: var(--space-16, 16px) var(--space-12, 12px) var(--space-12, 12px);
-  border: var(--border-main, 1px solid #69775d);
-  border-radius: var(--border-radius-side-profile, 24px);
+  width: 280px;
+  padding: var(--space-16, 16px) 0;
+  border: 1px solid var(--color-text-additional, #69735d);
+  border-radius: var(--border-radius-main, 12px);
   background-color: var(--color-bg-card, #fff);
   color: var(--color-text-main, #253017);
   font: var(--main-font, 400 16px 'Roboto', sans-serif);
+  line-height: 24px;
+  letter-spacing: 0.02em;
 }
 
 .calendar :global(.react-datepicker__month-container) {
   float: none;
-  width: 100%;
+  width: 224px;
+  margin-inline: auto;
 }
 
 .calendar :global(.react-datepicker__header) {
@@ -97,36 +100,33 @@
 
 .header {
   display: flex;
+  align-items: center;
   justify-content: center;
-  gap: var(--space-16, 16px);
-  margin-bottom: var(--space-12, 12px);
+  gap: var(--space-24, 24px);
+  height: 32px;
+  margin-bottom: 6px;
 }
 
 .selectWrapper {
   position: relative;
-}
-
-.select {
-  appearance: none;
-  padding: var(--space-4, 4px) var(--space-24, 24px) var(--space-4, 4px) var(--space-4, 4px);
-  border: none;
-  background: none;
-  color: var(--color-text-main, #253017);
-  font: var(--main-font, 400 16px 'Roboto', sans-serif);
-  cursor: pointer;
-}
-
-.select:focus-visible {
-  outline: 2px solid var(--color-links, #508826);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4, 4px);
   border-radius: var(--space-4, 4px);
 }
 
-.selectIcon {
+.selectWrapper:focus-within {
+  outline: 2px solid var(--color-links, #508826);
+  outline-offset: 2px;
+}
+
+/* настоящий select лежит поверх подписи и невидим, поэтому ширина зависит от выбранного значения */
+.select {
   position: absolute;
-  top: 50%;
-  right: var(--space-4, 4px);
-  transform: translateY(-50%);
-  pointer-events: none;
+  inset: 0;
+  width: 100%;
+  opacity: 0;
+  cursor: pointer;
 }
 
 .calendar :global(.react-datepicker__day-names) {
@@ -150,7 +150,7 @@
   margin: 0;
   border-radius: var(--border-radius-avatar, 100px);
   color: var(--color-text-main, #253017);
-  font-size: 14px;
+  font-size: 12px;
   line-height: 32px;
 }
 
@@ -158,15 +158,17 @@
   background-color: var(--color-inactive-elements, #e4e8df);
 }
 
-.calendar :global(.react-datepicker__day--outside-month) {
-  color: var(--color-text-additional, #69735d);
-  opacity: 0.6;
+.calendar :global(.react-datepicker__day--outside-month),
+.calendar :global(.react-datepicker__day--disabled) {
+  color: #9ca197;
 }
 
 .calendar :global(.react-datepicker__day--disabled) {
-  color: var(--color-text-additional, #69735d);
-  opacity: 0.4;
   cursor: not-allowed;
+}
+
+.calendar :global(.react-datepicker__day--disabled:hover) {
+  background: none;
 }
 
 .calendar :global(.react-datepicker__day--keyboard-selected) {
@@ -177,7 +179,6 @@
 .calendar :global(.react-datepicker__day--selected:hover) {
   background-color: var(--color-accent-main, #abd27a);
   color: var(--color-text-main, #253017);
-  font-weight: var(--font-weight-medium, 500);
 }
 
 .calendar :global(.react-datepicker__children-container) {
@@ -188,12 +189,12 @@
 
 .actions {
   display: flex;
-  gap: var(--space-8, 8px);
-  margin-top: var(--space-12, 12px);
+  justify-content: space-between;
+  margin-top: var(--space-16, 16px);
+  padding-inline: var(--space-16, 16px);
 }
 
+/* в макете кнопка высотой 48px вместе с рамкой, у общей кнопки рамка добавляется к padding */
 .actions > button {
-  flex: 1;
-  min-width: 0;
-  padding-inline: var(--space-12, 12px);
+  padding-block: calc(var(--space-12, 12px) - 1px);
 }
