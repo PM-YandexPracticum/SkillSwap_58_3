@@ -1,8 +1,8 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import type { KeyboardEvent } from 'react'
 import clsx from 'clsx'
-import type { SelectOption, SelectProps } from '@/shared/types'
 import { Icon } from '@/shared/ui/icons'
+import type { SelectOption, SelectProps } from './type'
 import styles from './Select.module.css'
 
 export function Select({
@@ -11,12 +11,15 @@ export function Select({
   onChange,
   placeholder = 'Не выбран',
   label,
+  disabled = false,
+  id: providedId,
 }: SelectProps) {
-  const id = useId()
+  const generatedId = useId()
+  const id = providedId ?? generatedId
   const listId = `${id}-list`
-  const rootRef = useRef<HTMLDivElement>(null)
-  const controlRef = useRef<HTMLButtonElement>(null)
-  const activeRef = useRef<HTMLLIElement>(null)
+  const rootRef = useRef<HTMLDivElement | null>(null)
+  const controlRef = useRef<HTMLButtonElement | null>(null)
+  const activeRef = useRef<HTMLLIElement | null>(null)
   const [isOpen, setIsOpen] = useState(false)
   const [activeIndex, setActiveIndex] = useState(-1)
   const selectedIndex = options.findIndex((option) => option.value === value)
@@ -26,12 +29,16 @@ export function Select({
 
   useEffect(() => {
     if (!isOpen) return
+    if (disabled) {
+      setIsOpen(false)
+      return
+    }
     const closeOutside = (event: PointerEvent) => {
       if (!rootRef.current?.contains(event.target as Node)) setIsOpen(false)
     }
     document.addEventListener('pointerdown', closeOutside)
     return () => document.removeEventListener('pointerdown', closeOutside)
-  }, [isOpen])
+  }, [isOpen, disabled])
 
   useEffect(() => {
     if (isOpen) activeRef.current?.scrollIntoView?.({ block: 'nearest' })
@@ -69,13 +76,7 @@ export function Select({
   }
 
   return (
-    <div
-      className={styles.root}
-      ref={rootRef}
-      onBlur={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setIsOpen(false)
-      }}
-    >
+    <div className={styles.root} ref={rootRef}>
       {label && (
         <label className={styles.label} htmlFor={id} id={`${id}-label`}>
           {label}
@@ -85,6 +86,7 @@ export function Select({
         ref={controlRef}
         id={id}
         type="button"
+        disabled={disabled}
         role="combobox"
         aria-label={label ? undefined : placeholder}
         aria-labelledby={label ? `${id}-label` : undefined}

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useArgs } from 'storybook/preview-api'
 import { expect, fn, userEvent, within } from 'storybook/test'
-import type { SelectProps } from '@/shared/types'
+import type { SelectProps } from './type'
 import { Select } from './Select'
 
 const meta = {
