@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import '@/app/styles/global.css'
+import { Icon } from '../icons'
 import { Button } from './Button'
 
 const meta: Meta<typeof Button> = {
@@ -42,5 +43,21 @@ export const Disabled: Story = {
     variant: 'primary',
     children: 'Неактивная кнопка',
     disabled: true,
+  },
+}
+
+export const WithIconLeft: Story = {
+  args: {
+    variant: 'primary',
+    children: 'Предложить обмен',
+    iconLeft: <Icon name="plus" size={18} />,
+  },
+}
+
+export const WithIconRight: Story = {
+  args: {
+    variant: 'outline',
+    children: 'Перейти к профилю',
+    iconRight: <Icon name="chevron-right" size={18} />,
   },
 }
