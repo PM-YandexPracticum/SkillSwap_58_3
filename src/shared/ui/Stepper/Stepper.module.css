@@ -1,0 +1,28 @@
+.oneStepContainer {
+  min-width: 60px;
+  min-height: 4px;
+  border-radius: 8px;
+  background-color: var(--color-inactive-elements, #e4e8df);
+}
+
+.stepCount {
+  font-weight: var(--font-weight-medium, 500);
+}
+
+.activeStep {
+  background-color: var(--color-accent-main, #abd27a);
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.stepSection {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
