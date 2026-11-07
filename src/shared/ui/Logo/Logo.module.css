@@ -1,0 +1,11 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-12, 12px);
+  width: fit-content;
+}
+
+.text {
+  font: var(--logo-font, 600 24px 'Jost', sans-serif);
+  color: var(--color-text-main, #253017);
+}
