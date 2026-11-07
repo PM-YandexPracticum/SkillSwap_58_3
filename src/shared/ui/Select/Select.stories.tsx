@@ -55,3 +55,8 @@ export const SelectedValue: Story = {
   name: 'С выбранным значением',
   args: { value: 'female' },
 }
+
+export const Disabled: Story = {
+  name: 'Отключённый список',
+  args: { value: 'female', disabled: true },
+}
