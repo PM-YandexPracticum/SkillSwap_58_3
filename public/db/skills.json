@@ -7,7 +7,12 @@
     "category": "creativity",
     "subcategory": "creativity-photography",
     "tags": ["фото", "портрет"],
-    "imageUrl": "/img/skills/skill-01.png",
+    "images": [
+      "/img/skills/skill-01.png",
+      "/img/skills/skill-02.png",
+      "/img/skills/skill-03.png",
+      "/img/skills/skill-05.png"
+    ],
     "authorId": "user-01",
     "createdAt": "2026-05-20T16:15:00Z"
   },
@@ -19,7 +24,12 @@
     "category": "business",
     "subcategory": "business-resume-and-interview",
     "tags": ["резюме", "карьера"],
-    "imageUrl": "/img/skills/skill-02.png",
+    "images": [
+      "/img/skills/skill-02.png",
+      "/img/skills/skill-03.png",
+      "/img/skills/skill-05.png",
+      "/img/skills/skill-06.png"
+    ],
     "authorId": "user-01",
     "createdAt": "2026-01-06T16:00:00Z"
   },
@@ -31,7 +41,12 @@
     "category": "creativity",
     "subcategory": "creativity-art-therapy",
     "tags": ["арт-терапия", "релакс"],
-    "imageUrl": "/img/skills/skill-03.png",
+    "images": [
+      "/img/skills/skill-03.png",
+      "/img/skills/skill-05.png",
+      "/img/skills/skill-06.png",
+      "/img/skills/skill-07.png"
+    ],
     "authorId": "user-02",
     "createdAt": "2025-05-17T21:45:00Z"
   },
@@ -43,7 +58,7 @@
     "category": "health",
     "subcategory": "health-yoga-and-meditation",
     "tags": ["йога", "медитация"],
-    "imageUrl": null,
+    "images": [],
     "authorId": "user-02",
     "createdAt": "2026-06-25T08:30:00Z"
   },
@@ -55,7 +70,12 @@
     "category": "education",
     "subcategory": "education-personal-development",
     "tags": ["цели", "привычки"],
-    "imageUrl": "/img/skills/skill-05.png",
+    "images": [
+      "/img/skills/skill-05.png",
+      "/img/skills/skill-06.png",
+      "/img/skills/skill-07.png",
+      "/img/skills/skill-08.png"
+    ],
     "authorId": "user-03",
     "createdAt": "2026-06-27T08:15:00Z"
   },
@@ -67,7 +87,12 @@
     "category": "health",
     "subcategory": "health-nutrition-and-healthy-living",
     "tags": ["питание", "зож"],
-    "imageUrl": "/img/skills/skill-06.png",
+    "images": [
+      "/img/skills/skill-06.png",
+      "/img/skills/skill-07.png",
+      "/img/skills/skill-08.png",
+      "/img/skills/skill-10.png"
+    ],
     "authorId": "user-03",
     "createdAt": "2025-06-14T21:15:00Z"
   },
@@ -79,7 +104,12 @@
     "category": "creativity",
     "subcategory": "creativity-drawing-and-illustration",
     "tags": ["рисование", "скетч"],
-    "imageUrl": "/img/skills/skill-07.png",
+    "images": [
+      "/img/skills/skill-07.png",
+      "/img/skills/skill-08.png",
+      "/img/skills/skill-10.png",
+      "/img/skills/skill-11.png"
+    ],
     "authorId": "user-04",
     "createdAt": "2025-08-07T10:00:00Z"
   },
@@ -91,7 +121,12 @@
     "category": "education",
     "subcategory": "education-speed-reading",
     "tags": ["чтение", "скорость"],
-    "imageUrl": "/img/skills/skill-08.png",
+    "images": [
+      "/img/skills/skill-08.png",
+      "/img/skills/skill-10.png",
+      "/img/skills/skill-11.png",
+      "/img/skills/skill-12.png"
+    ],
     "authorId": "user-04",
     "createdAt": "2025-12-26T17:30:00Z"
   },
@@ -103,7 +138,7 @@
     "category": "home",
     "subcategory": "home-finances",
     "tags": ["бюджет", "накопления"],
-    "imageUrl": null,
+    "images": [],
     "authorId": "user-05",
     "createdAt": "2026-02-09T15:00:00Z"
   },
@@ -115,7 +150,12 @@
     "category": "creativity",
     "subcategory": "creativity-music-and-sound",
     "tags": ["барабаны", "ритм"],
-    "imageUrl": "/img/skills/skill-10.png",
+    "images": [
+      "/img/skills/skill-10.png",
+      "/img/skills/skill-11.png",
+      "/img/skills/skill-12.png",
+      "/img/skills/skill-14.png"
+    ],
     "authorId": "user-05",
     "createdAt": "2025-07-03T13:00:00Z"
   },
@@ -127,7 +167,7 @@
     "category": "creativity",
     "subcategory": "creativity-acting",
     "tags": ["театр", "сцена"],
-    "imageUrl": "/img/skills/skill-11.png",
+    "images": ["/img/skills/skill-11.png"],
     "authorId": "user-06",
     "createdAt": "2026-01-05T10:45:00Z"
   },
@@ -139,7 +179,7 @@
     "category": "home",
     "subcategory": "home-repairs",
     "tags": ["ремонт", "инструменты"],
-    "imageUrl": "/img/skills/skill-12.png",
+    "images": ["/img/skills/skill-12.png"],
     "authorId": "user-06",
     "createdAt": "2025-08-17T15:00:00Z"
   },
@@ -151,7 +191,7 @@
     "category": "business",
     "subcategory": "business-marketing-and-advertising",
     "tags": ["маркетинг", "реклама"],
-    "imageUrl": null,
+    "images": [],
     "authorId": "user-07",
     "createdAt": "2025-03-27T10:30:00Z"
   },
@@ -163,7 +203,7 @@
     "category": "education",
     "subcategory": "education-cognitive-techniques",
     "tags": ["память", "мышление"],
-    "imageUrl": "/img/skills/skill-14.png",
+    "images": ["/img/skills/skill-14.png"],
     "authorId": "user-07",
     "createdAt": "2025-10-08T19:00:00Z"
   },
@@ -175,7 +215,7 @@
     "category": "languages",
     "subcategory": "languages-japanese",
     "tags": ["японский", "азбука"],
-    "imageUrl": "/img/skills/skill-15.png",
+    "images": ["/img/skills/skill-15.png"],
     "authorId": "user-08",
     "createdAt": "2026-02-01T09:30:00Z"
   },
@@ -187,7 +227,7 @@
     "category": "health",
     "subcategory": "health-mindfulness",
     "tags": ["осознанность", "практика"],
-    "imageUrl": "/img/skills/skill-16.png",
+    "images": ["/img/skills/skill-16.png"],
     "authorId": "user-08",
     "createdAt": "2025-09-10T11:15:00Z"
   },
@@ -199,7 +239,7 @@
     "category": "business",
     "subcategory": "business-team-management",
     "tags": ["лидерство", "команда"],
-    "imageUrl": "/img/skills/skill-17.png",
+    "images": ["/img/skills/skill-17.png"],
     "authorId": "user-09",
     "createdAt": "2026-10-28T17:00:00Z"
   },
@@ -211,7 +251,7 @@
     "category": "business",
     "subcategory": "business-personal-brand",
     "tags": ["бренд", "соцсети"],
-    "imageUrl": null,
+    "images": [],
     "authorId": "user-10",
     "createdAt": "2026-06-18T08:00:00Z"
   },
@@ -223,7 +263,7 @@
     "category": "creativity",
     "subcategory": "creativity-decor-and-diy",
     "tags": ["декор", "diy"],
-    "imageUrl": "/img/skills/skill-19.png",
+    "images": ["/img/skills/skill-19.png"],
     "authorId": "user-11",
     "createdAt": "2026-07-12T12:45:00Z"
   },
@@ -235,7 +275,7 @@
     "category": "languages",
     "subcategory": "languages-english",
     "tags": ["английский", "разговор"],
-    "imageUrl": "/img/skills/skill-20.png",
+    "images": ["/img/skills/skill-20.png"],
     "authorId": "user-12",
     "createdAt": "2025-02-17T09:45:00Z"
   },
@@ -247,7 +287,7 @@
     "category": "home",
     "subcategory": "home-cleaning-and-organization",
     "tags": ["уборка", "порядок"],
-    "imageUrl": "/img/skills/skill-21.png",
+    "images": ["/img/skills/skill-21.png"],
     "authorId": "user-13",
     "createdAt": "2026-01-14T20:00:00Z"
   },
@@ -259,7 +299,7 @@
     "category": "home",
     "subcategory": "home-cooking",
     "tags": ["кулинария", "рецепты"],
-    "imageUrl": null,
+    "images": [],
     "authorId": "user-14",
     "createdAt": "2026-08-17T09:15:00Z"
   },
@@ -271,7 +311,7 @@
     "category": "creativity",
     "subcategory": "creativity-video-editing",
     "tags": ["монтаж", "видео"],
-    "imageUrl": "/img/skills/skill-23.png",
+    "images": ["/img/skills/skill-23.png"],
     "authorId": "user-15",
     "createdAt": "2026-06-06T15:00:00Z"
   },
@@ -283,7 +323,7 @@
     "category": "languages",
     "subcategory": "languages-spanish",
     "tags": ["испанский", "путешествия"],
-    "imageUrl": "/img/skills/skill-24.png",
+    "images": ["/img/skills/skill-24.png"],
     "authorId": "user-16",
     "createdAt": "2025-11-15T15:30:00Z"
   },
@@ -295,7 +335,7 @@
     "category": "health",
     "subcategory": "health-physical-training",
     "tags": ["тренировки", "фитнес"],
-    "imageUrl": "/img/skills/skill-25.png",
+    "images": ["/img/skills/skill-25.png"],
     "authorId": "user-17",
     "createdAt": "2025-09-07T21:30:00Z"
   },
@@ -307,7 +347,7 @@
     "category": "business",
     "subcategory": "business-entrepreneurship",
     "tags": ["бизнес", "старт"],
-    "imageUrl": "/img/skills/skill-26.png",
+    "images": ["/img/skills/skill-26.png"],
     "authorId": "user-18",
     "createdAt": "2025-05-18T15:45:00Z"
   },
@@ -319,7 +359,7 @@
     "category": "education",
     "subcategory": "education-coaching",
     "tags": ["коучинг", "вопросы"],
-    "imageUrl": null,
+    "images": [],
     "authorId": "user-19",
     "createdAt": "2025-12-26T09:45:00Z"
   },
@@ -331,7 +371,7 @@
     "category": "health",
     "subcategory": "health-work-life-balance",
     "tags": ["баланс", "границы"],
-    "imageUrl": "/img/skills/skill-28.png",
+    "images": ["/img/skills/skill-28.png"],
     "authorId": "user-20",
     "createdAt": "2026-10-10T14:15:00Z"
   },
@@ -343,7 +383,7 @@
     "category": "languages",
     "subcategory": "languages-exam-preparation",
     "tags": ["ielts", "toefl"],
-    "imageUrl": "/img/skills/skill-29.png",
+    "images": ["/img/skills/skill-29.png"],
     "authorId": "user-21",
     "createdAt": "2025-02-17T20:30:00Z"
   },
@@ -355,7 +395,7 @@
     "category": "business",
     "subcategory": "business-time-management",
     "tags": ["планирование", "продуктивность"],
-    "imageUrl": "/img/skills/skill-30.png",
+    "images": ["/img/skills/skill-30.png"],
     "authorId": "user-22",
     "createdAt": "2026-06-18T21:30:00Z"
   },
@@ -367,7 +407,7 @@
     "category": "creativity",
     "subcategory": "creativity-creative-writing",
     "tags": ["тексты", "рассказ"],
-    "imageUrl": null,
+    "images": [],
     "authorId": "user-23",
     "createdAt": "2025-02-28T17:45:00Z"
   },
@@ -379,7 +419,7 @@
     "category": "education",
     "subcategory": "education-teaching-skills",
     "tags": ["преподавание", "методика"],
-    "imageUrl": "/img/skills/skill-32.png",
+    "images": ["/img/skills/skill-32.png"],
     "authorId": "user-24",
     "createdAt": "2026-01-12T17:00:00Z"
   },
@@ -391,7 +431,7 @@
     "category": "education",
     "subcategory": "education-learning-skills",
     "tags": ["обучение", "память"],
-    "imageUrl": "/img/skills/skill-33.png",
+    "images": ["/img/skills/skill-33.png"],
     "authorId": "user-25",
     "createdAt": "2026-05-09T11:30:00Z"
   },
@@ -403,7 +443,7 @@
     "category": "home",
     "subcategory": "home-storage",
     "tags": ["хранение", "гардероб"],
-    "imageUrl": "/img/skills/skill-34.png",
+    "images": ["/img/skills/skill-34.png"],
     "authorId": "user-26",
     "createdAt": "2025-08-28T18:30:00Z"
   },
@@ -415,7 +455,7 @@
     "category": "languages",
     "subcategory": "languages-chinese",
     "tags": ["китайский", "иероглифы"],
-    "imageUrl": "/img/skills/skill-35.png",
+    "images": ["/img/skills/skill-35.png"],
     "authorId": "user-27",
     "createdAt": "2026-08-11T21:00:00Z"
   },
@@ -427,7 +467,7 @@
     "category": "languages",
     "subcategory": "languages-german",
     "tags": ["немецкий", "грамматика"],
-    "imageUrl": null,
+    "images": [],
     "authorId": "user-28",
     "createdAt": "2025-10-16T08:00:00Z"
   },
@@ -439,7 +479,7 @@
     "category": "business",
     "subcategory": "business-project-management",
     "tags": ["проекты", "agile"],
-    "imageUrl": "/img/skills/skill-37.png",
+    "images": ["/img/skills/skill-37.png"],
     "authorId": "user-29",
     "createdAt": "2026-08-17T15:30:00Z"
   },
@@ -451,7 +491,7 @@
     "category": "business",
     "subcategory": "business-sales-and-negotiation",
     "tags": ["продажи", "переговоры"],
-    "imageUrl": "/img/skills/skill-38.png",
+    "images": ["/img/skills/skill-38.png"],
     "authorId": "user-30",
     "createdAt": "2026-02-10T09:15:00Z"
   },
@@ -463,7 +503,7 @@
     "category": "home",
     "subcategory": "home-houseplants",
     "tags": ["растения", "уход"],
-    "imageUrl": "/img/skills/skill-39.png",
+    "images": ["/img/skills/skill-39.png"],
     "authorId": "user-31",
     "createdAt": "2026-06-16T14:15:00Z"
   },
@@ -475,7 +515,7 @@
     "category": "health",
     "subcategory": "health-sleep-and-recovery",
     "tags": ["сон", "восстановление"],
-    "imageUrl": "/img/skills/skill-40.png",
+    "images": ["/img/skills/skill-40.png"],
     "authorId": "user-32",
     "createdAt": "2026-06-18T08:45:00Z"
   },
@@ -487,7 +527,7 @@
     "category": "languages",
     "subcategory": "languages-french",
     "tags": ["французский", "произношение"],
-    "imageUrl": null,
+    "images": [],
     "authorId": "user-33",
     "createdAt": "2026-10-18T10:45:00Z"
   },
@@ -499,7 +539,7 @@
     "category": "health",
     "subcategory": "health-mental-health",
     "tags": ["психология", "стресс"],
-    "imageUrl": "/img/skills/skill-42.png",
+    "images": ["/img/skills/skill-42.png"],
     "authorId": "user-34",
     "createdAt": "2025-03-20T10:00:00Z"
   },
@@ -511,7 +551,7 @@
     "category": "business",
     "subcategory": "business-sales-and-negotiation",
     "tags": ["продажи", "переговоры"],
-    "imageUrl": "/img/skills/skill-43.png",
+    "images": ["/img/skills/skill-43.png"],
     "authorId": "user-35",
     "createdAt": "2026-07-02T11:45:00Z"
   },
@@ -523,7 +563,7 @@
     "category": "languages",
     "subcategory": "languages-english",
     "tags": ["английский", "разговор"],
-    "imageUrl": "/img/skills/skill-44.png",
+    "images": ["/img/skills/skill-44.png"],
     "authorId": "user-36",
     "createdAt": "2025-10-13T08:15:00Z"
   },
@@ -535,7 +575,7 @@
     "category": "creativity",
     "subcategory": "creativity-drawing-and-illustration",
     "tags": ["рисование", "скетч"],
-    "imageUrl": "/img/skills/skill-45.png",
+    "images": ["/img/skills/skill-45.png"],
     "authorId": "user-37",
     "createdAt": "2025-09-13T08:45:00Z"
   },
@@ -547,7 +587,7 @@
     "category": "business",
     "subcategory": "business-project-management",
     "tags": ["проекты", "agile"],
-    "imageUrl": null,
+    "images": [],
     "authorId": "user-38",
     "createdAt": "2026-08-21T13:00:00Z"
   },
@@ -559,7 +599,7 @@
     "category": "creativity",
     "subcategory": "creativity-video-editing",
     "tags": ["монтаж", "видео"],
-    "imageUrl": "/img/skills/skill-47.png",
+    "images": ["/img/skills/skill-47.png"],
     "authorId": "user-39",
     "createdAt": "2026-02-03T20:45:00Z"
   },
@@ -571,7 +611,7 @@
     "category": "creativity",
     "subcategory": "creativity-music-and-sound",
     "tags": ["барабаны", "ритм"],
-    "imageUrl": "/img/skills/skill-48.png",
+    "images": ["/img/skills/skill-48.png"],
     "authorId": "user-40",
     "createdAt": "2026-09-04T21:15:00Z"
   }

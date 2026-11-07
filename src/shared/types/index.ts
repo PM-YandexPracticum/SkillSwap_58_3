@@ -11,7 +11,7 @@ export interface Skill {
   category: CategoryId
   subcategory: SubcategoryId
   tags: string[]
-  imageUrl: string | null
+  images: string[]
   authorId: UserId
   createdAt: string
 }
