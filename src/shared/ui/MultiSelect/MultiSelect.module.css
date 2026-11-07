@@ -1,0 +1,76 @@
+.container {
+  position: relative;
+  width: 100%;
+  font: var(--main-font);
+  color: var(--color-text-main);
+}
+
+.label {
+  display: block;
+  margin-bottom: var(--space-8);
+  color: var(--color-text-main);
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-12);
+  width: 100%;
+  min-height: 60px;
+  padding: var(--space-12) var(--space-24);
+  border: var(--border-main);
+  border-radius: var(--border-radius-main);
+  background-color: var(--color-bg-card);
+  color: var(--color-text-main);
+  text-align: left;
+  cursor: pointer;
+}
+
+.trigger[aria-expanded='true'] {
+  position: relative;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  border-bottom: none;
+}
+
+.trigger[aria-expanded='true']::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: var(--border-radius-main);
+  border-bottom: var(--border-inactive);
+  border-bottom-right-radius: var(--border-radius-main);
+  border-bottom-left-radius: var(--border-radius-main);
+  pointer-events: none;
+}
+
+.trigger:focus-visible {
+  outline: 2px solid var(--color-links);
+  outline-offset: 2px;
+}
+
+.dropdown {
+  position: absolute;
+  z-index: 10;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-height: 420px;
+  overflow-y: auto;
+  padding: var(--space-8) var(--space-16);
+  border: var(--border-main);
+  border-top: none;
+  border-radius: 0 0 var(--border-radius-main) var(--border-radius-main);
+  background-color: var(--color-bg-card);
+}
+
+.placeholder {
+  color: var(--color-text-additional);
+}
+
+.option {
+  padding: var(--space-8);
+}

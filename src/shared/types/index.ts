@@ -79,3 +79,19 @@ export interface Category {
   name: string
   subcategories: Subcategory[]
 }
+
+// ─── MultiSelect ─────────────────────────────────────────
+
+export interface MultiSelectOption {
+  value: string
+  label: string
+}
+
+export interface MultiSelectProps {
+  options: MultiSelectOption[]
+  value: string[]
+  onChange: (values: string[]) => void
+  placeholder?: string
+  label?: string
+  defaultOpen?: boolean
+}
