@@ -24,6 +24,7 @@ export type IconName =
   | 'google'
   | 'heart'
   | 'heart-filled'
+  | 'logo'
   | 'logout'
   | 'message-text'
   | 'moon'
