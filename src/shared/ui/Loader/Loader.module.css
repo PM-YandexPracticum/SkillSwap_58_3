@@ -1,0 +1,27 @@
+.loader {
+  border: 3px solid var(--color-text-main, #253017);
+  border-left-color: transparent;
+  border-radius: var(--border-radius-avatar, 100px);
+  animation: spin 1s linear infinite;
+}
+
+.medium {
+  height: 24px;
+  width: 24px;
+}
+
+.small {
+  height: 12px;
+  width: 12px;
+  border-width: 2px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
