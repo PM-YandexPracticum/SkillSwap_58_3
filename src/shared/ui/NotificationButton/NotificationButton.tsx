@@ -11,7 +11,7 @@ export const NotificationButton = ({ hasNew = false, onClick }: NotificationButt
       onClick={onClick}
       aria-label={hasNew ? 'Уведомления: есть новые' : 'Уведомления'}
     >
-      <Icon name="bell" className={styles.bellIcon} />
+      <Icon name="bell" />
     </button>
   )
 }

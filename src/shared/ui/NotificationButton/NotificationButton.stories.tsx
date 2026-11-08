@@ -2,7 +2,7 @@ import { Meta, StoryObj } from '@storybook/react-vite'
 import { NotificationButton } from './NotificationButton'
 
 const meta: Meta<typeof NotificationButton> = {
-  title: 'shared/NotificationButton',
+  title: 'Shared/NotificationButton',
   component: NotificationButton,
   tags: ['autodocs'],
   argTypes: {
