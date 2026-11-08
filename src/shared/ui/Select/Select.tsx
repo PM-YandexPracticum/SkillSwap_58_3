@@ -58,6 +58,7 @@ export function Select({
   function handleKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
     if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
       event.preventDefault()
+      event.stopPropagation()
       if (!isOpen) {
         open()
         if (event.key === 'ArrowUp' && !selected) setActiveIndex(options.length - 1)
@@ -67,10 +68,14 @@ export function Select({
       }
     } else if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault()
+      event.stopPropagation()
       if (!isOpen) open()
       else if (active) choose(active)
     } else if (event.key === 'Escape' || event.key === 'Tab') {
-      if (event.key === 'Escape' && isOpen) event.preventDefault()
+      if (event.key === 'Escape' && isOpen) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
       setIsOpen(false)
     }
   }

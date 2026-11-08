@@ -103,6 +103,45 @@ describe('Select', () => {
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument()
   })
 
+  it('не передаёт родителю обработанные клавиши навигации, выбора и закрытия', async () => {
+    const user = userEvent.setup()
+    const onChange = vi.fn()
+    const onParentKeyDown = vi.fn()
+    render(
+      <div onKeyDown={(event) => onParentKeyDown(event.key)}>
+        <Select options={options} value="" onChange={onChange} label="Пол" />
+      </div>,
+    )
+    await user.click(screen.getByRole('combobox'))
+    await user.keyboard('{ArrowDown}{ArrowUp}{Enter}')
+    expect(onChange).toHaveBeenCalledTimes(1)
+    expect(onChange).toHaveBeenCalledWith('unspecified')
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument()
+    await user.keyboard(' ')
+    expect(screen.getByRole('listbox')).toBeVisible()
+    await user.keyboard('{Escape}')
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument()
+    expect(onParentKeyDown).not.toHaveBeenCalled()
+  })
+
+  it('передаёт родителю Escape закрытого списка, Tab и необработанные клавиши', async () => {
+    const user = userEvent.setup()
+    const onParentKeyDown = vi.fn()
+    render(
+      <div onKeyDown={(event) => onParentKeyDown(event.key)}>
+        <Select options={options} value="" onChange={vi.fn()} label="Пол" />
+        <button type="button">Следующее поле</button>
+      </div>,
+    )
+    await user.tab()
+    await user.keyboard('{Escape}a{ArrowDown}')
+    expect(screen.getByRole('listbox')).toBeVisible()
+    await user.tab()
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Следующее поле' })).toHaveFocus()
+    expect(onParentKeyDown.mock.calls).toEqual([['Escape'], ['a'], ['Tab']])
+  })
+
   it('выбирает первый вариант после заполнения открытого пустого списка', async () => {
     const user = userEvent.setup()
     const onChange = vi.fn()
