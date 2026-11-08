@@ -25,7 +25,7 @@ export interface City {
 
 // ─── User ────────────────────────────────────────────────
 export type Gender = 'male' | 'female' | 'unspecified'
-export type UserId = 'string'
+export type UserId = string
 
 export interface User {
   id: UserId
