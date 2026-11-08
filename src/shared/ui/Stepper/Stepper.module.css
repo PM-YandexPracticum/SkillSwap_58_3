@@ -3,6 +3,7 @@
   min-height: 4px;
   border-radius: 8px;
   background-color: var(--color-inactive-elements, #e4e8df);
+  list-style-type: none;
 }
 
 .stepCount {
