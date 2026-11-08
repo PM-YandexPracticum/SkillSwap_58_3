@@ -13,7 +13,7 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['primary', 'outline'],
+      options: ['primary', 'outline', 'link'],
     },
     disabled: {
       control: 'boolean',
@@ -35,6 +35,21 @@ export const Outline: Story = {
   args: {
     variant: 'outline',
     children: 'Обмен предложен',
+  },
+}
+
+export const Link: Story = {
+  args: {
+    variant: 'link',
+    children: 'Все города',
+  },
+}
+
+export const LinkWithIcon: Story = {
+  args: {
+    variant: 'link',
+    children: 'Все города',
+    iconRight: <Icon name="chevron-down" size={16} />,
   },
 }
 
