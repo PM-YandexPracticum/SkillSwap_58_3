@@ -1,7 +1,7 @@
 import { Input } from './Input'
 
 export default {
-  title: 'Components/Input',
+  title: 'Shared/Input',
   component: Input,
   argTypes: {
     type: { control: 'select', options: ['text', 'password', 'search'] },
