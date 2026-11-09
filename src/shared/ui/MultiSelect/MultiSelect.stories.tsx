@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useArgs } from 'storybook/preview-api'
 import '@/app/styles/global.css'
 import { MultiSelect } from './MultiSelect'
-import type { MultiSelectProps } from '@/shared/types'
+import type { MultiSelectProps } from './interface'
 
 const options = [
   { value: 'business', label: 'Бизнес и карьера' },
@@ -78,5 +78,13 @@ export const MultipleSelected: Story = {
     placeholder: 'Выберите категорию',
     label: 'Категория навыка',
     onChange: () => {},
+  },
+}
+
+export const Disabled: Story = {
+  args: {
+    value: ['business'],
+    disabled: true,
+    defaultOpen: false,
   },
 }
