@@ -2,7 +2,7 @@ import type { ChangeEvent } from 'react'
 import type { IconName } from '../icons'
 
 export interface TextareaProps {
-  label: string
+  label?: string
   placeholder?: string
   value: string
   onChange: (event: ChangeEvent<HTMLTextAreaElement>) => void
@@ -11,5 +11,6 @@ export interface TextareaProps {
   maxLength?: number
   iconRight?: IconName
   readOnly?: boolean
+  disabled?: boolean
   onIconRightClick?: () => void
 }

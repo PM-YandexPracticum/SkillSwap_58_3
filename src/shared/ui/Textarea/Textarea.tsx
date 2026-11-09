@@ -14,13 +14,14 @@ export function Textarea({
   maxLength = 500,
   iconRight,
   readOnly = false,
+  disabled = false,
   onIconRightClick,
 }: TextareaProps) {
   const id = useId()
 
   return (
     <div className={styles.wrapper}>
-      <label htmlFor={id}>{label}</label>
+      {label && <label htmlFor={id}>{label}</label>}
       <div className={styles.field}>
         <textarea
           id={id}
@@ -34,6 +35,8 @@ export function Textarea({
           rows={rows}
           maxLength={maxLength}
           readOnly={readOnly}
+          disabled={disabled}
+          aria-label={label ? undefined : placeholder || 'Текстовое поле'}
           aria-invalid={Boolean(error)}
           aria-describedby={error ? `${id}-error` : undefined}
         />
@@ -41,7 +44,8 @@ export function Textarea({
           <button
             className={styles.iconButton}
             type="button"
-            aria-label={`Редактировать: ${label}`}
+            aria-label={label ? `Редактировать: ${label}` : 'Редактировать'}
+            disabled={disabled}
             onClick={onIconRightClick}
           >
             <Icon name={iconRight} />

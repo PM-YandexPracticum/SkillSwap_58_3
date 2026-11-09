@@ -76,3 +76,17 @@ export const ReadOnly: Story = {
     readOnly: true,
   },
 }
+
+export const Disabled: Story = {
+  name: 'Недоступное поле',
+  args: {
+    value: 'Это поле недоступно для редактирования.',
+    iconRight: 'edit',
+    disabled: true,
+  },
+}
+
+export const WithoutLabel: Story = {
+  name: 'Без подписи',
+  args: { label: undefined },
+}

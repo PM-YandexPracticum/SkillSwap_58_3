@@ -38,6 +38,18 @@
   border-color: var(--color-text-main, #253017);
 }
 
+.textarea[readonly] {
+  background: var(--color-bg-main, #f9faf7);
+  cursor: default;
+}
+
+.textarea:disabled {
+  border-color: var(--color-inactive-elements, #e4e8df);
+  color: var(--color-text-additional, #69735d);
+  background: var(--color-inactive-elements, #e4e8df);
+  cursor: not-allowed;
+}
+
 .textarea.error {
   border-color: var(--color-error, #bf3920);
 }
@@ -53,6 +65,11 @@
   display: flex;
   transform: translateY(-50%);
   color: var(--color-text-additional, #69735d);
+}
+
+.iconButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .errorText {
