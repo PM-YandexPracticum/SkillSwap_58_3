@@ -4,7 +4,7 @@ import styles from './NotificationPanel.module.css'
 import { Icon } from '../icons'
 import { Button } from '../Button'
 
-export const NofificationSection = ({
+export const NotificationSection = ({
   items,
   heading,
   onButtonClick,
@@ -65,7 +65,7 @@ export const NotificationPanel = ({
 }: NotificationPanelProps) => {
   return (
     <section className={clsx(styles.notificationPanel)}>
-      <NofificationSection
+      <NotificationSection
         items={newItems}
         heading="Новые уведомления"
         buttonName="Прочитать все"
@@ -73,7 +73,7 @@ export const NotificationPanel = ({
         onGo={onGo}
       />
 
-      <NofificationSection
+      <NotificationSection
         items={viewedItems}
         heading="Просмотренные"
         buttonName="Очистить"
