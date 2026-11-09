@@ -79,3 +79,11 @@ export interface Category {
   name: string
   subcategories: Subcategory[]
 }
+
+// ─── NotificationItem  ────────────────────────────────────────
+export interface NotificationItem {
+  id: string
+  text: string
+  description: string
+  dateLabel: string
+}
