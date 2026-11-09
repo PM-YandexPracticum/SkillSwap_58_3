@@ -89,6 +89,7 @@
 }
 
 .option:hover,
+.optionHighlighted,
 .optionSelected {
   background-color: var(--color-bg-overlay, #deebc5);
 }

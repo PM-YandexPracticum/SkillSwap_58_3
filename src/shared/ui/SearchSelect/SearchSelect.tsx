@@ -15,16 +15,19 @@ export const SearchSelect = ({
 }: SearchSelectProps) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+  const dropdownRef = useRef<HTMLUListElement>(null)
   const inputId = useId()
 
   const selectedOption = options.find((option) => option.value === value)
 
   const [isOpen, setIsOpen] = useState(false)
   const [search, setSearch] = useState(selectedOption ? selectedOption.label : '')
+  const [highlightedIndex, setHighlightedIndex] = useState<number>(-1)
 
   useEffect(() => {
     if (!isOpen) {
       setSearch(selectedOption ? selectedOption.label : '')
+      setHighlightedIndex(-1)
     }
   }, [value, selectedOption, isOpen])
 
@@ -33,6 +36,7 @@ export const SearchSelect = ({
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
         setIsOpen(false)
         setSearch(selectedOption ? selectedOption.label : '')
+        setHighlightedIndex(-1)
       }
     }
 
@@ -46,8 +50,18 @@ export const SearchSelect = ({
     option.label.toLowerCase().includes(search.toLowerCase()),
   )
 
+  useEffect(() => {
+    if (isOpen && highlightedIndex >= 0 && dropdownRef.current) {
+      const activeElement = dropdownRef.current.children[highlightedIndex] as
+        | HTMLElement
+        | undefined
+      activeElement?.scrollIntoView({ block: 'nearest' })
+    }
+  }, [highlightedIndex, isOpen])
+
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value)
+    setHighlightedIndex(-1)
     if (!isOpen) {
       setIsOpen(true)
     }
@@ -57,21 +71,48 @@ export const SearchSelect = ({
     setIsOpen(true)
   }
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Escape') {
-      setIsOpen(false)
-      setSearch(selectedOption ? selectedOption.label : '')
-    }
-  }
-
   const handleSelect = (option: SearchSelectOption) => {
     onChange(option.value)
     setSearch(option.label)
     setIsOpen(false)
+    setHighlightedIndex(-1)
+  }
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      if (!isOpen) {
+        setIsOpen(true)
+        const selectedIdx = filteredOptions.findIndex((opt) => opt.value === value)
+        setHighlightedIndex(selectedIdx >= 0 ? selectedIdx : 0)
+        return
+      }
+      if (filteredOptions.length === 0) return
+      setHighlightedIndex((prev) => (prev < filteredOptions.length - 1 ? prev + 1 : 0))
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      if (!isOpen) {
+        setIsOpen(true)
+        setHighlightedIndex(filteredOptions.length - 1)
+        return
+      }
+      if (filteredOptions.length === 0) return
+      setHighlightedIndex((prev) => (prev > 0 ? prev - 1 : filteredOptions.length - 1))
+    } else if (e.key === 'Enter') {
+      if (isOpen && highlightedIndex >= 0 && highlightedIndex < filteredOptions.length) {
+        e.preventDefault()
+        handleSelect(filteredOptions[highlightedIndex])
+      }
+    } else if (e.key === 'Escape') {
+      setIsOpen(false)
+      setSearch(selectedOption ? selectedOption.label : '')
+      setHighlightedIndex(-1)
+    }
   }
 
   const handleClear = () => {
     setSearch('')
+    setHighlightedIndex(-1)
     onClear?.()
     inputRef.current?.focus()
   }
@@ -126,14 +167,19 @@ export const SearchSelect = ({
       </div>
 
       {isOpen && (
-        <ul className={styles.dropdown} role="listbox">
+        <ul ref={dropdownRef} className={styles.dropdown} role="listbox">
           {filteredOptions.length > 0 ? (
-            filteredOptions.map((option) => (
+            filteredOptions.map((option, index) => (
               <li
                 key={option.value}
                 role="option"
                 aria-selected={option.value === value}
-                className={clsx(styles.option, option.value === value && styles.optionSelected)}
+                className={clsx(
+                  styles.option,
+                  option.value === value && styles.optionSelected,
+                  index === highlightedIndex && styles.optionHighlighted,
+                )}
+                onMouseEnter={() => setHighlightedIndex(index)}
                 onClick={() => handleSelect(option)}
               >
                 {option.label}
