@@ -7,7 +7,7 @@ const meta: Meta<typeof NotificationPanel> = {
   component: NotificationPanel,
   tags: ['autodocs'],
   argTypes: {
-    onGo: { action: 'onGo clicked' },
+    onGo: { action: 'onGo clicked "1"' },
     onReadAll: { action: 'onReadAll clicked' },
     onClear: { action: 'onClear clicked' },
   },

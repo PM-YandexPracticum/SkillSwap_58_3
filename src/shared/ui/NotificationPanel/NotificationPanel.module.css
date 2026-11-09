@@ -1,6 +1,5 @@
 .notificationPanel {
   width: 556px;
-  min-height: 616px;
   display: flex;
   align-items: start;
   justify-content: start;
@@ -82,8 +81,4 @@
   font-weight: var(--font-weight-regular, 400);
   font-size: var(--font-size-12, 12px);
   font-family: var(--font-roboto, 'Roboto', sans-serif);
-}
-
-.noItems {
-  min-height: 150px;
 }
