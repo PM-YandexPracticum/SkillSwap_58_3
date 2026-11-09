@@ -1,0 +1,21 @@
+.root {
+  position: relative;
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.panel {
+  position: absolute;
+  z-index: 10;
+  top: calc(100% + var(--space-8));
+  right: 0;
+  width: max-content;
+  border-radius: var(--border-radius-main);
+  color: var(--color-text-main);
+  background-color: var(--color-bg-card);
+  font: var(--main-font);
+}
+
+.panel[hidden] {
+  display: none;
+}
