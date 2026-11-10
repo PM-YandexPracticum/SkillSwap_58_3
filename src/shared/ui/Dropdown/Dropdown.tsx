@@ -42,7 +42,14 @@ export function Dropdown({
       ref={rootRef}
       className={clsx(styles.root, className)}
       onBlur={(event) => {
-        if (isOpen && !event.currentTarget.contains(event.relatedTarget as Node | null)) onClose()
+        // Клик по обычному тексту внутри панели тоже вызывает blur с relatedTarget === null.
+        if (
+          isOpen &&
+          event.relatedTarget !== null &&
+          !event.currentTarget.contains(event.relatedTarget as Node)
+        ) {
+          onClose()
+        }
       }}
     >
       {cloneElement(trigger, { 'aria-expanded': isOpen, 'aria-controls': panelId })}

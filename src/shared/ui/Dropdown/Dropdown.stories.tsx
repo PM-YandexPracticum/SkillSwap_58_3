@@ -10,10 +10,10 @@ import type { DropdownProps } from './interface'
 
 const contentStyle = {
   display: 'grid',
-  gap: 'var(--space-8)',
-  padding: 'var(--space-16)',
-  border: 'var(--border-main)',
-  borderRadius: 'var(--border-radius-main)',
+  gap: 'var(--space-8, 8px)',
+  padding: 'var(--space-16, 16px)',
+  border: 'var(--border-main, 1px solid #69775d)',
+  borderRadius: 'var(--border-radius-main, 12px)',
 }
 
 const meta = {
@@ -72,6 +72,11 @@ export const WithText: Story = {
     await userEvent.click(trigger)
     await expect(trigger).toHaveAttribute('aria-expanded', 'false')
     await userEvent.click(trigger)
+    const text = canvas.getByText('Содержимое панели приходит снаружи.')
+    await userEvent.click(text)
+    await expect(canvas.getByRole('group', { name: 'Выпадающая панель' })).toBeVisible()
+    await userEvent.dblClick(text)
+    await expect(trigger).toHaveAttribute('aria-expanded', 'true')
     await userEvent.keyboard('{Escape}')
     await expect(trigger).toHaveAttribute('aria-expanded', 'false')
     await expect(trigger).toHaveFocus()

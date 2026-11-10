@@ -30,6 +30,7 @@ function Example({
         }}
         ariaLabel="Содержимое панели"
       >
+        <p>Подробности уведомления</p>
         <button type="button">Действие внутри</button>
       </Dropdown>
       <button type="button">Снаружи</button>
@@ -75,6 +76,21 @@ describe('Dropdown', () => {
     expect(screen.getByRole('group')).toBeVisible()
     await user.click(trigger)
     expect(trigger).toHaveAttribute('aria-expanded', 'false')
+    expect(onClose).not.toHaveBeenCalled()
+  })
+
+  it('не закрывается при переходе с trigger на обычный текст внутри панели', async () => {
+    const user = userEvent.setup()
+    const onClose = vi.fn()
+    render(<Example initiallyOpen={false} onClose={onClose} />)
+    const trigger = screen.getByRole('button', { name: 'Открыть панель' })
+
+    await user.click(trigger)
+    expect(trigger).toHaveFocus()
+    await user.click(screen.getByText('Подробности уведомления'))
+
+    expect(screen.getByRole('group', { name: 'Содержимое панели' })).toBeVisible()
+    expect(trigger).toHaveAttribute('aria-expanded', 'true')
     expect(onClose).not.toHaveBeenCalled()
   })
 
