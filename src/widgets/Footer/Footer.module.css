@@ -1,34 +1,33 @@
 .footer {
   width: 100%;
   background-color: var(--color-bg-card, #fff);
-  border-top: 1px solid var(--color-inactive-elements, #e4e8df);
+  border-top: var(--border-inactive);
   padding: var(--space-40, 40px) var(--space-60, 60px);
 }
 
 .container {
-  max-width: 1200px;
+  max-width: var(--max-width-layout, 1440px);
   margin: 0 auto;
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
-  gap: var(--space-40, 40px);
+  gap: var(--space-60, 60px);
 }
 
 .brand {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   gap: var(--space-32, 32px);
 }
 
 .copyright {
-  font-size: 14px;
+  font-size: var(--font-size-14, 14px);
   color: var(--color-text-additional, #69735d);
 }
 
 .nav {
   display: flex;
   gap: var(--space-60, 60px);
+  margin-left: auto;
 }
 
 .column {
