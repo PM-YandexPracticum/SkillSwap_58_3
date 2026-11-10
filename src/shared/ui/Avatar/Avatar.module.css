@@ -80,17 +80,15 @@
   height: var(--space-24, 24px);
 }
 
+.root > .editDropdown {
+  position: static;
+}
+
 .popup {
-  position: absolute;
-  z-index: 1;
-  top: calc(100% + var(--space-8, 8px));
-  right: 0;
   display: grid;
   min-width: 144px;
   padding: var(--space-8, 8px);
   border: var(--border-main, 1px solid #69775d);
-  border-radius: var(--border-radius-main, 12px);
-  background-color: var(--color-bg-card, #fff);
 }
 
 .popupButton {
