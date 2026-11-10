@@ -8,6 +8,7 @@ import styles from './DatePicker.module.css'
 import type { DatePickerProps } from './interface'
 import { Button } from '../Button'
 import { Icon } from '../icons'
+import { maskDate } from './maskDate'
 
 const DATE_FORMAT = 'dd.MM.yyyy'
 const MIN_YEAR = 1900
@@ -114,6 +115,13 @@ export const DatePicker = ({ label, placeholder, value, onChange, error }: DateP
     setIsOpen(false)
   }
 
+  // библиотека читает event.target.value после этого колбэка, поэтому маска применяется здесь
+  const applyMask = (event?: { target: EventTarget }) => {
+    if (event?.target instanceof HTMLInputElement) {
+      event.target.value = maskDate(event.target.value)
+    }
+  }
+
   return (
     <div className={styles.wrapper}>
       <label className={styles.label} htmlFor={id}>
@@ -125,6 +133,7 @@ export const DatePicker = ({ label, placeholder, value, onChange, error }: DateP
         open={isOpen}
         selected={isOpen ? draft : value}
         onChange={setDraft}
+        onChangeRaw={applyMask}
         onInputClick={openCalendar}
         onFocus={openCalendar}
         onClickOutside={cancel}
@@ -151,7 +160,9 @@ export const DatePicker = ({ label, placeholder, value, onChange, error }: DateP
           <Button variant="outline" onClick={cancel}>
             Отменить
           </Button>
-          <Button onClick={confirm}>Выбрать</Button>
+          <Button onClick={confirm} disabled={!draft}>
+            Выбрать
+          </Button>
         </div>
       </ReactDatePicker>
 
