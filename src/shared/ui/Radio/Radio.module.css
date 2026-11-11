@@ -1,0 +1,58 @@
+.container {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-12, 12px);
+  cursor: pointer;
+  user-select: none;
+  font: var(--main-font, 400 16px/1.5 'Roboto', sans-serif);
+  color: var(--color-text-main, #253017);
+}
+
+.input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border: var(--border-main, 1px solid #69775d);
+  border-radius: 50%;
+  background-color: var(--color-bg-card, #fff);
+}
+
+.circleChecked {
+  border-color: var(--color-links, #508826);
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--color-links, #508826);
+  opacity: 0;
+}
+
+.circleChecked .dot {
+  opacity: 1;
+}
+
+.input:focus-visible + .circle {
+  outline: 2px solid var(--color-links, #508826);
+  outline-offset: 2px;
+}
+
+.label {
+  line-height: 1.5;
+}

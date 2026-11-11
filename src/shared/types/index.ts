@@ -11,7 +11,7 @@ export interface Skill {
   category: CategoryId
   subcategory: SubcategoryId
   tags: string[]
-  imageUrl: string | null
+  images: string[]
   authorId: UserId
   createdAt: string
 }
@@ -25,7 +25,7 @@ export interface City {
 
 // ─── User ────────────────────────────────────────────────
 export type Gender = 'male' | 'female' | 'unspecified'
-export type UserId = 'string'
+export type UserId = string
 
 export interface User {
   id: UserId
@@ -78,4 +78,12 @@ export interface Category {
   id: CategoryId
   name: string
   subcategories: Subcategory[]
+}
+
+// ─── NotificationItem  ────────────────────────────────────────
+export interface NotificationItem {
+  id: string
+  text: string
+  description: string
+  dateLabel: string
 }

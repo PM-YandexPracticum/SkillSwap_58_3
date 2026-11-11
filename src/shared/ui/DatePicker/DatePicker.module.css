@@ -1,0 +1,200 @@
+/* стили библиотеки react-datepicker глобальные, поэтому :global */
+/* stylelint-disable selector-pseudo-class-no-unknown */
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4, 4px);
+}
+
+.label {
+  font: var(--main-font, 400 16px 'Roboto', sans-serif);
+  color: var(--color-text-main, #253017);
+}
+
+.pickerWrapper {
+  display: block;
+  width: 100%;
+}
+
+.pickerWrapper :global(.react-datepicker__input-container) {
+  display: block;
+}
+
+.field {
+  position: relative;
+}
+
+.input {
+  width: 100%;
+  min-height: 48px;
+  padding: var(--input-margin, 12px 20px);
+  padding-right: 52px;
+  border: 1px solid var(--color-text-additional, #69735d);
+  border-radius: var(--border-radius-main, 12px);
+  background-color: var(--color-bg-card, #fff);
+  color: var(--color-text-main, #253017);
+  font-size: var(--font-size-16, 16px);
+}
+
+.input::placeholder {
+  color: var(--color-text-additional, #69735d);
+  font-size: var(--font-size-16, 16px);
+}
+
+.input:focus {
+  outline: none;
+}
+
+.input:focus-visible {
+  border-color: var(--color-text-main, #253017);
+}
+
+.error {
+  border-color: var(--color-error, #bf3920);
+}
+
+.icon {
+  position: absolute;
+  top: 50%;
+  right: var(--space-20, 20px);
+  transform: translateY(-50%);
+  color: var(--color-text-main, #253017);
+  pointer-events: none;
+}
+
+.errorText {
+  color: var(--color-error, #bf3920);
+  font-size: 12px;
+}
+
+/* ─── Календарь ─────────────────────────────────────────── */
+
+.popper {
+  z-index: 10;
+}
+
+.calendar {
+  width: 280px;
+  padding: var(--space-16, 16px) 0;
+  border: 1px solid var(--color-text-additional, #69735d);
+  border-radius: var(--border-radius-main, 12px);
+  background-color: var(--color-bg-card, #fff);
+  color: var(--color-text-main, #253017);
+  font: var(--main-font, 400 16px 'Roboto', sans-serif);
+  line-height: 24px;
+  letter-spacing: 0.02em;
+}
+
+.calendar :global(.react-datepicker__month-container) {
+  float: none;
+  width: 224px;
+  margin-inline: auto;
+}
+
+.calendar :global(.react-datepicker__header) {
+  padding: 0;
+  border: none;
+  background: none;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-24, 24px);
+  height: 32px;
+  margin-bottom: 6px;
+}
+
+.selectWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4, 4px);
+  border-radius: var(--space-4, 4px);
+}
+
+.selectWrapper:focus-within {
+  outline: 2px solid var(--color-links, #508826);
+  outline-offset: 2px;
+}
+
+/* настоящий select лежит поверх подписи и невидим, поэтому ширина зависит от выбранного значения */
+.select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.calendar :global(.react-datepicker__day-names) {
+  margin: 0;
+}
+
+.calendar :global(.react-datepicker__day-name) {
+  width: 32px;
+  margin: 0;
+  color: var(--color-links, #508826);
+  font-size: 12px;
+  line-height: 32px;
+}
+
+.calendar :global(.react-datepicker__month) {
+  margin: 0;
+}
+
+.calendar :global(.react-datepicker__day) {
+  width: 32px;
+  margin: 0;
+  border-radius: var(--border-radius-avatar, 100px);
+  color: var(--color-text-main, #253017);
+  font-size: 12px;
+  line-height: 32px;
+}
+
+.calendar :global(.react-datepicker__day:hover) {
+  background-color: var(--color-inactive-elements, #e4e8df);
+}
+
+.calendar :global(.react-datepicker__day--outside-month),
+.calendar :global(.react-datepicker__day--disabled) {
+  color: #9ca197;
+}
+
+.calendar :global(.react-datepicker__day--disabled) {
+  cursor: not-allowed;
+}
+
+.calendar :global(.react-datepicker__day--disabled:hover) {
+  background: none;
+}
+
+.calendar :global(.react-datepicker__day--keyboard-selected) {
+  background: none;
+}
+
+.calendar :global(.react-datepicker__day--selected),
+.calendar :global(.react-datepicker__day--selected:hover) {
+  background-color: var(--color-accent-main, #abd27a);
+  color: var(--color-text-main, #253017);
+}
+
+.calendar :global(.react-datepicker__children-container) {
+  width: auto;
+  margin: 0;
+  padding: 0;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--space-16, 16px);
+  padding-inline: var(--space-16, 16px);
+}
+
+/* в макете кнопка высотой 48px вместе с рамкой, у общей кнопки рамка добавляется к padding */
+.actions > button {
+  padding-block: calc(var(--space-12, 12px) - 1px);
+}

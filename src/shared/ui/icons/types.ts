@@ -13,6 +13,7 @@ export type IconName =
   | 'category-home'
   | 'category-languages'
   | 'chevron-down'
+  | 'chevron-left'
   | 'chevron-right'
   | 'chevron-up'
   | 'clock'

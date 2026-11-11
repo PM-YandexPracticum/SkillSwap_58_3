@@ -1,0 +1,126 @@
+.carousel {
+  display: grid;
+  grid-template-columns: minmax(0, 3.5217fr) minmax(0, 1fr);
+  gap: var(--space-24, 24px);
+  width: 100%;
+}
+
+.main {
+  position: relative;
+  min-width: 0;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: var(--border-radius-main, 12px);
+}
+
+.swiper,
+.slide {
+  width: 100%;
+  height: 100%;
+}
+
+.mainImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thumbnails {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 0;
+  height: 100%;
+}
+
+.thumbnail {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: var(--border-radius-main, 12px);
+}
+
+.thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.activeThumbnail {
+  isolation: isolate;
+}
+
+.activeThumbnail::after {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  border: 4px solid var(--color-accent-main, #abd27a);
+  border-radius: inherit;
+  pointer-events: none;
+  content: '';
+}
+
+.remainingCount {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--color-text-main, #253017);
+  background-color: rgb(255 255 255 / 50%);
+  font: var(--photo-counter-font, 400 20px 'Inter', sans-serif);
+}
+
+.carousel .navigationButton {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  color: var(--color-text-additional, #69735d);
+  background-color: var(--color-inactive-elements, #e4e8df);
+  border-radius: 50%;
+  transform: translateY(-50%);
+  transition:
+    color 150ms ease,
+    background-color 150ms ease;
+}
+
+.carousel .navigationButton svg {
+  width: 24px;
+  height: 24px;
+}
+
+.carousel .navigationButton:hover {
+  color: var(--color-text-main, #253017);
+  background-color: var(--color-bg-overlay, #deebc5);
+}
+
+.carousel .navigationButton:active {
+  color: var(--color-bg-card, #fff);
+  background-color: var(--color-links, #508826);
+}
+
+.carousel .navigationButton:focus-visible {
+  outline: 2px solid var(--color-links, #508826);
+  outline-offset: 2px;
+}
+
+.previousButton {
+  left: var(--space-16, 16px);
+}
+
+.nextButton {
+  right: var(--space-16, 16px);
+}
+
+.empty {
+  display: grid;
+  place-items: center;
+  color: var(--color-text-additional, #69735d);
+  background-color: var(--color-inactive-elements, #e4e8df);
+  font: var(--main-font, 400 16px 'Roboto', sans-serif);
+}

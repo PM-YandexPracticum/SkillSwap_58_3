@@ -1,0 +1,123 @@
+.header {
+  width: 100%;
+  background-color: var(--color-bg-main, #f9faf7);
+  padding: var(--space-24, 24px) var(--space-40, 40px);
+}
+
+.container {
+  max-width: var(--max-width-layout, 1440px);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: var(--space-32, 32px);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-24, 24px);
+  flex-shrink: 0;
+}
+
+.navLink {
+  font-size: var(--font-size-16, 16px);
+  color: var(--color-text-main, #253017);
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+.navLink:hover {
+  color: var(--color-links, #508826);
+}
+
+.nav .skillsTrigger {
+  color: var(--color-text-main, #253017);
+  font-weight: var(--font-weight-regular, 400);
+  gap: var(--space-4, 4px);
+  white-space: nowrap;
+}
+
+.nav .skillsTrigger:hover:not(:disabled),
+.nav .skillsTriggerOpen {
+  color: var(--color-links, #508826);
+  opacity: 1;
+}
+
+.skillsPanel {
+  left: 0;
+  right: auto;
+}
+
+.search {
+  flex: 1;
+  min-width: 200px;
+}
+
+.search div {
+  width: 100%;
+}
+
+.search input {
+  background-color: var(--color-bg-card, #fff);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-20, 20px);
+  flex-shrink: 0;
+}
+
+.iconButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-main, #253017);
+  transition: color 0.2s ease;
+}
+
+.iconButton:hover {
+  color: var(--color-links, #508826);
+}
+
+.authButtons {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8, 8px);
+}
+
+.profileTrigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8, 8px);
+  color: var(--color-text-main, #253017);
+}
+
+.userName {
+  font-size: var(--font-size-16, 16px);
+  white-space: nowrap;
+}
+
+.profileMenu {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24, 24px);
+  min-width: 260px;
+  padding: var(--space-40, 40px);
+  border: var(--border-profile-modal, 1px solid #b2b9a9);
+  border-radius: var(--border-radius-main, 12px);
+  background-color: var(--color-bg-card, #fff);
+}
+
+.profileMenuItem {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8, 8px);
+  font-size: var(--font-size-16, 16px);
+  color: var(--color-text-main, #253017);
+  transition: color 0.2s ease;
+}
+
+.profileMenuItem:hover {
+  color: var(--color-links, #508826);
+}
