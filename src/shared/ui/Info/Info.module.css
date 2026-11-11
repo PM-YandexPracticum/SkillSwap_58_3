@@ -1,0 +1,51 @@
+.info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-40, 40px);
+  color: var(--color-text-main, #253017);
+  text-align: center;
+}
+
+.registration {
+  justify-content: center;
+  width: 556px;
+  min-height: 692px;
+  padding: var(--space-60, 60px);
+  border-radius: var(--border-radius-main, 12px);
+  background-color: var(--color-bg-card, #fff);
+}
+
+.error {
+  width: 460px;
+}
+
+.image {
+  display: block;
+  flex-shrink: 0;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12, 12px);
+  width: 100%;
+}
+
+.error .text {
+  gap: var(--space-4, 4px);
+}
+
+.title {
+  font-family: var(--font-jost, 'Jost', sans-serif);
+  font-size: var(--font-size-24, 24px);
+  font-weight: var(--font-weight-medium, 500);
+  line-height: 28px;
+  letter-spacing: -0.011em;
+}
+
+.description {
+  font: var(--main-font, 400 16px 'Roboto', sans-serif);
+  line-height: 24px;
+  letter-spacing: 0.02em;
+}
