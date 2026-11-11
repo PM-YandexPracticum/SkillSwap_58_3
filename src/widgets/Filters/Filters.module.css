@@ -1,0 +1,114 @@
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-32, 32px);
+  width: 100%;
+  max-width: 332px;
+  padding: var(--space-24, 24px);
+  background-color: var(--color-bg-card, #fff);
+  border-radius: var(--border-radius-main, 12px);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-12, 12px);
+}
+
+.title {
+  margin: 0;
+  font: var(--heading-filter-font, 500 24px 'Jost', sans-serif);
+  color: var(--color-text-main, #253017);
+}
+
+.count {
+  color: var(--color-text-main, #253017);
+}
+
+.filters .resetButton {
+  font-size: var(--font-size-12, 12px);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12, 12px);
+}
+
+.sectionTitle {
+  margin: 0;
+  font: var(--main-font-accent, 500 16px 'Roboto', sans-serif);
+  color: var(--color-text-main, #253017);
+}
+
+.category {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8, 8px);
+}
+
+.categoryRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8, 8px);
+}
+
+.categoryToggle {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  color: var(--color-text-additional, #69735d);
+  transition: color 150ms ease;
+}
+
+.categoryToggle:hover {
+  color: var(--color-links, #508826);
+}
+
+.categoryToggle:focus-visible {
+  outline: 2px solid var(--color-links, #508826);
+  outline-offset: 2px;
+  border-radius: var(--border-radius-main, 12px);
+}
+
+.subcategories {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 300ms ease-in-out;
+  overflow: hidden;
+}
+
+.subcategoriesOpen {
+  grid-template-rows: 1fr;
+}
+
+.subcategoriesInner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12, 12px);
+  padding-left: var(--space-20, 20px);
+  min-height: 0;
+}
+
+.expandLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4, 4px);
+  width: fit-content;
+  color: var(--color-links, #508826);
+  font-size: var(--font-size-12, 12px);
+  transition: opacity 150ms ease;
+}
+
+.expandLink:hover {
+  opacity: 0.8;
+}
+
+.expandLink:focus-visible {
+  outline: 2px solid var(--color-links, #508826);
+  outline-offset: 2px;
+  border-radius: var(--border-radius-main, 12px);
+}
