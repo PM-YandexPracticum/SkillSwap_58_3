@@ -18,6 +18,13 @@ const makeCategories = (): Category[] => [
   },
 ]
 
+const makeEmptyDict = (): Dictionaries =>
+  ({
+    cities: [],
+    categories: [],
+    skills: [],
+  }) as Dictionaries
+
 const makeDictionaries = (): Dictionaries =>
   ({
     cities: [{ id: 'moscow', name: 'Москва' }],
@@ -30,6 +37,7 @@ describe('mapUserToCardData', () => {
     const result = mapUserToCardData(user1, makeDictionaries(), new Date(2026, 0, 10))
 
     expect(result).toEqual({
+      id: 'user-01',
       name: 'Иван Петров',
       avatarUrl: '/img/avatars/avatar-01.png',
       description: 'Практик, а не теоретик: покажу на примерах, как это работает.',
@@ -41,6 +49,18 @@ describe('mapUserToCardData', () => {
         { id: 'home-finances', label: 'Личные финансы', categoryId: 'home' },
       ],
     })
+  })
+
+  it('Если нет города вернет пустую строку', () => {
+    const result = mapUserToCardData(user1, makeEmptyDict(), new Date(2026, 0, 10))
+
+    expect(result?.city).toEqual('')
+  })
+
+  it('Если есть id города то вернет город', () => {
+    const result = mapUserToCardData(user1, makeDictionaries(), new Date(2026, 0, 10))
+
+    expect(result?.city).toBe('Москва')
   })
 
   it('learn: пропускает подкатегорию, которой нет в словаре', () => {

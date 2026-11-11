@@ -1,7 +1,7 @@
 import { Category, CategoryId, Skill, SubcategoryId, User, UserId } from '@/shared/types'
 import { Dictionaries } from './types'
 
-const getAgeInYears = (birthdayUser: string, currentDate?: Date | null): number => {
+const getAgeInYears = (birthdayUser: string | Date, currentDate?: Date | null): number => {
   const birthday = typeof birthdayUser === 'string' ? new Date(birthdayUser) : birthdayUser
 
   if (!birthday || isNaN(birthday.getTime())) {
@@ -40,7 +40,7 @@ const transformTeachFromSkills = (skills: Skill[], userId: UserId) => {
   return teach
 }
 
-const transformrLearnFromSubCat = (subCatIds: SubcategoryId[], categories: Category[]) => {
+const transformLearnFromSubCat = (subCatIds: SubcategoryId[], categories: Category[]) => {
   if (!Array.isArray(subCatIds) || !Array.isArray(categories)) {
     return []
   }
@@ -77,12 +77,13 @@ export const mapUserToCardData = (
   const currentCityName = dictionaries?.cities?.find((city) => city.id === user.town)?.name || ''
 
   return {
+    id: user.id,
     name: user.name,
     avatarUrl: user.avatarUrl,
     description: user.description,
     city: currentCityName,
     age: getAgeInYears(user.birthday, currentDate),
     teach: transformTeachFromSkills(dictionaries?.skills ?? [], user.id),
-    learn: transformrLearnFromSubCat(user.learn, dictionaries?.categories ?? []),
+    learn: transformLearnFromSubCat(user.learn, dictionaries?.categories ?? []),
   }
 }
