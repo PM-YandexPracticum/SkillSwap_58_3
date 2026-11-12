@@ -7,6 +7,7 @@ import { formatAge } from './formatAge'
 import { SkillGroup } from './SkillGroup'
 import type { UserCardProps } from './interface'
 import styles from './UserCard.module.css'
+import { Icon } from '@/shared/ui/icons'
 
 export const UserCard = ({
   variant,
@@ -18,6 +19,7 @@ export const UserCard = ({
   teach,
   learn,
   isLiked = false,
+  isExchangeProposed = false,
   onLike,
   onDetails,
 }: UserCardProps) => {
@@ -52,11 +54,16 @@ export const UserCard = ({
         <SkillGroup title={`Хочет научиться${titleSuffix}`} skills={learn} />
       </div>
 
-      {isCatalog && (
-        <Button className={styles.details} onClick={onDetails}>
-          Подробнее
-        </Button>
-      )}
+      {isCatalog &&
+        (!isExchangeProposed ? (
+          <Button className={styles.details} onClick={onDetails}>
+            Подробнее
+          </Button>
+        ) : (
+          <Button variant="outline" disabled iconLeft={<Icon name="clock" />}>
+            Обмен предложен
+          </Button>
+        ))}
     </article>
   )
 }

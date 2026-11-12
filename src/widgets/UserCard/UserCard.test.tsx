@@ -163,4 +163,15 @@ describe('UserCard', () => {
       expect(container.querySelector('img')).not.toBeInTheDocument()
     })
   })
+
+  it('shows special unclicable button with specific text and svg instead of default one when exchange proposed', () => {
+    render(<UserCard {...baseProps} isExchangeProposed />)
+    const newButton = screen.getByRole('button', { name: 'Обмен предложен' })
+    const oldButton = screen.queryByRole('button', { name: 'Подробнее' })
+
+    expect(oldButton).not.toBeInTheDocument()
+    expect(newButton).toBeInTheDocument()
+    expect(newButton).toBeDisabled()
+    expect(newButton.querySelector('svg')).toBeInTheDocument()
+  })
 })

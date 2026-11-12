@@ -46,6 +46,7 @@ const meta = {
     teach: [drums],
     learn: [timeManagement, meditation],
     isLiked: false,
+    isExchangeProposed: false,
     onLike: fn(),
     onDetails: fn(),
   },
@@ -61,6 +62,11 @@ type Story = StoryObj<typeof meta>
 
 // Каталог
 export const Catalog: Story = {}
+
+// Каталог, предложен обмен
+export const CatalogWithExchange: Story = {
+  args: { isExchangeProposed: true },
+}
 
 // Каталог, когда навыков больше двух: лишние заменяются на +n
 export const CatalogWithMoreTags: Story = {

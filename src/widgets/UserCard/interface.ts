@@ -25,6 +25,8 @@ export interface UserCardProps {
   isLiked?: boolean
   /** Только для variant="catalog" */
   onLike?: () => void
+  /** Только для variant="catalog" */
+  isExchangeProposed?: boolean
   /** Вызывается по кнопке «Подробнее», только для variant="catalog" */
   onDetails?: () => void
 }
