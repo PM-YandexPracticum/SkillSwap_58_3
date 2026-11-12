@@ -1,0 +1,87 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-32, 32px);
+  row-gap: var(--space-40, 40px);
+}
+
+.category {
+  min-width: 0;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12, 12px);
+  margin-bottom: var(--space-12, 12px);
+}
+
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background-color: var(--color-inactive-elements, #e4e8df);
+}
+
+.title {
+  margin: 0;
+  font: var(--heading-skills-font, 500 20px 'Jost', sans-serif);
+  color: var(--color-text-main, #253017);
+}
+
+.subcategories {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-12, 12px);
+  margin: 0;
+  padding: 0 0 0 44px;
+  list-style: none;
+}
+
+.subcategory {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text-main, #253017);
+  font: var(--main-font, 400 16px 'Roboto', sans-serif);
+  text-align: left;
+  cursor: pointer;
+}
+
+.subcategory:hover {
+  color: var(--color-links, #508826);
+}
+
+.subcategory:focus-visible {
+  outline: 2px solid var(--color-links, #508826);
+  outline-offset: 2px;
+}
+
+.business {
+  background-color: var(--color-category-business, #eee7f7);
+}
+
+.languages {
+  background-color: var(--color-category-languages, #ebe5c5);
+}
+
+.home {
+  background-color: var(--color-category-home, #f7ebe5);
+}
+
+.creativity {
+  background-color: var(--color-category-creative, #f7e7f2);
+}
+
+.education {
+  background-color: var(--color-category-education, #e7f2f6);
+}
+
+.health {
+  background-color: var(--color-category-health, #e9f7e7);
+}
