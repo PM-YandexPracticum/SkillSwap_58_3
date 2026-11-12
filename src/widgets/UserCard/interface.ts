@@ -14,7 +14,8 @@ export interface UserCardProps {
   /** Без ссылки показывается заглушка */
   avatarUrl?: string | null
   city: string
-  age: number
+  /** Дата рождения в формате ГГГГ-ММ-ДД */
+  birthday: string
   /** Только для variant="preview" */
   description?: string
   /** Навыки «Может научить» */

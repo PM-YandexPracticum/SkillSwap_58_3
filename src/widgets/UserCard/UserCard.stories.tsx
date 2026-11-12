@@ -41,7 +41,7 @@ const meta = {
     name: 'Иван',
     avatarUrl: '/img/avatars/avatar-01.png',
     city: 'Санкт-Петербург',
-    age: 34,
+    birthday: '1992-05-15',
     description: 'Привет! Люблю ритм, кофе по утрам и людей, которые не боятся пробовать новое',
     teach: [drums],
     learn: [timeManagement, meditation],
@@ -51,7 +51,7 @@ const meta = {
   },
   argTypes: {
     variant: { control: 'inline-radio', options: ['catalog', 'preview'] },
-    age: { control: { type: 'number', min: 0, max: 120 } },
+    birthday: { control: 'text' },
   },
   render: (args) => <UserCardPreview {...args} />,
 } satisfies Meta<typeof UserCard>

@@ -1,10 +1,18 @@
 import { cleanup, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { UserCard } from './UserCard'
 import type { UserCardProps, UserCardSkill } from './interface'
 
-afterEach(cleanup)
+beforeEach(() => {
+  vi.useFakeTimers({ toFake: ['Date'] })
+  vi.setSystemTime(new Date(2026, 4, 15))
+})
+
+afterEach(() => {
+  cleanup()
+  vi.useRealTimers()
+})
 
 const drums: UserCardSkill = { id: 'drums', label: 'Игра на барабанах', categoryId: 'creativity' }
 const timeManagement: UserCardSkill = {
@@ -21,7 +29,7 @@ const baseProps: UserCardProps = {
   name: 'Иван',
   avatarUrl: '/img/avatars/avatar-01.png',
   city: 'Санкт-Петербург',
-  age: 34,
+  birthday: '1992-05-15',
   teach: [drums],
   learn: [timeManagement, meditation],
 }
@@ -41,6 +49,18 @@ describe('UserCard', () => {
     render(<UserCard {...baseProps} />)
 
     expect(screen.getByText('Санкт-Петербург, 34 года')).toBeInTheDocument()
+  })
+
+  it('shows the previous age before the birthday', () => {
+    render(<UserCard {...baseProps} birthday="1992-05-16" />)
+
+    expect(screen.getByText('Санкт-Петербург, 33 года')).toBeInTheDocument()
+  })
+
+  it('shows zero age for an invalid birthday', () => {
+    render(<UserCard {...baseProps} birthday="1992-02-31" />)
+
+    expect(screen.getByText('Санкт-Петербург, 0 лет')).toBeInTheDocument()
   })
 
   describe('skills', () => {

@@ -1,5 +1,6 @@
 import { useId } from 'react'
 import clsx from 'clsx'
+import { getAgeFromBirthDate } from '@/shared/lib/helpers'
 import { Avatar } from '@/shared/ui/Avatar'
 import { Button } from '@/shared/ui/Button'
 import { LikeButton } from '@/shared/ui/LikeButton'
@@ -13,7 +14,7 @@ export const UserCard = ({
   name,
   avatarUrl,
   city,
-  age,
+  birthday,
   description,
   teach,
   learn,
@@ -21,6 +22,7 @@ export const UserCard = ({
   onLike,
   onDetails,
 }: UserCardProps) => {
+  const age = getAgeFromBirthDate(birthday)
   const nameId = useId()
   const isCatalog = variant === 'catalog'
   const titleSuffix = isCatalog ? ':' : ''
