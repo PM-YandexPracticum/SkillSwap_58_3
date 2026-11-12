@@ -27,7 +27,7 @@ export const TeamMemberCard = ({
         <div>
           <h4 className={styles.subheadingText}>Связаться со мной:</h4>
           <div className={styles.contactsGit}>
-            <Icon name="search" />
+            <Icon name="github" />
             <a
               className={styles.contactsGitLink}
               href={githubUrl}
