@@ -25,6 +25,7 @@ export type IconName =
   | 'gallery-add'
   | 'gallery-edit'
   | 'google'
+  | 'github'
   | 'heart'
   | 'heart-filled'
   | 'light-bulb'
