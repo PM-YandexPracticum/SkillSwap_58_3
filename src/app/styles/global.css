@@ -72,7 +72,9 @@
   --space-32: 32px;
   --space-33: 33px;
   --space-40: 40px;
+  --space-52: 52px;
   --space-60: 60px;
+  --space-80: 80px;
 
   /* Spacing+++ */
   --card-padding: var(--space-20);
