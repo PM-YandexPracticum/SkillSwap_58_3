@@ -1,0 +1,28 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-80, 80px) var(--space-60, 60px);
+}
+
+.container svg {
+  height: 100px;
+  width: 100px;
+  margin-bottom: var(--space-52, 52px);
+}
+
+.container p {
+  padding-bottom: var(--space-32, 32px);
+  text-align: center;
+}
+
+.container button {
+  width: 100%;
+}
+
+.exchangeHeadingText {
+  font-weight: var(--font-weight-medium, 500);
+  font-family: var(--font-jost, 'Jost', sans-serif);
+  font-size: var(--font-size-24, 24px);
+}
