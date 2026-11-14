@@ -9,4 +9,5 @@ export interface SkillsSectionProps {
   title: string
   items: SkillsSectionItem[]
   actions?: ReactNode
+  columns?: 3 | 4
 }
