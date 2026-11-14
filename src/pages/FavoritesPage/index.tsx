@@ -1,10 +1,93 @@
-// TODO: реализовать страницу FavoritesPage
+import { mapUserToCardData } from '@/widgets/UserCard/mapUserToCardData'
+import type { SkillsSectionItem } from '@/widgets/SkillsSection'
+import { useNavigate } from 'react-router-dom'
+import { ROUTES } from '@/shared/lib/constants'
+import { Filters } from '@/widgets/Filters'
+import { SkillsSection } from '@/widgets/SkillsSection'
+import { Button } from '@/shared/ui/Button'
+import { useEffect, useState } from 'react'
+import { fetchUsers } from '@/api/users'
+import { fetchSkills } from '@/api/skills'
+import { fetchCategories } from '@/api/categories'
+import { fetchCities } from '@/api/cities'
+import type { User, Skill, Category, City } from '@/shared/types'
+import { Loader } from '@/shared/ui/Loader'
+import styles from './FavoritesPage.module.css'
 
 export default function FavoritesPage() {
+  const [users, setUsers] = useState<User[]>([])
+  const [skills, setSkills] = useState<Skill[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
+  const [cities, setCities] = useState<City[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState(false)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    let isMounted = true
+
+    Promise.all([fetchUsers(), fetchSkills(), fetchCategories(), fetchCities()])
+      .then(([usersData, skillsData, categoriesData, citiesData]) => {
+        if (!isMounted) return
+
+        setUsers(usersData)
+        setSkills(skillsData)
+        setCategories(categoriesData)
+        setCities(citiesData)
+      })
+      .catch(() => {
+        if (isMounted) setError(true)
+      })
+      .finally(() => {
+        if (isMounted) setIsLoading(false)
+      })
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
+  const currentUser = users.find((user) => user.id === 'user-02')
+
+  const favoriteUsers = users.filter((user) => currentUser?.favourites.includes(user.id))
+
+  const favoriteCards: SkillsSectionItem[] = favoriteUsers.flatMap((user) => {
+    const card = mapUserToCardData(user, { skills, categories, cities })
+
+    return card ? [{ ...card, isLiked: true }] : []
+  })
+
+  if (isLoading) {
+    return (
+      <div className={styles.loader}>
+        <Loader />
+      </div>
+    )
+  }
+
+  if (error) {
+    return <p>Не удалось загрузить избранное. Попробуйте обновить страницу.</p>
+  }
+
   return (
-    <main>
-      <h1>FavoritesPage</h1>
-      <p>Страница в разработке</p>
-    </main>
+    <div className={styles.page}>
+      <div className={styles.content}>
+        <aside className={styles.sidebar}>
+          <Filters />
+        </aside>
+
+        <div className={styles.results}>
+          {favoriteCards.length > 0 ? (
+            <SkillsSection title="Избранное" items={favoriteCards} />
+          ) : (
+            <section className={styles.empty}>
+              <h1>Избранное</h1>
+              <p>В избранном пока ничего нет</p>
+              <Button onClick={() => navigate(ROUTES.HOME)}>Вернуться в каталог</Button>
+            </section>
+          )}
+        </div>
+      </div>
+    </div>
   )
 }
