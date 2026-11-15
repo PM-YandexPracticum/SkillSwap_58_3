@@ -8,4 +8,3 @@ export interface FormFieldProps {
   hint?: string
   error?: string
 }
-

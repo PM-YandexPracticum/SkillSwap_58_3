@@ -1,9 +1,9 @@
-import { StepperProps } from './types';
-import styles from './Stepper.module.css';
-import clsx from 'clsx';
+import { StepperProps } from './types'
+import styles from './Stepper.module.css'
+import clsx from 'clsx'
 
 export const Stepper = ({ currentStep, totalSteps = 3 }: StepperProps) => {
-  const step = currentStep > totalSteps ? totalSteps : currentStep;
+  const step = currentStep > totalSteps ? totalSteps : currentStep
 
   return (
     <div className={styles.container}>
@@ -22,6 +22,5 @@ export const Stepper = ({ currentStep, totalSteps = 3 }: StepperProps) => {
         ))}
       </ol>
     </div>
-  );
-};
-
+  )
+}
