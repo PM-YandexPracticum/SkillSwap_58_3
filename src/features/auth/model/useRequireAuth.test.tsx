@@ -15,10 +15,12 @@ const createTestStore = (isAuthorized: boolean) =>
     reducer: { auth: authReducer },
     preloadedState: {
       auth: {
-        isAuthorized,
         user: isAuthorized
           ? { id: '1', name: 'Иван', email: 'test@mail.ru', token: 'token' }
           : null,
+        status: 'idle' as const,
+        error: null,
+        currentRequestId: null,
       },
     },
   })
