@@ -61,27 +61,3 @@
   border-radius: var(--border-radius-main, 12px);
   background-color: var(--color-bg-card, #fff);
 }
-
-.illustrationCard {
-  gap: var(--space-40, 40px);
-  padding: var(--space-60, 60px);
-  text-align: center;
-}
-
-.illustration {
-  display: block;
-  flex-shrink: 0;
-}
-
-.text {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-12, 12px);
-  width: 100%;
-}
-
-.title {
-  font: var(--heading-filter-font, 500 24px 'Jost', sans-serif);
-  line-height: 28px;
-  letter-spacing: -0.011em;
-}

@@ -1,10 +1,8 @@
 import type { ReactNode } from 'react'
+import type { InfoProps } from '@/shared/ui/Info'
 
-export interface AuthLayoutProps {
+export interface AuthLayoutProps extends InfoProps {
   children: ReactNode
-  title: string
-  description: string
-  illustrationSrc: string
   currentStep?: number
   onClose?: () => void
 }

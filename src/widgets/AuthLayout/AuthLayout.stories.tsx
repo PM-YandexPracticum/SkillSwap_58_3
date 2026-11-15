@@ -47,7 +47,9 @@ const meta = {
   args: {
     title: 'Добро пожаловать в SkillSwap!',
     description: 'Присоединяйтесь к SkillSwap и обменивайтесь знаниями и навыками с другими людьми',
-    illustrationSrc: '/img/auth/light-bulb.svg',
+    image: 'light-bulb',
+    variant: 'registration',
+    alt: 'Лампочка как символ обмена знаниями',
     onClose: fn(),
     children: <FormPreview action="Войти" />,
   },
@@ -69,7 +71,8 @@ export const RegistrationStep2: Story = {
     currentStep: 2,
     title: 'Расскажите немного о себе',
     description: 'Это поможет другим людям лучше вас узнать, чтобы выбрать для обмена',
-    illustrationSrc: '/img/auth/user-info.svg',
+    image: 'user-info',
+    alt: 'Пользователь рассказывает о себе',
     children: <FormPreview label="Имя" />,
   },
 }
@@ -80,7 +83,8 @@ export const RegistrationStep3: Story = {
     currentStep: 3,
     title: 'Укажите, чем вы готовы поделиться',
     description: 'Так другие люди смогут увидеть ваши предложения и предложить вам обмен!',
-    illustrationSrc: '/img/auth/school-board.svg',
+    image: 'school-board',
+    alt: 'Доска для объяснения навыка',
     children: <FormPreview label="Название навыка" />,
   },
 }
