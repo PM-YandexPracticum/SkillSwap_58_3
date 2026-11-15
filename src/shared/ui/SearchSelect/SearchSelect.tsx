@@ -53,8 +53,7 @@ export const SearchSelect = ({
   useEffect(() => {
     if (isOpen && highlightedIndex >= 0 && dropdownRef.current) {
       const activeElement = dropdownRef.current.children[highlightedIndex] as
-        | HTMLElement
-        | undefined
+        HTMLElement | undefined
       activeElement?.scrollIntoView({ block: 'nearest' })
     }
   }, [highlightedIndex, isOpen])
