@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { fetchUsers } from '@/api/users'
 import { LOCAL_STORAGE_KEYS } from '@/shared/lib/constants'
 import type { AuthUser, RegisterPayload, User } from '@/shared/types'
+import catalogReducer from '@/store/slices/catalogSlice'
 import authReducer, {
   loginUser,
   logout,
@@ -76,7 +77,8 @@ const registration: RegisterPayload = {
 }
 
 const idleState = { user: null, status: 'idle', error: null, currentRequestId: null }
-const createStore = () => configureStore({ reducer: { auth: authReducer } })
+const createStore = () =>
+  configureStore({ reducer: { auth: authReducer, catalog: catalogReducer } })
 let storage: ReturnType<typeof createMemoryStorage>
 
 function readAuthUser(): AuthUser | null {
