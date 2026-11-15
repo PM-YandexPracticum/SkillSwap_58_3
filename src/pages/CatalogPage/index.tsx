@@ -5,13 +5,17 @@ import { fetchSkills } from '@/api/skills'
 import { fetchUsers } from '@/api/users'
 import type { Category, City, Skill, User } from '@/shared/types'
 import { Button } from '@/shared/ui/Button'
+import { FilterChip } from '@/shared/ui/FilterChip'
 import { Icon } from '@/shared/ui/icons'
 import { Loader } from '@/shared/ui/Loader'
 import { Filters } from '@/widgets/Filters'
+import { getFilterChips, removeFilterChip } from '@/widgets/Filters/filterChips'
 import { SkillsSection } from '@/widgets/SkillsSection'
 import { mapUserToCardData } from '@/widgets/UserCard/mapUserToCardData'
 import type { Dictionaries } from '@/widgets/UserCard/types'
 import { PaginatedSkillsSection } from './PaginatedSkillsSection'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import { resetFilters, selectFilters, setFilters } from '@/store/slices/filtersSlice'
 import styles from './CatalogPage.module.css'
 
 // количество карточек в секциях вынесено в именованные константы по требованию задачи
@@ -27,6 +31,8 @@ type CardData = NonNullable<ReturnType<typeof mapUserToCardData>>
 // Главная страница каталога: сайдбар фильтров и три секции карточек.
 
 export default function CatalogPage() {
+  const dispatch = useAppDispatch()
+  const filters = useAppSelector(selectFilters)
   const [users, setUsers] = useState<User[]>([])
   const [skills, setSkills] = useState<Skill[]>([])
   const [categories, setCategories] = useState<Category[]>([])
@@ -61,6 +67,8 @@ export default function CatalogPage() {
     [skills, categories, cities],
   )
 
+  // TODO(#151): подключить filterUsers перед маппингом карточек, передав users, filters,
+  // search из selectSearch, skills и categories. Результат использовать для режима поиска.
   const cards = useMemo(
     () =>
       users
@@ -114,6 +122,8 @@ export default function CatalogPage() {
     )
   }
 
+  const filterChips = getFilterChips(filters, categories, cities)
+
   const seeAllAction = (
     <Button variant="outline" iconRight={<Icon name="chevron-right" size={16} />}>
       Смотреть все
@@ -122,10 +132,28 @@ export default function CatalogPage() {
 
   return (
     <div className={styles.page}>
-      {/* Filters подключаем как готовый блок по макету;
-          связывание значений фильтров со списком карточек — отдельная задача */}
-      <Filters />
+      <Filters
+        values={filters}
+        onChange={(values) => dispatch(setFilters(values))}
+        onReset={() => dispatch(resetFilters())}
+      />
       <div className={styles.content}>
+        {filterChips.length > 0 && (
+          <ul className={styles.chips} aria-label="Активные фильтры">
+            {filterChips.map((chip) => (
+              <li key={chip.id} aria-label={chip.label}>
+                <FilterChip
+                  label={chip.label}
+                  onRemove={() =>
+                    dispatch(setFilters(removeFilterChip(filters, chip.id, categories)))
+                  }
+                />
+              </li>
+            ))}
+          </ul>
+        )}
+        {/* TODO(#152): после подключения filterUsers из #151 показывать результаты со счётчиком
+            или «Ничего не найдено»; три секции оставлять только без поиска и фильтров. */}
         <SkillsSection title="Популярное" items={popularCards} actions={seeAllAction} />
         <SkillsSection title="Новое" items={newCards} actions={seeAllAction} />
         <PaginatedSkillsSection
