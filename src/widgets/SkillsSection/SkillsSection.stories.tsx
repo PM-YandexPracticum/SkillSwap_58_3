@@ -72,6 +72,26 @@ export const WithoutActions: Story = {
   },
 }
 
+export const FourColumns: Story = {
+  name: 'Четыре колонки',
+  args: {
+    title: 'Вам может понравиться',
+    columns: 4,
+    items: [
+      ...items,
+      {
+        id: '4',
+        name: 'Елена',
+        avatarUrl: '/img/avatars/avatar-04.png',
+        city: 'Екатеринбург',
+        age: 31,
+        teach: [{ id: 'cooking', label: 'Кулинария', categoryId: 'home' }],
+        learn: [{ id: 'english', label: 'Английский язык', categoryId: 'languages' }],
+      },
+    ],
+  },
+}
+
 export const Empty: Story = {
   args: {
     title: 'Избранное',

@@ -25,4 +25,3 @@ export const FormField = ({ id, label, children, className, hint, error }: FormF
     </div>
   )
 }
-

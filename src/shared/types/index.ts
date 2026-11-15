@@ -64,6 +64,21 @@ export interface AuthUser {
   token: string
 }
 
+export interface LoginCredentials {
+  email: string
+  password: string
+}
+
+export interface RegisterPayload extends LoginCredentials {
+  name: string
+  birthday: string
+  gender: Gender
+  town: CityId
+  learn: SubcategoryId[]
+  avatarUrl?: string | null
+  description?: string
+}
+
 // ─── Category ────────────────────────────────────────────
 export type SubcategoryId = string
 
