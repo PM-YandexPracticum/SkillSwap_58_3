@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { act, cleanup, render, screen, within } from '@testing-library/react'
+import { act, cleanup, render, screen, waitFor, within } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { Category, City, Skill, User } from '@/shared/types'
@@ -84,13 +84,18 @@ const countRecommendedCards = () => {
   return within(section as HTMLElement).getAllByRole('article').length
 }
 
-function renderPage() {
+async function renderPage() {
   const store = configureStore({ reducer: { filters: filtersReducer } })
   render(
     <Provider store={store}>
       <CatalogPage />
     </Provider>,
   )
+  await screen.findByRole('heading', { name: 'Рекомендуем' })
+  // Заголовок может появиться раньше, чем useEffect подключит наблюдатель прокрутки.
+  await waitFor(() => {
+    expect(FakeIntersectionObserver.instances.some((observer) => observer.isConnected)).toBe(true)
+  })
   return store
 }
 
@@ -107,8 +112,7 @@ describe('CatalogPage: подгрузка карточек при прокрут
   })
 
   it('показывает сначала 6 карточек, а после прокрутки и задержки их становится 12', async () => {
-    renderPage()
-    await screen.findByRole('heading', { name: 'Рекомендуем' })
+    await renderPage()
     vi.useFakeTimers()
 
     expect(countRecommendedCards()).toBe(PAGE_SIZE)
@@ -126,8 +130,7 @@ describe('CatalogPage: подгрузка карточек при прокрут
   })
 
   it('после фильтра и сброса начинает рекомендации с первой порции и снова подгружает карточки', async () => {
-    const store = renderPage()
-    await screen.findByRole('heading', { name: 'Рекомендуем' })
+    const store = await renderPage()
     vi.useFakeTimers()
     act(() => FakeIntersectionObserver.scrollToMarker())
     act(() => vi.advanceTimersByTime(LOAD_DELAY_MS))
