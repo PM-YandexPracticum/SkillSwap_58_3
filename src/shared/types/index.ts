@@ -102,3 +102,9 @@ export interface NotificationItem {
   description: string
   dateLabel: string
 }
+
+export interface StoredNotification extends NotificationItem {
+  userId: UserId
+  skillId: SkillId
+  isNew: boolean
+}
