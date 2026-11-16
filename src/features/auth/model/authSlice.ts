@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, isAnyOf } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, isAnyOf, type PayloadAction } from '@reduxjs/toolkit'
 import { fetchUsers } from '@/api/users'
 import { LOCAL_STORAGE_KEYS } from '@/shared/lib/constants'
 import type { AuthUser, LoginCredentials, RegisterPayload, User } from '@/shared/types'
@@ -87,7 +87,7 @@ export const registerUser = createAsyncThunk<AuthUser, RegisterPayload, AuthThun
   authRequestOptions,
 )
 
-const authSlice = createSlice({
+export const authSlice = createSlice({
   name: 'auth',
   initialState: (): AuthState => ({
     user: getAuthUser(),
@@ -96,6 +96,9 @@ const authSlice = createSlice({
     currentRequestId: null,
   }),
   reducers: {
+    setAuthUser(state, action: PayloadAction<AuthUser | null>) {
+      state.user = action.payload
+    },
     logout(state) {
       state.user = null
       state.status = 'idle'
@@ -131,7 +134,7 @@ const authSlice = createSlice({
   },
 })
 
-export const { logout } = authSlice.actions
+export const { logout, setAuthUser } = authSlice.actions
 export const selectAuthUser = (state: RootState) => state.auth.user
 export const selectIsAuthorized = (state: RootState) => state.auth.user !== null
 export const selectAuthStatus = (state: RootState) => state.auth.status
