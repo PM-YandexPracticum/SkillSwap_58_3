@@ -1,4 +1,5 @@
 import { AuthLayout } from '@/widgets/AuthLayout'
+import { AuthForm } from '@/widgets/AuthForm'
 
 export default function LoginPage() {
   return (
@@ -9,8 +10,7 @@ export default function LoginPage() {
       title="Добро пожаловать в SkillSwap!"
       description="Присоединяйтесь к SkillSwap и обменивайтесь знаниями и навыками с другими людьми"
     >
-      authForm
-      {/* todo <AuthForm variant='login'/> */}
+      <AuthForm onSubmit={() => {}} savedValues={{ email: '', password: '' }} variant="login" />
     </AuthLayout>
   )
 }

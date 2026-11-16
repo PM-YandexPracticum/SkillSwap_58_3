@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { lazy, Suspense, useState } from 'react'
 import { ROUTES } from '@/shared/lib/constants'
 import { MainLayout } from '@/app/layouts/MainLayout'
+import { PrivateRoute } from '@/features/auth'
 
 // Lazy-загрузка страниц — каждая страница грузится только при переходе на неё
 const CatalogPage = lazy(() => import('@/pages/CatalogPage'))
@@ -34,9 +35,11 @@ export function AppRouter() {
             <Route path={ROUTES.SKILL} element={<SkillPage />} />
             <Route path={ROUTES.FAVORITES} element={<FavoritesPage />} />
 
-            {/* Защищённые маршруты — добавь PrivateRoute обёртку */}
-            <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
-            <Route path={ROUTES.CREATE} element={<CreateSkillPage />} />
+            {/* Защищённые маршруты */}
+            <Route element={<PrivateRoute />}>
+              <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
+              <Route path={ROUTES.CREATE} element={<CreateSkillPage />} />
+            </Route>
 
             <Route path="*" element={<NotFoundPage />} />
           </Route>
