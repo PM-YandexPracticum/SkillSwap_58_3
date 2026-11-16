@@ -11,12 +11,15 @@ import { Filters } from '@/widgets/Filters'
 import { SkillsSection } from '@/widgets/SkillsSection'
 import { mapUserToCardData } from '@/widgets/UserCard/mapUserToCardData'
 import type { Dictionaries } from '@/widgets/UserCard/types'
+import { PaginatedSkillsSection } from './PaginatedSkillsSection'
 import styles from './CatalogPage.module.css'
 
 // количество карточек в секциях вынесено в именованные константы по требованию задачи
 const POPULAR_SECTION_SIZE = 3
 const NEW_SECTION_SIZE = 3
-const RECOMMENDED_SECTION_SIZE = 9
+// секция "Рекомендуем" подгружается порциями при прокрутке
+const RECOMMENDED_PAGE_SIZE = 6
+const LOAD_MORE_DELAY_MS = 1000
 
 // тип данных карточки: результат mapUserToCardData без null
 type CardData = NonNullable<ReturnType<typeof mapUserToCardData>>
@@ -66,6 +69,35 @@ export default function CatalogPage() {
     [users, dictionaries],
   )
 
+  // секции считаем до ранних возвратов и в useMemo: usePaginatedList сбрасывает показ,
+  // если список "Рекомендуем" каждый рендер оказывается новым массивом
+  const { popularCards, newCards, recommendedCards } = useMemo(() => {
+    const cardById = new Map<string, CardData>(cards.map((card) => [card.id, card]))
+    const toCards = (orderedUsers: User[]) =>
+      orderedUsers
+        .map((user) => cardById.get(user.id))
+        .filter((card): card is CardData => card !== undefined)
+
+    // Популярное — топ по лайкам, Новое — свежие по createdAt, Рекомендуем — остальные
+    const popular = toCards([...users].sort((a, b) => b.likedCount - a.likedCount)).slice(
+      0,
+      POPULAR_SECTION_SIZE,
+    )
+    const popularIds = new Set(popular.map((card) => card.id))
+    const fresh = toCards(
+      [...users]
+        .filter((user) => !popularIds.has(user.id))
+        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()),
+    ).slice(0, NEW_SECTION_SIZE)
+    const takenIds = new Set([...popularIds, ...fresh.map((card) => card.id)])
+
+    return {
+      popularCards: popular,
+      newCards: fresh,
+      recommendedCards: toCards(users.filter((user) => !takenIds.has(user.id))),
+    }
+  }, [users, cards])
+
   if (isLoading) {
     return (
       <div className={styles.loader}>
@@ -82,29 +114,6 @@ export default function CatalogPage() {
     )
   }
 
-  const cardById = new Map<string, CardData>(cards.map((card) => [card.id, card]))
-  const toCards = (orderedUsers: User[]) =>
-    orderedUsers
-      .map((user) => cardById.get(user.id))
-      .filter((card): card is CardData => card !== undefined)
-
-  // Популярное — топ по лайкам, Новое — свежие по createdAt, Рекомендуем — остальные
-  const popularCards = toCards([...users].sort((a, b) => b.likedCount - a.likedCount)).slice(
-    0,
-    POPULAR_SECTION_SIZE,
-  )
-  const popularIds = new Set(popularCards.map((card) => card.id))
-  const newCards = toCards(
-    [...users]
-      .filter((user) => !popularIds.has(user.id))
-      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()),
-  ).slice(0, NEW_SECTION_SIZE)
-  const takenIds = new Set([...popularIds, ...newCards.map((card) => card.id)])
-  const recommendedCards = toCards(users.filter((user) => !takenIds.has(user.id))).slice(
-    0,
-    RECOMMENDED_SECTION_SIZE,
-  )
-
   const seeAllAction = (
     <Button variant="outline" iconRight={<Icon name="chevron-right" size={16} />}>
       Смотреть все
@@ -119,7 +128,12 @@ export default function CatalogPage() {
       <div className={styles.content}>
         <SkillsSection title="Популярное" items={popularCards} actions={seeAllAction} />
         <SkillsSection title="Новое" items={newCards} actions={seeAllAction} />
-        <SkillsSection title="Рекомендуем" items={recommendedCards} />
+        <PaginatedSkillsSection
+          title="Рекомендуем"
+          items={recommendedCards}
+          pageSize={RECOMMENDED_PAGE_SIZE}
+          delay={LOAD_MORE_DELAY_MS}
+        />
       </div>
     </div>
   )
