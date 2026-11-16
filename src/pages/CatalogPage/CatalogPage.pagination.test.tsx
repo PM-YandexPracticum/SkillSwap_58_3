@@ -1,4 +1,4 @@
-import { act, render, screen, within } from '@testing-library/react'
+import { act, cleanup, render, screen, waitFor, within } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { Category, City, Skill, User } from '@/shared/types'
 import CatalogPage from './index'
@@ -87,6 +87,7 @@ describe('CatalogPage: подгрузка карточек при прокрут
   })
 
   afterEach(() => {
+    cleanup()
     vi.useRealTimers()
     vi.unstubAllGlobals()
   })
@@ -94,6 +95,10 @@ describe('CatalogPage: подгрузка карточек при прокрут
   it('показывает сначала 6 карточек, а после прокрутки и задержки их становится 12', async () => {
     render(<CatalogPage />)
     await screen.findByRole('heading', { name: 'Рекомендуем' })
+    // Заголовок может появиться раньше, чем useEffect подключит наблюдатель прокрутки.
+    await waitFor(() => {
+      expect(FakeIntersectionObserver.instances.some((observer) => observer.isConnected)).toBe(true)
+    })
     vi.useFakeTimers()
 
     expect(countRecommendedCards()).toBe(PAGE_SIZE)
