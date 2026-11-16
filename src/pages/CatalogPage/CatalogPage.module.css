@@ -23,6 +23,11 @@
   list-style: none;
 }
 
+.empty {
+  margin: 0;
+  color: var(--color-text-additional, #69735d);
+}
+
 .loader {
   display: grid;
   place-items: center;

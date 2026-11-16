@@ -10,12 +10,13 @@ import { Icon } from '@/shared/ui/icons'
 import { Loader } from '@/shared/ui/Loader'
 import { Filters } from '@/widgets/Filters'
 import { getFilterChips, removeFilterChip } from '@/widgets/Filters/filterChips'
+import { filterUsers } from '@/widgets/Filters/filterUsers'
 import { SkillsSection } from '@/widgets/SkillsSection'
 import { mapUserToCardData } from '@/widgets/UserCard/mapUserToCardData'
 import type { Dictionaries } from '@/widgets/UserCard/types'
 import { PaginatedSkillsSection } from './PaginatedSkillsSection'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
-import { resetFilters, selectFilters, setFilters } from '@/store/slices/filtersSlice'
+import { resetFilters, selectFilters, selectSearch, setFilters } from '@/store/slices/filtersSlice'
 import styles from './CatalogPage.module.css'
 
 // количество карточек в секциях вынесено в именованные константы по требованию задачи
@@ -28,11 +29,12 @@ const LOAD_MORE_DELAY_MS = 1000
 // тип данных карточки: результат mapUserToCardData без null
 type CardData = NonNullable<ReturnType<typeof mapUserToCardData>>
 
-// Главная страница каталога: сайдбар фильтров и три секции карточек.
+// Главная страница каталога: сайдбар, исходные секции или результаты поиска и фильтрации.
 
 export default function CatalogPage() {
   const dispatch = useAppDispatch()
   const filters = useAppSelector(selectFilters)
+  const search = useAppSelector(selectSearch)
   const [users, setUsers] = useState<User[]>([])
   const [skills, setSkills] = useState<Skill[]>([])
   const [categories, setCategories] = useState<Category[]>([])
@@ -67,14 +69,12 @@ export default function CatalogPage() {
     [skills, categories, cities],
   )
 
-  // TODO(#151): подключить filterUsers перед маппингом карточек, передав users, filters,
-  // search из selectSearch, skills и categories. Результат использовать для режима поиска.
   const cards = useMemo(
     () =>
-      users
+      filterUsers({ users, filters, search, skills, categories })
         .map((user) => mapUserToCardData(user, dictionaries))
         .filter((card): card is CardData => card !== null),
-    [users, dictionaries],
+    [users, filters, search, skills, categories, dictionaries],
   )
 
   // секции считаем до ранних возвратов и в useMemo: usePaginatedList сбрасывает показ,
@@ -123,6 +123,7 @@ export default function CatalogPage() {
   }
 
   const filterChips = getFilterChips(filters, categories, cities)
+  const isFiltering = search.trim().length > 0 || filterChips.length > 0
 
   const seeAllAction = (
     <Button variant="outline" iconRight={<Icon name="chevron-right" size={16} />}>
@@ -152,16 +153,27 @@ export default function CatalogPage() {
             ))}
           </ul>
         )}
-        {/* TODO(#152): после подключения filterUsers из #151 показывать результаты со счётчиком
-            или «Ничего не найдено»; три секции оставлять только без поиска и фильтров. */}
-        <SkillsSection title="Популярное" items={popularCards} actions={seeAllAction} />
-        <SkillsSection title="Новое" items={newCards} actions={seeAllAction} />
-        <PaginatedSkillsSection
-          title="Рекомендуем"
-          items={recommendedCards}
-          pageSize={RECOMMENDED_PAGE_SIZE}
-          delay={LOAD_MORE_DELAY_MS}
-        />
+        {isFiltering ? (
+          <>
+            <SkillsSection title={`Подходящие предложения: ${cards.length}`} items={cards} />
+            {cards.length === 0 && (
+              <p className={styles.empty} role="status">
+                Ничего не найдено
+              </p>
+            )}
+          </>
+        ) : (
+          <>
+            <SkillsSection title="Популярное" items={popularCards} actions={seeAllAction} />
+            <SkillsSection title="Новое" items={newCards} actions={seeAllAction} />
+            <PaginatedSkillsSection
+              title="Рекомендуем"
+              items={recommendedCards}
+              pageSize={RECOMMENDED_PAGE_SIZE}
+              delay={LOAD_MORE_DELAY_MS}
+            />
+          </>
+        )}
       </div>
     </div>
   )
