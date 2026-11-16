@@ -1,8 +1,10 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { lazy, Suspense, useState } from 'react'
+import { lazy, Suspense } from 'react'
 import { ROUTES } from '@/shared/lib/constants'
 import { MainLayout } from '@/app/layouts/MainLayout'
 import { PrivateRoute } from '@/features/auth'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import { selectSearch, setSearch } from '@/store/slices/filtersSlice'
 
 // Lazy-загрузка страниц — каждая страница грузится только при переходе на неё
 const CatalogPage = lazy(() => import('@/pages/CatalogPage'))
@@ -14,7 +16,8 @@ const LoginPage = lazy(() => import('@/pages/LoginPage'))
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'))
 
 export function AppRouter() {
-  const [searchValue, setSearchValue] = useState('')
+  const dispatch = useAppDispatch()
+  const searchValue = useAppSelector(selectSearch)
   return (
     <BrowserRouter>
       <Suspense fallback={<div>Загрузка...</div>}>
@@ -22,7 +25,14 @@ export function AppRouter() {
           <Route path={ROUTES.LOGIN} element={<LoginPage />} />
           <Route path={ROUTES.REGISTER} element={<LoginPage />} />
 
-          <Route element={<MainLayout searchValue={searchValue} onSearchChange={setSearchValue} />}>
+          <Route
+            element={
+              <MainLayout
+                searchValue={searchValue}
+                onSearchChange={(value) => dispatch(setSearch(value))}
+              />
+            }
+          >
             <Route path={ROUTES.HOME} element={<CatalogPage />} />
             <Route path={ROUTES.SKILL} element={<SkillPage />} />
             <Route path={ROUTES.FAVORITES} element={<FavoritesPage />} />

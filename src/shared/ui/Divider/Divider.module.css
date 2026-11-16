@@ -1,0 +1,16 @@
+.divider {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 4px;
+}
+
+.dividerLine {
+  flex: 1;
+  height: 1px;
+  background-color: var(--color-inactive-elements, #e4e8df);
+}
+
+.dividerText {
+  white-space: nowrap;
+}

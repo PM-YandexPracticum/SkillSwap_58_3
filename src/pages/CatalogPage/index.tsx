@@ -5,25 +5,36 @@ import { fetchSkills } from '@/api/skills'
 import { fetchUsers } from '@/api/users'
 import type { Category, City, Skill, User } from '@/shared/types'
 import { Button } from '@/shared/ui/Button'
+import { FilterChip } from '@/shared/ui/FilterChip'
 import { Icon } from '@/shared/ui/icons'
 import { Loader } from '@/shared/ui/Loader'
 import { Filters } from '@/widgets/Filters'
+import { getFilterChips, removeFilterChip } from '@/widgets/Filters/filterChips'
+import { filterUsers } from '@/widgets/Filters/filterUsers'
 import { SkillsSection } from '@/widgets/SkillsSection'
 import { mapUserToCardData } from '@/widgets/UserCard/mapUserToCardData'
 import type { Dictionaries } from '@/widgets/UserCard/types'
+import { PaginatedSkillsSection } from './PaginatedSkillsSection'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import { resetFilters, selectFilters, selectSearch, setFilters } from '@/store/slices/filtersSlice'
 import styles from './CatalogPage.module.css'
 
 // количество карточек в секциях вынесено в именованные константы по требованию задачи
 const POPULAR_SECTION_SIZE = 3
 const NEW_SECTION_SIZE = 3
-const RECOMMENDED_SECTION_SIZE = 9
+// секция "Рекомендуем" подгружается порциями при прокрутке
+const RECOMMENDED_PAGE_SIZE = 6
+const LOAD_MORE_DELAY_MS = 1000
 
 // тип данных карточки: результат mapUserToCardData без null
 type CardData = NonNullable<ReturnType<typeof mapUserToCardData>>
 
-// Главная страница каталога: сайдбар фильтров и три секции карточек.
+// Главная страница каталога: сайдбар, исходные секции или результаты поиска и фильтрации.
 
 export default function CatalogPage() {
+  const dispatch = useAppDispatch()
+  const filters = useAppSelector(selectFilters)
+  const search = useAppSelector(selectSearch)
   const [users, setUsers] = useState<User[]>([])
   const [skills, setSkills] = useState<Skill[]>([])
   const [categories, setCategories] = useState<Category[]>([])
@@ -60,11 +71,40 @@ export default function CatalogPage() {
 
   const cards = useMemo(
     () =>
-      users
+      filterUsers({ users, filters, search, skills, categories })
         .map((user) => mapUserToCardData(user, dictionaries))
         .filter((card): card is CardData => card !== null),
-    [users, dictionaries],
+    [users, filters, search, skills, categories, dictionaries],
   )
+
+  // секции считаем до ранних возвратов и в useMemo: usePaginatedList сбрасывает показ,
+  // если список "Рекомендуем" каждый рендер оказывается новым массивом
+  const { popularCards, newCards, recommendedCards } = useMemo(() => {
+    const cardById = new Map<string, CardData>(cards.map((card) => [card.id, card]))
+    const toCards = (orderedUsers: User[]) =>
+      orderedUsers
+        .map((user) => cardById.get(user.id))
+        .filter((card): card is CardData => card !== undefined)
+
+    // Популярное — топ по лайкам, Новое — свежие по createdAt, Рекомендуем — остальные
+    const popular = toCards([...users].sort((a, b) => b.likedCount - a.likedCount)).slice(
+      0,
+      POPULAR_SECTION_SIZE,
+    )
+    const popularIds = new Set(popular.map((card) => card.id))
+    const fresh = toCards(
+      [...users]
+        .filter((user) => !popularIds.has(user.id))
+        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()),
+    ).slice(0, NEW_SECTION_SIZE)
+    const takenIds = new Set([...popularIds, ...fresh.map((card) => card.id)])
+
+    return {
+      popularCards: popular,
+      newCards: fresh,
+      recommendedCards: toCards(users.filter((user) => !takenIds.has(user.id))),
+    }
+  }, [users, cards])
 
   if (isLoading) {
     return (
@@ -82,28 +122,8 @@ export default function CatalogPage() {
     )
   }
 
-  const cardById = new Map<string, CardData>(cards.map((card) => [card.id, card]))
-  const toCards = (orderedUsers: User[]) =>
-    orderedUsers
-      .map((user) => cardById.get(user.id))
-      .filter((card): card is CardData => card !== undefined)
-
-  // Популярное — топ по лайкам, Новое — свежие по createdAt, Рекомендуем — остальные
-  const popularCards = toCards([...users].sort((a, b) => b.likedCount - a.likedCount)).slice(
-    0,
-    POPULAR_SECTION_SIZE,
-  )
-  const popularIds = new Set(popularCards.map((card) => card.id))
-  const newCards = toCards(
-    [...users]
-      .filter((user) => !popularIds.has(user.id))
-      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()),
-  ).slice(0, NEW_SECTION_SIZE)
-  const takenIds = new Set([...popularIds, ...newCards.map((card) => card.id)])
-  const recommendedCards = toCards(users.filter((user) => !takenIds.has(user.id))).slice(
-    0,
-    RECOMMENDED_SECTION_SIZE,
-  )
+  const filterChips = getFilterChips(filters, categories, cities)
+  const isFiltering = search.trim().length > 0 || filterChips.length > 0
 
   const seeAllAction = (
     <Button variant="outline" iconRight={<Icon name="chevron-right" size={16} />}>
@@ -113,13 +133,47 @@ export default function CatalogPage() {
 
   return (
     <div className={styles.page}>
-      {/* Filters подключаем как готовый блок по макету;
-          связывание значений фильтров со списком карточек — отдельная задача */}
-      <Filters />
+      <Filters
+        values={filters}
+        onChange={(values) => dispatch(setFilters(values))}
+        onReset={() => dispatch(resetFilters())}
+      />
       <div className={styles.content}>
-        <SkillsSection title="Популярное" items={popularCards} actions={seeAllAction} />
-        <SkillsSection title="Новое" items={newCards} actions={seeAllAction} />
-        <SkillsSection title="Рекомендуем" items={recommendedCards} />
+        {filterChips.length > 0 && (
+          <ul className={styles.chips} aria-label="Активные фильтры">
+            {filterChips.map((chip) => (
+              <li key={chip.id} aria-label={chip.label}>
+                <FilterChip
+                  label={chip.label}
+                  onRemove={() =>
+                    dispatch(setFilters(removeFilterChip(filters, chip.id, categories)))
+                  }
+                />
+              </li>
+            ))}
+          </ul>
+        )}
+        {isFiltering ? (
+          <>
+            <SkillsSection title={`Подходящие предложения: ${cards.length}`} items={cards} />
+            {cards.length === 0 && (
+              <p className={styles.empty} role="status">
+                Ничего не найдено
+              </p>
+            )}
+          </>
+        ) : (
+          <>
+            <SkillsSection title="Популярное" items={popularCards} actions={seeAllAction} />
+            <SkillsSection title="Новое" items={newCards} actions={seeAllAction} />
+            <PaginatedSkillsSection
+              title="Рекомендуем"
+              items={recommendedCards}
+              pageSize={RECOMMENDED_PAGE_SIZE}
+              delay={LOAD_MORE_DELAY_MS}
+            />
+          </>
+        )}
       </div>
     </div>
   )

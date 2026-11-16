@@ -56,6 +56,9 @@ export interface SwapRequest {
   updatedAt: string
 }
 
+// ─── Async loading ────────────────────────────────────────
+export type LoadingStatus = 'idle' | 'loading' | 'succeeded' | 'failed'
+
 // ─── Auth ────────────────────────────────────────────────
 export interface AuthUser {
   id: string
