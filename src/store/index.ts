@@ -2,11 +2,13 @@ import { configureStore } from '@reduxjs/toolkit'
 import authReducer from '@/features/auth/model/authSlice'
 import exchangeReducer from '@/features/exchange/model/exchangeSlice'
 import { saveNotifications, saveRequests } from '@/features/exchange/model/exchangeUtils'
+import catalogReducer from './slices/catalogSlice'
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     exchange: exchangeReducer,
+    catalog: catalogReducer,
   },
 })
 
