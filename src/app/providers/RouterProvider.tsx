@@ -22,15 +22,7 @@ export function AppRouter() {
           <Route path={ROUTES.LOGIN} element={<LoginPage />} />
           <Route path={ROUTES.REGISTER} element={<LoginPage />} />
 
-          <Route
-            element={
-              <MainLayout
-                isAuthorized={false}
-                searchValue={searchValue}
-                onSearchChange={setSearchValue}
-              />
-            }
-          >
+          <Route element={<MainLayout searchValue={searchValue} onSearchChange={setSearchValue} />}>
             <Route path={ROUTES.HOME} element={<CatalogPage />} />
             <Route path={ROUTES.SKILL} element={<SkillPage />} />
             <Route path={ROUTES.FAVORITES} element={<FavoritesPage />} />
