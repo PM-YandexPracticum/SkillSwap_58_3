@@ -41,13 +41,23 @@ function renderPage({ search = '', values }: { search?: string; values?: Filters
 
 beforeEach(() => {
   vi.resetAllMocks()
+  vi.stubGlobal(
+    'IntersectionObserver',
+    class {
+      observe() {}
+      disconnect() {}
+    },
+  )
   vi.mocked(fetchUsers).mockResolvedValue(usersFixture as unknown as User[])
   vi.mocked(fetchSkills).mockResolvedValue(skillsFixture as Skill[])
   vi.mocked(fetchCategories).mockResolvedValue(categories)
   vi.mocked(fetchCities).mockResolvedValue(cities)
 })
 
-afterEach(cleanup)
+afterEach(() => {
+  cleanup()
+  vi.unstubAllGlobals()
+})
 
 describe('CatalogPage: фильтры и чипы', () => {
   it('показывает три исходные секции и значения фильтров по умолчанию', async () => {
