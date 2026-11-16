@@ -1,6 +1,10 @@
-import { act, render, screen, within } from '@testing-library/react'
+import { configureStore } from '@reduxjs/toolkit'
+import { act, cleanup, render, screen, waitFor, within } from '@testing-library/react'
+import { Provider } from 'react-redux'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { Category, City, Skill, User } from '@/shared/types'
+import filtersReducer, { resetFilters, setFilters } from '@/store/slices/filtersSlice'
+import { DEFAULT_FILTERS } from '@/widgets/Filters/constants'
 import CatalogPage from './index'
 
 const USERS_COUNT = 30
@@ -80,6 +84,21 @@ const countRecommendedCards = () => {
   return within(section as HTMLElement).getAllByRole('article').length
 }
 
+async function renderPage() {
+  const store = configureStore({ reducer: { filters: filtersReducer } })
+  render(
+    <Provider store={store}>
+      <CatalogPage />
+    </Provider>,
+  )
+  await screen.findByRole('heading', { name: 'Рекомендуем' })
+  // Заголовок может появиться раньше, чем useEffect подключит наблюдатель прокрутки.
+  await waitFor(() => {
+    expect(FakeIntersectionObserver.instances.some((observer) => observer.isConnected)).toBe(true)
+  })
+  return store
+}
+
 describe('CatalogPage: подгрузка карточек при прокрутке', () => {
   beforeEach(() => {
     FakeIntersectionObserver.instances = []
@@ -87,13 +106,13 @@ describe('CatalogPage: подгрузка карточек при прокрут
   })
 
   afterEach(() => {
+    cleanup()
     vi.useRealTimers()
     vi.unstubAllGlobals()
   })
 
   it('показывает сначала 6 карточек, а после прокрутки и задержки их становится 12', async () => {
-    render(<CatalogPage />)
-    await screen.findByRole('heading', { name: 'Рекомендуем' })
+    await renderPage()
     vi.useFakeTimers()
 
     expect(countRecommendedCards()).toBe(PAGE_SIZE)
@@ -108,5 +127,30 @@ describe('CatalogPage: подгрузка карточек при прокрут
 
     expect(countRecommendedCards()).toBe(PAGE_SIZE * 2)
     expect(screen.queryByRole('status', { name: 'идет загрузка' })).not.toBeInTheDocument()
+  })
+
+  it('после фильтра и сброса начинает рекомендации с первой порции и снова подгружает карточки', async () => {
+    const store = await renderPage()
+    vi.useFakeTimers()
+    act(() => FakeIntersectionObserver.scrollToMarker())
+    act(() => vi.advanceTimersByTime(LOAD_DELAY_MS))
+    expect(countRecommendedCards()).toBe(PAGE_SIZE * 2)
+
+    act(() => FakeIntersectionObserver.scrollToMarker())
+    expect(screen.getByRole('status', { name: 'идет загрузка' })).toBeInTheDocument()
+    act(() => store.dispatch(setFilters({ ...DEFAULT_FILTERS, gender: 'female' })))
+    act(() => vi.advanceTimersByTime(LOAD_DELAY_MS))
+
+    expect(screen.getByRole('heading', { name: 'Подходящие предложения: 0' })).toBeInTheDocument()
+    expect(screen.getByText('Ничего не найдено')).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Рекомендуем' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('status', { name: 'идет загрузка' })).not.toBeInTheDocument()
+
+    act(() => store.dispatch(resetFilters()))
+
+    expect(countRecommendedCards()).toBe(PAGE_SIZE)
+    act(() => FakeIntersectionObserver.scrollToMarker())
+    act(() => vi.advanceTimersByTime(LOAD_DELAY_MS))
+    expect(countRecommendedCards()).toBe(PAGE_SIZE * 2)
   })
 })
