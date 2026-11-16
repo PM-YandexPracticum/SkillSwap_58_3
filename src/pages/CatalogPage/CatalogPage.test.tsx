@@ -16,6 +16,9 @@ import filtersReducer, {
 } from '@/store/slices/filtersSlice'
 import { DEFAULT_FILTERS } from '@/widgets/Filters/constants'
 import type { FiltersValues } from '@/widgets/Filters/interface'
+import { MemoryRouter } from 'react-router-dom'
+import authReducer from '@/features/auth/model/authSlice'
+import favoritesReducer from '@/features/favorites/model/favoritesSlice'
 import categories from '../../../public/db/categories.json'
 import cities from '../../../public/db/cities.json'
 import skillsFixture from '../../../public/db/skills.json'
@@ -28,14 +31,25 @@ vi.mock('@/api/skills', () => ({ fetchSkills: vi.fn() }))
 vi.mock('@/api/users', () => ({ fetchUsers: vi.fn() }))
 
 function renderPage({ search = '', values }: { search?: string; values?: FiltersValues } = {}) {
-  const store = configureStore({ reducer: { filters: filtersReducer } })
+  const store = configureStore({
+    reducer: {
+      auth: authReducer,
+      favorites: favoritesReducer,
+      filters: filtersReducer,
+    },
+  })
+
   store.dispatch(setSearch(search))
   if (values) store.dispatch(setFilters(values))
+
   render(
     <Provider store={store}>
-      <CatalogPage />
+      <MemoryRouter>
+        <CatalogPage />
+      </MemoryRouter>
     </Provider>,
   )
+
   return store
 }
 

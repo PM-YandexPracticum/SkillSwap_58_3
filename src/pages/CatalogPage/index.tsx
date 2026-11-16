@@ -14,9 +14,10 @@ import { filterUsers } from '@/widgets/Filters/filterUsers'
 import { SkillsSection } from '@/widgets/SkillsSection'
 import { mapUserToCardData } from '@/widgets/UserCard/mapUserToCardData'
 import type { Dictionaries } from '@/widgets/UserCard/types'
-import { PaginatedSkillsSection } from './PaginatedSkillsSection'
+import { useFavorites } from '@/features/favorites/model/useFavorites'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { resetFilters, selectFilters, selectSearch, setFilters } from '@/store/slices/filtersSlice'
+import { PaginatedSkillsSection } from './PaginatedSkillsSection'
 import styles from './CatalogPage.module.css'
 
 // количество карточек в секциях вынесено в именованные константы по требованию задачи
@@ -41,6 +42,7 @@ export default function CatalogPage() {
   const [cities, setCities] = useState<City[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
+  const { isFavorite, toggle } = useFavorites()
 
   useEffect(() => {
     let isMounted = true
@@ -73,8 +75,13 @@ export default function CatalogPage() {
     () =>
       filterUsers({ users, filters, search, skills, categories })
         .map((user) => mapUserToCardData(user, dictionaries))
-        .filter((card): card is CardData => card !== null),
-    [users, filters, search, skills, categories, dictionaries],
+        .filter((card): card is CardData => card !== null)
+        .map((card) => ({
+          ...card,
+          isLiked: isFavorite(card.id),
+          onLike: () => toggle(card.id),
+        })),
+    [users, filters, search, skills, categories, dictionaries, isFavorite, toggle],
   )
 
   // секции считаем до ранних возвратов и в useMemo: usePaginatedList сбрасывает показ,

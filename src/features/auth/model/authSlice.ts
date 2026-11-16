@@ -134,8 +134,14 @@ export const authSlice = createSlice({
 })
 
 export const { logout, setAuthUser } = authSlice.actions
-export const selectAuthUser = (state: { auth: AuthState }) => state.auth.user
-export const selectIsAuthorized = (state: { auth: AuthState }) => state.auth.user !== null
-export const selectAuthStatus = (state: { auth: AuthState }) => state.auth.status
-export const selectAuthError = (state: { auth: AuthState }) => state.auth.error
+
+type AuthSelectorState = {
+  auth: AuthState
+}
+
+export const selectAuthUser = (state: AuthSelectorState) => state.auth.user
+export const selectIsAuthorized = (state: AuthSelectorState) => state.auth.user !== null
+export const selectAuthStatus = (state: AuthSelectorState) => state.auth.status
+export const selectAuthError = (state: AuthSelectorState) => state.auth.error
+
 export default authSlice.reducer
