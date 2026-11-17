@@ -1,9 +1,9 @@
+import { useEffect, useState } from 'react'
 import { generatePath, Outlet, useNavigate } from 'react-router-dom'
-import { Header } from '@/widgets/Header'
-import type { HeaderProps } from '@/widgets/Header'
-import { Footer } from '@/widgets/Footer'
-import { NotificationPanel } from '@/shared/ui/NotificationPanel'
-import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchUserById } from '@/api/users'
+import { logout, selectAuthUser, selectIsAuthorized } from '@/features/auth'
+import { getRegisteredUsers } from '@/features/auth/model/authUtils'
 import {
   clearViewed,
   markAllRead,
@@ -12,19 +12,73 @@ import {
   selectViewedNotifications,
 } from '@/features/exchange/model/exchangeSlice'
 import { ROUTES } from '@/shared/lib/constants'
+import { NotificationPanel } from '@/shared/ui/NotificationPanel'
+import { Footer } from '@/widgets/Footer'
+import { Header } from '@/widgets/Header'
+import type { HeaderProps } from '@/widgets/Header'
+import type { AppDispatch } from '@/store'
 import styles from './MainLayout.module.css'
 
+export interface MainLayoutProps extends Partial<HeaderProps> {
+  searchValue?: string
+  onSearchChange?: (value: string) => void
+}
+
 export const MainLayout = ({
-  hasNewNotifications: propHasNewNotifications,
-  notificationPanel: propNotificationPanel,
-  ...headerProps
-}: HeaderProps) => {
-  const dispatch = useAppDispatch()
+  searchValue = '',
+  onSearchChange = () => {},
+  ...restProps
+}: MainLayoutProps) => {
   const navigate = useNavigate()
-  const user = useAppSelector((state) => state.auth?.user)
-  const hasNewNotifications = useAppSelector(selectHasNewNotifications)
-  const newNotifications = useAppSelector(selectNewNotifications)
-  const viewedNotifications = useAppSelector(selectViewedNotifications)
+  const dispatch = useDispatch<AppDispatch>()
+
+  const isAuthorized = useSelector(selectIsAuthorized)
+  const authUser = useSelector(selectAuthUser)
+  const hasNewNotifications = useSelector(selectHasNewNotifications)
+  const newNotifications = useSelector(selectNewNotifications)
+  const viewedNotifications = useSelector(selectViewedNotifications)
+  const [avatarUrl, setAvatarUrl] = useState<string | undefined>(undefined)
+
+  useEffect(() => {
+    if (!authUser?.id) {
+      setAvatarUrl(undefined)
+      return
+    }
+
+    const localUser = getRegisteredUsers().find((user) => user.id === authUser.id)
+    if (localUser?.avatarUrl) {
+      setAvatarUrl(localUser.avatarUrl)
+      return
+    }
+
+    let isMounted = true
+    fetchUserById(authUser.id)
+      .then((user) => {
+        if (isMounted && user?.avatarUrl) {
+          setAvatarUrl(user.avatarUrl)
+        }
+      })
+      .catch(() => {
+        // если аватар не найден в каталоге, остаётся дефолтная заглушка
+      })
+
+    return () => {
+      isMounted = false
+    }
+  }, [authUser?.id])
+
+  const handleLogin = () => {
+    navigate(ROUTES.LOGIN)
+  }
+
+  const handleRegister = () => {
+    navigate(ROUTES.REGISTER)
+  }
+
+  const handleLogout = () => {
+    dispatch(logout())
+    navigate(ROUTES.HOME)
+  }
 
   const handleNotificationGo = (id: string) => {
     const item = [...newNotifications, ...viewedNotifications].find((n) => n.id === id)
@@ -33,16 +87,16 @@ export const MainLayout = ({
     }
   }
 
-  const notificationPanel = propNotificationPanel ?? (
+  const notificationPanel = restProps.notificationPanel ?? (
     <NotificationPanel
       newItems={newNotifications}
       viewedItems={viewedNotifications}
       onGo={handleNotificationGo}
       onReadAll={() => {
-        if (user?.id) dispatch(markAllRead(user.id))
+        if (authUser?.id) dispatch(markAllRead(authUser.id))
       }}
       onClear={() => {
-        if (user?.id) dispatch(clearViewed(user.id))
+        if (authUser?.id) dispatch(clearViewed(authUser.id))
       }}
     />
   )
@@ -50,9 +104,17 @@ export const MainLayout = ({
   return (
     <div className={styles.layoutContainer}>
       <Header
-        hasNewNotifications={propHasNewNotifications ?? hasNewNotifications}
+        isAuthorized={isAuthorized}
+        name={authUser?.name}
+        avatarUrl={avatarUrl}
+        searchValue={searchValue}
+        onSearchChange={onSearchChange}
+        onLogin={handleLogin}
+        onRegister={handleRegister}
+        onLogout={handleLogout}
+        hasNewNotifications={restProps.hasNewNotifications ?? hasNewNotifications}
         notificationPanel={notificationPanel}
-        {...headerProps}
+        {...restProps}
       />
       <main className={styles.mainContent}>
         <Outlet />
