@@ -8,28 +8,16 @@ import { Checkbox } from '@/shared/ui/Checkbox'
 import { Icon } from '@/shared/ui/icons'
 import { Radio } from '@/shared/ui/Radio'
 import type { FilterGender, FilterPurpose, FiltersProps, FiltersValues } from './interface'
+import { DEFAULT_FILTERS, GENDER_OPTIONS, PURPOSE_OPTIONS } from './constants'
 import styles from './Filters.module.css'
 
 const VISIBLE_CITIES_COUNT = 5
 
-const PURPOSE_OPTIONS: { value: FilterPurpose; label: string }[] = [
-  { value: 'all', label: 'Всё' },
-  { value: 'learn', label: 'Хочу научиться' },
-  { value: 'teach', label: 'Могу научить' },
-]
-
-const GENDER_OPTIONS: { value: FilterGender; label: string }[] = [
-  { value: 'any', label: 'Не имеет значения' },
-  { value: 'male', label: 'Мужской' },
-  { value: 'female', label: 'Женский' },
-]
-
-const createDefaultValues = (): FiltersValues => ({
-  purpose: 'all',
-  gender: 'any',
-  categoryIds: [],
-  subcategoryIds: [],
-  cityIds: [],
+const copyValues = (values: FiltersValues): FiltersValues => ({
+  ...values,
+  categoryIds: [...values.categoryIds],
+  subcategoryIds: [...values.subcategoryIds],
+  cityIds: [...values.cityIds],
 })
 
 const toggleInList = (list: string[], id: string) =>
@@ -38,8 +26,16 @@ const toggleInList = (list: string[], id: string) =>
 // виджет фильтров каталога (цель обмена, навыки с подкатегориями, пол автора, город)
 // в шапке счётчик и кнопка сбросить при активных > 0
 
-export const Filters = ({ onChange, className }: FiltersProps) => {
-  const [values, setValues] = useState<FiltersValues>(createDefaultValues)
+export const Filters = ({
+  values: controlledValues,
+  onChange,
+  onReset,
+  className,
+}: FiltersProps) => {
+  const [internalValues, setInternalValues] = useState<FiltersValues>(() =>
+    copyValues(DEFAULT_FILTERS),
+  )
+  const values = controlledValues ?? internalValues
   const [categories, setCategories] = useState<Category[]>([])
   const [cities, setCities] = useState<City[]>([])
   const [isCitiesExpanded, setIsCitiesExpanded] = useState(false)
@@ -63,8 +59,8 @@ export const Filters = ({ onChange, className }: FiltersProps) => {
   }, [])
 
   const update = (next: Partial<FiltersValues>) => {
-    const result = { ...values, ...next }
-    setValues(result)
+    const result = copyValues({ ...values, ...next })
+    if (controlledValues === undefined) setInternalValues(result)
     onChange?.(result)
   }
 
@@ -114,7 +110,10 @@ export const Filters = ({ onChange, className }: FiltersProps) => {
             variant="link"
             className={styles.resetButton}
             iconRight={<Icon name="close" size={16} />}
-            onClick={() => update(createDefaultValues())}
+            onClick={() => {
+              update(DEFAULT_FILTERS)
+              onReset?.()
+            }}
           >
             Сбросить
           </Button>
