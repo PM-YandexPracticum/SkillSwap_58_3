@@ -1,72 +1,9 @@
 [
   {
-    "avatarUrl": "https://example.com/avatars/alex.jpg",
-    "name": "Alex Morozov",
-    "role": "Frontend Lead",
-    "description": "Руководит фронтенд-направлением, проектирует архитектуру компонентов и следит за качеством кода.",
-    "githubUrl": "https://github.com/alexmorozov"
-  },
-  {
-    "avatarUrl": "https://example.com/avatars/maria.jpg",
-    "name": "Maria Volkova",
-    "role": "Fullstack Developer",
-    "description": "Разрабатывает как клиентскую, так и серверную часть, активно участвует в планировании спринтов.",
-    "githubUrl": "https://github.com/mariavolkova"
-  },
-  {
-    "avatarUrl": "https://example.com/avatars/ivan.jpg",
-    "name": "Ivan Petrov",
-    "role": "Backend Engineer",
-    "description": "Специализируется на высоконагруженных API и оптимизации запросов к базе данных.",
-    "githubUrl": "https://github.com/ivanpetrov"
-  },
-  {
-    "avatarUrl": "https://example.com/avatars/elena.jpg",
-    "name": "Elena Sokolova",
-    "role": "UI/UX Designer",
-    "description": "Создаёт прототипы, прорабатывает пользовательские сценарии и улучшает визуальную консистентность продукта.",
-    "githubUrl": "https://github.com/elenasokolova"
-  },
-  {
-    "avatarUrl": "https://example.com/avatars/dmitry.jpg",
-    "name": "Dmitry Kuznetsov",
-    "role": "DevOps Engineer",
-    "description": "Настраивает CI/CD, управляет контейнеризацией и обеспечивает стабильность инфраструктуры.",
-    "githubUrl": "https://github.com/dmitrykuznetsov"
-  },
-  {
-    "avatarUrl": "https://example.com/avatars/olga.jpg",
-    "name": "Olga Fedorova",
-    "role": "QA Engineer",
-    "description": "Пишет автотесты, проводит ручное тестирование и следит за соответствием продукта требованиям.",
-    "githubUrl": "https://github.com/olgafedorova"
-  },
-  {
-    "avatarUrl": "https://example.com/avatars/kirill.jpg",
-    "name": "Kirill Novikov",
-    "role": "Mobile Developer",
-    "description": "Разрабатывает нативные мобильные приложения, интегрирует их с бэкендом и оптимизирует производительность.",
-    "githubUrl": "https://github.com/kirillnovikov"
-  },
-  {
-    "avatarUrl": "https://example.com/avatars/natalia.jpg",
-    "name": "Natalia Orlova",
-    "role": "Product Manager",
-    "description": "Формирует дорожную карту продукта, приоритизирует задачи и взаимодействует с заинтересованными сторонами.",
-    "githubUrl": "https://github.com/nataliaorlova"
-  },
-  {
-    "avatarUrl": "https://example.com/avatars/sergey.jpg",
-    "name": "Sergey Belov",
-    "role": "Data Analyst",
-    "description": "Анализирует метрики продукта, строит отчёты и помогает команде принимать решения на основе данных.",
-    "githubUrl": "https://github.com/sergeybelov"
-  },
-  {
-    "avatarUrl": "https://example.com/avatars/anna.jpg",
-    "name": "Anna Zhukova",
-    "role": "Technical Writer",
-    "description": "Готовит документацию, пишет статьи для базы знаний и помогает пользователям разобраться в функционале.",
-    "githubUrl": "https://github.com/annazhukova"
+    "avatarUrl": "https://img.magnific.com/premium-photo/portrait-white-cat-floor_857956-339.jpg?semt=ais_hybrid",
+    "name": "Anastasia",
+    "role": "Frontend developer",
+    "description": "Frontend разработчик (React, Redux, TypeScript), создаю устойчивые компоненты, покрываю их историями в Storybook",
+    "githubUrl": "https://github.com/AnastasiyaAlaska2001"
   }
 ]

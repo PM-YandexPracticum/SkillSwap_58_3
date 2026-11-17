@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice, isAnyOf, type PayloadAction } from '@red
 import { fetchUsers } from '@/api/users'
 import { LOCAL_STORAGE_KEYS } from '@/shared/lib/constants'
 import type { AuthUser, LoginCredentials, RegisterPayload, User } from '@/shared/types'
-import type { RootState } from '@/store'
 import {
   clearAuthUser,
   getAuthUser,
@@ -135,8 +134,8 @@ export const authSlice = createSlice({
 })
 
 export const { logout, setAuthUser } = authSlice.actions
-export const selectAuthUser = (state: RootState) => state.auth.user
-export const selectIsAuthorized = (state: RootState) => state.auth.user !== null
-export const selectAuthStatus = (state: RootState) => state.auth.status
-export const selectAuthError = (state: RootState) => state.auth.error
+export const selectAuthUser = (state: { auth: AuthState }) => state.auth.user
+export const selectIsAuthorized = (state: { auth: AuthState }) => state.auth.user !== null
+export const selectAuthStatus = (state: { auth: AuthState }) => state.auth.status
+export const selectAuthError = (state: { auth: AuthState }) => state.auth.error
 export default authSlice.reducer
