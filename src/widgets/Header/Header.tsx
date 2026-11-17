@@ -11,6 +11,7 @@ import { NotificationButton } from '@/shared/ui/NotificationButton'
 import { SearchInput } from '@/shared/ui/SearchInput'
 import type { HeaderProps } from './interface'
 import styles from './Header.module.css'
+import { getAuthUser } from '@/features/auth/model/authUtils'
 
 const HEADER_LINKS = {
   about: '/about',
@@ -50,6 +51,8 @@ export const Header = ({
     setIsProfileOpen(false)
     onLogout?.()
   }
+
+  const nameLocal = getAuthUser()?.name ?? name
 
   return (
     <header className={styles.header}>
@@ -130,8 +133,8 @@ export const Header = ({
                     className={styles.profileTrigger}
                     onClick={() => setIsProfileOpen((prev) => !prev)}
                   >
-                    {name && <span className={styles.userName}>{name}</span>}
-                    <Avatar size="small" src={avatarUrl} alt={name ?? 'Профиль'} />
+                    {name && <span className={styles.userName}>{nameLocal}</span>}
+                    <Avatar size="small" src={avatarUrl} alt={nameLocal ?? 'Профиль'} />
                   </button>
                 }
               >

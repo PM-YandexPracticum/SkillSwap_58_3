@@ -102,7 +102,9 @@ export const ProfileEditForm = ({
       formData.password = password
     }
 
-    onSave(formData)
+    if (formData) {
+      onSave(formData, isPasswordBlockVisible)
+    }
   }
 
   return (
