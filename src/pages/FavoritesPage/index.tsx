@@ -1,17 +1,19 @@
-import { mapUserToCardData } from '@/widgets/UserCard/mapUserToCardData'
-import type { SkillsSectionItem } from '@/widgets/SkillsSection'
-import { useNavigate } from 'react-router-dom'
-import { ROUTES } from '@/shared/lib/constants'
-import { Filters } from '@/widgets/Filters'
-import { SkillsSection } from '@/widgets/SkillsSection'
-import { Button } from '@/shared/ui/Button'
 import { useEffect, useState } from 'react'
-import { fetchUsers } from '@/api/users'
-import { fetchSkills } from '@/api/skills'
+import { useNavigate } from 'react-router-dom'
 import { fetchCategories } from '@/api/categories'
 import { fetchCities } from '@/api/cities'
-import type { User, Skill, Category, City } from '@/shared/types'
+import { fetchSkills } from '@/api/skills'
+import { fetchUsers } from '@/api/users'
+import { useAppSelector } from '@/store/hooks'
+import { selectProposedUserIds } from '@/features/exchange/model/exchangeSlice'
+import { ROUTES } from '@/shared/lib/constants'
+import type { Category, City, Skill, User } from '@/shared/types'
+import { Button } from '@/shared/ui/Button'
 import { Loader } from '@/shared/ui/Loader'
+import { Filters } from '@/widgets/Filters'
+import { SkillsSection } from '@/widgets/SkillsSection'
+import type { SkillsSectionItem } from '@/widgets/SkillsSection'
+import { mapUserToCardData } from '@/widgets/UserCard/mapUserToCardData'
 import styles from './FavoritesPage.module.css'
 
 export default function FavoritesPage() {
@@ -47,6 +49,7 @@ export default function FavoritesPage() {
     }
   }, [])
 
+  const proposedUserIds = useAppSelector(selectProposedUserIds)
   const currentUser = users.find((user) => user.id === 'user-02')
 
   const favoriteUsers = users.filter((user) => currentUser?.favourites.includes(user.id))
@@ -54,7 +57,15 @@ export default function FavoritesPage() {
   const favoriteCards: SkillsSectionItem[] = favoriteUsers.flatMap((user) => {
     const card = mapUserToCardData(user, { skills, categories, cities })
 
-    return card ? [{ ...card, isLiked: true }] : []
+    return card
+      ? [
+          {
+            ...card,
+            isLiked: true,
+            isExchangeProposed: proposedUserIds.includes(card.id),
+          },
+        ]
+      : []
   })
 
   if (isLoading) {

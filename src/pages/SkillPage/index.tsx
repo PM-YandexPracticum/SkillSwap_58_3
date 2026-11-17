@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { generatePath, Link, useNavigate, useParams } from 'react-router-dom'
+import { generatePath, Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { fetchSkillById, fetchSkills } from '@/api/skills'
 import { fetchUserById, fetchUsers } from '@/api/users'
 import { fetchCities } from '@/api/cities'
@@ -11,6 +11,13 @@ import { SkillCard } from '@/widgets/SkillCard'
 import { SkillsSection } from '@/widgets/SkillsSection'
 import { UserCard } from '@/widgets/UserCard'
 import { mapUserToCardData } from '@/widgets/UserCard/mapUserToCardData'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import {
+  proposeExchange,
+  selectIsSkillRequested,
+  selectProposedUserIds,
+} from '@/features/exchange/model/exchangeSlice'
+import { ExchangeProposedModal } from '@/widgets/ExchangeProposedModal'
 import { selectSimilarSkills } from './selectSimilarSkills'
 import styles from './SkillPage.module.css'
 
@@ -30,8 +37,15 @@ type PageState = { id: string | undefined } & (
 export default function SkillPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const location = useLocation()
+  const dispatch = useAppDispatch()
   const [state, setState] = useState<PageState>({ id, status: 'loading' })
   const [likedAuthorIds, setLikedAuthorIds] = useState<string[]>([])
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const isAuthorized = useAppSelector((rootState) => Boolean(rootState.auth?.user))
+  const isSkillRequested = useAppSelector(selectIsSkillRequested(id ?? ''))
+  const proposedUserIds = useAppSelector(selectProposedUserIds)
 
   useEffect(() => {
     let active = true
@@ -108,6 +122,7 @@ export default function SkillPage() {
           {
             ...card,
             isLiked: likedAuthorIds.includes(card.id),
+            isExchangeProposed: proposedUserIds.includes(card.id),
             onLike: () => toggleLike(card.id),
             onDetails: () => navigate(generatePath(ROUTES.SKILL, { id: similarSkill.id })),
           },
@@ -127,12 +142,24 @@ export default function SkillPage() {
           categoryName={category?.name ?? ''}
           subcategoryName={subcategory?.name ?? ''}
           isLiked={likedAuthorIds.includes(author.id)}
+          isExchanged={isSkillRequested}
           onAction={(action) => {
             if (action === 'like') toggleLike(author.id)
+            if (action === 'exchange') {
+              if (!isAuthorized) {
+                navigate(ROUTES.LOGIN, { state: { from: location } })
+                return
+              }
+              if (id) {
+                dispatch(proposeExchange(id))
+                setIsModalOpen(true)
+              }
+            }
           }}
         />
       </section>
       <SkillsSection title="Похожие предложения" items={similarItems} columns={4} />
+      <ExchangeProposedModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   )
 }

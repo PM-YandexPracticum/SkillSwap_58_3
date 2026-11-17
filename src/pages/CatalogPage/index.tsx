@@ -17,6 +17,7 @@ import type { Dictionaries } from '@/widgets/UserCard/types'
 import { PaginatedSkillsSection } from './PaginatedSkillsSection'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { resetFilters, selectFilters, selectSearch, setFilters } from '@/store/slices/filtersSlice'
+import { selectProposedUserIds } from '@/features/exchange/model/exchangeSlice'
 import styles from './CatalogPage.module.css'
 
 // количество карточек в секциях вынесено в именованные константы по требованию задачи
@@ -27,7 +28,9 @@ const RECOMMENDED_PAGE_SIZE = 6
 const LOAD_MORE_DELAY_MS = 1000
 
 // тип данных карточки: результат mapUserToCardData без null
-type CardData = NonNullable<ReturnType<typeof mapUserToCardData>>
+type CardData = NonNullable<ReturnType<typeof mapUserToCardData>> & {
+  isExchangeProposed: boolean
+}
 
 // Главная страница каталога: сайдбар, исходные секции или результаты поиска и фильтрации.
 
@@ -35,6 +38,7 @@ export default function CatalogPage() {
   const dispatch = useAppDispatch()
   const filters = useAppSelector(selectFilters)
   const search = useAppSelector(selectSearch)
+  const proposedUserIds = useAppSelector(selectProposedUserIds)
   const [users, setUsers] = useState<User[]>([])
   const [skills, setSkills] = useState<Skill[]>([])
   const [categories, setCategories] = useState<Category[]>([])
@@ -72,9 +76,17 @@ export default function CatalogPage() {
   const cards = useMemo(
     () =>
       filterUsers({ users, filters, search, skills, categories })
-        .map((user) => mapUserToCardData(user, dictionaries))
+        .map((user) => {
+          const card = mapUserToCardData(user, dictionaries)
+          return card
+            ? {
+                ...card,
+                isExchangeProposed: proposedUserIds.includes(card.id),
+              }
+            : null
+        })
         .filter((card): card is CardData => card !== null),
-    [users, filters, search, skills, categories, dictionaries],
+    [users, filters, search, skills, categories, dictionaries, proposedUserIds],
   )
 
   // секции считаем до ранних возвратов и в useMemo: usePaginatedList сбрасывает показ,

@@ -1,13 +1,17 @@
+import { configureStore } from '@reduxjs/toolkit'
 import { act, cleanup, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { Provider } from 'react-redux'
 import { Link, MemoryRouter, Route, Routes } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { fetchCategories } from '@/api/categories'
 import { fetchCities } from '@/api/cities'
 import { fetchSkillById, fetchSkills } from '@/api/skills'
 import { fetchUserById, fetchUsers } from '@/api/users'
+import authReducer from '@/features/auth/model/authSlice'
+import exchangeReducer from '@/features/exchange/model/exchangeSlice'
 import { ROUTES } from '@/shared/lib/constants'
-import type { Skill, User } from '@/shared/types'
+import type { AuthUser, Skill, SwapRequest, User } from '@/shared/types'
 import categories from '../../../public/db/categories.json'
 import cities from '../../../public/db/cities.json'
 import skillsFixture from '../../../public/db/skills.json'
@@ -24,6 +28,18 @@ const users = usersFixture as unknown as User[]
 const currentSkill = skills.find((skill) => skill.id === 'skill-01')!
 const nextSkill = skills.find((skill) => skill.id === 'skill-03')!
 
+const defaultAuthUser: AuthUser = {
+  id: 'user-03',
+  email: 'alexey.kuznetsov@example.com',
+  name: 'Алексей Кузнецов',
+  token: 'mock-token',
+}
+
+interface RenderOptions {
+  user?: AuthUser | null
+  initialRequests?: SwapRequest[]
+}
+
 function deferred<T>() {
   let resolve!: (value: T) => void
   const promise = new Promise<T>((resolvePromise) => {
@@ -32,19 +48,45 @@ function deferred<T>() {
   return { promise, resolve }
 }
 
-function renderPage(id = currentSkill.id) {
-  return render(
-    <MemoryRouter initialEntries={['/skill/' + id]}>
-      <Link to={'/skill/' + nextSkill.id}>Открыть другой навык</Link>
-      <Routes>
-        <Route path={ROUTES.SKILL} element={<SkillPage />} />
-        <Route path={ROUTES.HOME} element={<p>Главная страница</p>} />
-      </Routes>
-    </MemoryRouter>,
-  )
+function renderPage(id = currentSkill.id, options: RenderOptions = {}) {
+  const store = configureStore({
+    reducer: {
+      auth: authReducer,
+      exchange: exchangeReducer,
+    },
+    preloadedState: {
+      auth: {
+        user: options.user !== undefined ? options.user : defaultAuthUser,
+        status: 'idle' as const,
+        error: null,
+        currentRequestId: null,
+      },
+      exchange: {
+        requests: options.initialRequests ?? [],
+        notifications: [],
+      },
+    },
+  })
+
+  return {
+    store,
+    ...render(
+      <Provider store={store}>
+        <MemoryRouter initialEntries={['/skill/' + id]}>
+          <Link to={'/skill/' + nextSkill.id}>Открыть другой навык</Link>
+          <Routes>
+            <Route path={ROUTES.SKILL} element={<SkillPage />} />
+            <Route path={ROUTES.HOME} element={<p>Главная страница</p>} />
+            <Route path={ROUTES.LOGIN} element={<p>Страница входа</p>} />
+          </Routes>
+        </MemoryRouter>
+      </Provider>,
+    ),
+  }
 }
 
 beforeEach(() => {
+  localStorage.clear()
   vi.resetAllMocks()
   vi.mocked(fetchSkillById).mockImplementation(async (id) =>
     skills.find((skill) => skill.id === id),
@@ -118,7 +160,8 @@ describe('SkillPage', () => {
     await user.click(within(card).getByRole('button', { name: /поставить лайк/ }))
     expect(within(card).getByRole('button', { name: 'убрать лайк' })).toBeInTheDocument()
     await user.click(within(card).getByRole('button', { name: 'Предложить обмен' }))
-    expect(within(card).getByRole('button', { name: 'Обмен предложен' })).toBeDisabled()
+    expect(await within(card).findByRole('button', { name: 'Обмен предложен' })).toBeDisabled()
+    await user.click(screen.getByRole('button', { name: 'Готово' }))
 
     const recommendation = screen.getByRole('article', { name: 'Мария Соколова' })
     await user.click(within(recommendation).getByRole('button', { name: /поставить лайк/ }))
@@ -155,6 +198,60 @@ describe('SkillPage', () => {
     ).toBeInTheDocument()
     expect(
       screen.queryByRole('article', { name: `${currentSkill.title}. Автор: Иван Петров` }),
+    ).not.toBeInTheDocument()
+  })
+
+  it('перенаправляет неавторизованного пользователя на страницу входа при нажатии «Предложить обмен»', async () => {
+    const user = userEvent.setup()
+    renderPage(currentSkill.id, { user: null })
+
+    const card = await screen.findByRole('article', {
+      name: `${currentSkill.title}. Автор: Иван Петров`,
+    })
+    await user.click(within(card).getByRole('button', { name: 'Предложить обмен' }))
+
+    expect(await screen.findByText('Страница входа')).toBeInTheDocument()
+    expect(screen.queryByText('Вы предложили обмен')).not.toBeInTheDocument()
+  })
+
+  it('открывает модалку подтверждения и блокирует кнопку при предложении обмена', async () => {
+    const user = userEvent.setup()
+    renderPage()
+
+    const card = await screen.findByRole('article', {
+      name: `${currentSkill.title}. Автор: Иван Петров`,
+    })
+    await user.click(within(card).getByRole('button', { name: 'Предложить обмен' }))
+
+    expect(await screen.findByRole('heading', { name: 'Вы предложили обмен' })).toBeInTheDocument()
+    expect(
+      screen.getByText('Теперь дождитесь подтверждения. Вам придёт уведомление'),
+    ).toBeInTheDocument()
+    expect(within(card).getByRole('button', { name: 'Обмен предложен' })).toBeDisabled()
+
+    await user.click(screen.getByRole('button', { name: 'Готово' }))
+    expect(screen.queryByRole('heading', { name: 'Вы предложили обмен' })).not.toBeInTheDocument()
+  })
+
+  it('отображает кнопку «Обмен предложен» в похожих предложениях для пользователей, которым уже предложен обмен', async () => {
+    const initialRequests: SwapRequest[] = [
+      {
+        id: 'request-test-1',
+        skillId: 'skill-03',
+        fromUserId: defaultAuthUser.id,
+        toUserId: 'user-02',
+        status: 'pending',
+        createdAt: '2026-11-17T00:00:00.000Z',
+        updatedAt: '2026-11-17T00:00:00.000Z',
+      },
+    ]
+
+    renderPage(currentSkill.id, { initialRequests })
+
+    const recommendation = await screen.findByRole('article', { name: 'Мария Соколова' })
+    expect(within(recommendation).getByRole('button', { name: 'Обмен предложен' })).toBeDisabled()
+    expect(
+      within(recommendation).queryByRole('button', { name: 'Подробнее' }),
     ).not.toBeInTheDocument()
   })
 })
