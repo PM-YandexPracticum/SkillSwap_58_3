@@ -28,7 +28,6 @@ export function AppRouter() {
           <Route
             element={
               <MainLayout
-                isAuthorized={false}
                 searchValue={searchValue}
                 onSearchChange={(value) => dispatch(setSearch(value))}
               />
