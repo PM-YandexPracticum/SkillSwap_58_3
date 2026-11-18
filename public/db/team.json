@@ -19,5 +19,12 @@
     "role": "Frontend developer",
     "description": "Разработка компонентов, верстка страниц, интеграция данных обмена навыками и клиентской логики",
     "githubUrl": "https://github.com/qdjk6xbjby-source"
+  },
+  {
+    "avatarUrl": "https://avatars.githubusercontent.com/u/254094738?s=400&v=4",
+    "name": "Daniil",
+    "role": "Frontend developer",
+    "description": "Реализация функциональности избранного, работа с Redux и localStorage, подключение интерактивных элементов интерфейса",
+    "githubUrl": "https://github.com/DaniilLysyy"
   }
 ]
