@@ -13,7 +13,7 @@ import { useCallback, useEffect, useState } from 'react'
 export const useProfilePage = () => {
   const [activeItem, setActiveItem] = useState<ProfileMenuItemId>('personal')
   const [currentUser, setCurrentUser] = useState<User | null>(null)
-  const [isLoading, setIsloading] = useState(true)
+  const [isLoading, setIsloading] = useState(false)
   const [errors, setErrors] = useState<Partial<Record<keyof ProfileFormData, string>> | undefined>()
 
   const handleSave = (formdata: ProfileFormData, isPasswordVisible: boolean) => {
