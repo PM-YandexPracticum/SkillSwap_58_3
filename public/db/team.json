@@ -12,5 +12,12 @@
     "role": "Frontend разработчик на все случаи жизни",
     "description": "Подключение шрифтов, настройка css-переменных, создание компонентов, сборка виджетов и страниц, настройка логики страницы, маршрутизация, поиск багов, работа со Storybook и юнит-тестами",
     "githubUrl": "https://github.com/alexzh323"
+  },
+  {
+    "avatarUrl": null,
+    "name": "Artem",
+    "role": "Frontend developer",
+    "description": "Разработка компонентов, верстка страниц, интеграция данных обмена навыками и клиентской логики",
+    "githubUrl": "https://github.com/qdjk6xbjby-source"
   }
 ]
