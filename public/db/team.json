@@ -5,5 +5,12 @@
     "role": "Frontend developer",
     "description": "Frontend разработчик (React, Redux, TypeScript), создаю устойчивые компоненты, покрываю их историями в Storybook",
     "githubUrl": "https://github.com/AnastasiyaAlaska2001"
+  },
+  {
+    "avatarUrl": "https://avatars.githubusercontent.com/u/254585016?v=4",
+    "name": "Alex",
+    "role": "Frontend разработчик на все случаи жизни",
+    "description": "Подключение шрифтов, настройка css-переменных, создание компонентов, сборка виджетов и страниц, настройка логики страницы, маршрутизация, поиск багов, работа со Storybook и юнит-тестами",
+    "githubUrl": "https://github.com/alexzh323"
   }
 ]
