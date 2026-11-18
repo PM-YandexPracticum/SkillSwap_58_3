@@ -1,0 +1,68 @@
+.form {
+  width: 100%;
+}
+
+.form input:not([type='file'], [type='checkbox']) {
+  height: 48px;
+  font: inherit;
+  line-height: 24px;
+  letter-spacing: inherit;
+  color: inherit;
+}
+
+.form button {
+  font: inherit;
+  line-height: 24px;
+  letter-spacing: inherit;
+}
+
+.credentials > div > section > button {
+  height: 48px;
+}
+
+.credentials > div > section:first-child > button {
+  gap: var(--space-12, 12px);
+  border: var(--border-main, 1px solid #69775d);
+}
+
+.credentials > div > section:last-child > button {
+  margin-top: var(--space-8, 8px);
+}
+
+.credentials label ~ span {
+  line-height: 16px;
+}
+
+.skill > form {
+  max-width: none;
+  gap: var(--space-32, 32px);
+  padding: var(--space-40, 40px) var(--space-60, 60px);
+}
+
+.skill > form > div:first-child {
+  gap: var(--space-16, 16px);
+}
+
+.skill > form > div:last-child {
+  gap: var(--space-20, 20px);
+}
+
+.skill button[role='combobox'],
+.skill button[type='submit'],
+.skill > form > div:last-child > button {
+  height: 48px;
+  min-height: 48px;
+}
+
+.skill textarea {
+  height: calc(var(--space-24, 24px) * 4);
+}
+
+.error {
+  margin: 0 var(--space-60, 60px) var(--space-16, 16px);
+  color: var(--color-error, #bf3920);
+}
+
+body:has(.form) > div > [role='dialog'][aria-modal='true'] {
+  transform: translateY(-22px);
+}
