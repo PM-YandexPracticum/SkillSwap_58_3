@@ -8,6 +8,10 @@ import { fetchSkillById, fetchSkills } from '@/api/skills'
 import { fetchUserById, fetchUsers } from '@/api/users'
 import { ROUTES } from '@/shared/lib/constants'
 import type { Skill, User } from '@/shared/types'
+import { Provider } from 'react-redux'
+import { configureStore } from '@reduxjs/toolkit'
+import authReducer from '@/features/auth/model/authSlice'
+import favoritesReducer from '@/features/favorites/model/favoritesSlice'
 import categories from '../../../public/db/categories.json'
 import cities from '../../../public/db/cities.json'
 import skillsFixture from '../../../public/db/skills.json'
@@ -33,14 +37,41 @@ function deferred<T>() {
 }
 
 function renderPage(id = currentSkill.id) {
+  const store = configureStore({
+    reducer: {
+      auth: authReducer,
+      favorites: favoritesReducer,
+    },
+    preloadedState: {
+      auth: {
+        user: {
+          id: 'user-02',
+          name: 'Мария Соколова',
+          email: 'maria.sokolova@example.com',
+          token: 'mock_token_user-02',
+        },
+        status: 'idle' as const,
+        error: null,
+        currentRequestId: null,
+      },
+      favorites: {
+        byUser: {
+          'user-02': [],
+        },
+      },
+    },
+  })
+
   return render(
-    <MemoryRouter initialEntries={['/skill/' + id]}>
-      <Link to={'/skill/' + nextSkill.id}>Открыть другой навык</Link>
-      <Routes>
-        <Route path={ROUTES.SKILL} element={<SkillPage />} />
-        <Route path={ROUTES.HOME} element={<p>Главная страница</p>} />
-      </Routes>
-    </MemoryRouter>,
+    <Provider store={store}>
+      <MemoryRouter initialEntries={['/skill/' + id]}>
+        <Link to={'/skill/' + nextSkill.id}>Открыть другой навык</Link>
+        <Routes>
+          <Route path={ROUTES.SKILL} element={<SkillPage />} />
+          <Route path={ROUTES.HOME} element={<p>Главная страница</p>} />
+        </Routes>
+      </MemoryRouter>
+    </Provider>,
   )
 }
 

@@ -12,6 +12,7 @@ import { SkillsSection } from '@/widgets/SkillsSection'
 import { UserCard } from '@/widgets/UserCard'
 import { mapUserToCardData } from '@/widgets/UserCard/mapUserToCardData'
 import { selectSimilarSkills } from './selectSimilarSkills'
+import { useFavorites } from '@/features/favorites/model/useFavorites'
 import styles from './SkillPage.module.css'
 
 interface SkillPageData {
@@ -31,7 +32,7 @@ export default function SkillPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const [state, setState] = useState<PageState>({ id, status: 'loading' })
-  const [likedAuthorIds, setLikedAuthorIds] = useState<string[]>([])
+  const { isFavorite, toggle } = useFavorites()
 
   useEffect(() => {
     let active = true
@@ -70,12 +71,6 @@ export default function SkillPage() {
     }
   }, [id])
 
-  function toggleLike(authorId: string) {
-    setLikedAuthorIds((ids) =>
-      ids.includes(authorId) ? ids.filter((value) => value !== authorId) : [...ids, authorId],
-    )
-  }
-
   if (state.id !== id || state.status === 'loading') {
     return (
       <div className={styles.status}>
@@ -107,8 +102,8 @@ export default function SkillPage() {
       ? [
           {
             ...card,
-            isLiked: likedAuthorIds.includes(card.id),
-            onLike: () => toggleLike(card.id),
+            isLiked: isFavorite(card.id),
+            onLike: () => toggle(card.id),
             onDetails: () => navigate(generatePath(ROUTES.SKILL, { id: similarSkill.id })),
           },
         ]
@@ -126,9 +121,9 @@ export default function SkillPage() {
           author={author}
           categoryName={category?.name ?? ''}
           subcategoryName={subcategory?.name ?? ''}
-          isLiked={likedAuthorIds.includes(author.id)}
+          isLiked={isFavorite(author.id)}
           onAction={(action) => {
-            if (action === 'like') toggleLike(author.id)
+            if (action === 'like') toggle(author.id)
           }}
         />
       </section>

@@ -12,6 +12,7 @@ import { fetchCategories } from '@/api/categories'
 import { fetchCities } from '@/api/cities'
 import type { User, Skill, Category, City } from '@/shared/types'
 import { Loader } from '@/shared/ui/Loader'
+import { useFavorites } from '@/features/favorites/model/useFavorites'
 import styles from './FavoritesPage.module.css'
 
 export default function FavoritesPage() {
@@ -22,6 +23,7 @@ export default function FavoritesPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(false)
   const navigate = useNavigate()
+  const { favoriteIds, toggle } = useFavorites()
 
   useEffect(() => {
     let isMounted = true
@@ -47,14 +49,20 @@ export default function FavoritesPage() {
     }
   }, [])
 
-  const currentUser = users.find((user) => user.id === 'user-02')
-
-  const favoriteUsers = users.filter((user) => currentUser?.favourites.includes(user.id))
+  const favoriteUsers = users.filter((user) => favoriteIds.includes(user.id))
 
   const favoriteCards: SkillsSectionItem[] = favoriteUsers.flatMap((user) => {
     const card = mapUserToCardData(user, { skills, categories, cities })
 
-    return card ? [{ ...card, isLiked: true }] : []
+    return card
+      ? [
+          {
+            ...card,
+            isLiked: true,
+            onLike: () => toggle(user.id),
+          },
+        ]
+      : []
   })
 
   if (isLoading) {

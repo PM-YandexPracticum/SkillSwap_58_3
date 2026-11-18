@@ -6,6 +6,9 @@ import type { Category, City, Skill, User } from '@/shared/types'
 import filtersReducer, { resetFilters, setFilters } from '@/store/slices/filtersSlice'
 import { DEFAULT_FILTERS } from '@/widgets/Filters/constants'
 import CatalogPage from './index'
+import { MemoryRouter } from 'react-router-dom'
+import authReducer from '@/features/auth/model/authSlice'
+import favoritesReducer from '@/features/favorites/model/favoritesSlice'
 
 const USERS_COUNT = 30
 const PAGE_SIZE = 6
@@ -85,17 +88,29 @@ const countRecommendedCards = () => {
 }
 
 async function renderPage() {
-  const store = configureStore({ reducer: { filters: filtersReducer } })
+  const store = configureStore({
+    reducer: {
+      auth: authReducer,
+      favorites: favoritesReducer,
+      filters: filtersReducer,
+    },
+  })
+
   render(
     <Provider store={store}>
-      <CatalogPage />
+      <MemoryRouter>
+        <CatalogPage />
+      </MemoryRouter>
     </Provider>,
   )
+
   await screen.findByRole('heading', { name: 'Рекомендуем' })
+
   // Заголовок может появиться раньше, чем useEffect подключит наблюдатель прокрутки.
   await waitFor(() => {
     expect(FakeIntersectionObserver.instances.some((observer) => observer.isConnected)).toBe(true)
   })
+
   return store
 }
 
