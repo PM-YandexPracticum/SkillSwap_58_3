@@ -4,7 +4,7 @@ import { format } from 'date-fns'
 import clsx from 'clsx'
 import { fetchCities } from '@/api/cities'
 import { fetchCategories } from '@/api/categories'
-import { registerUser } from '@/features/auth/model/authSlice'
+import { completeRegistration } from '@/features/auth/model/completeRegistration'
 import { ROUTES } from '@/shared/lib/constants'
 import type { Category, City } from '@/shared/types'
 import { useAppDispatch } from '@/store/hooks'
@@ -19,20 +19,20 @@ import styles from './RegisterPage.module.css'
 const STEP_INFO = {
   1: {
     image: 'light-bulb',
-    title: 'Добро пожаловать в SkillSwap!',
-    description: 'Присоединяйтесь к SkillSwap и обменивайтесь знаниями и навыками с другими людьми',
+    title: 'Добро пожаловать в SkillSwap!',
+    description: 'Присоединяйтесь к SkillSwap и обменивайтесь знаниями и навыками с другими людьми',
     alt: 'Лампочка как символ обмена знаниями',
   },
   2: {
     image: 'user-info',
-    title: 'Расскажите немного о себе',
-    description: 'Это поможет другим людям лучше вас узнать, чтобы выбрать для обмена',
+    title: 'Расскажите немного о себе',
+    description: 'Это поможет другим людям лучше вас узнать, чтобы выбрать для обмена',
     alt: 'Пользователь рассказывает о себе',
   },
   3: {
     image: 'school-board',
-    title: 'Укажите, чем вы готовы поделиться',
-    description: 'Так другие люди смогут увидеть ваши предложения и предложить вам обмен!',
+    title: 'Укажите, чем вы готовы поделиться',
+    description: 'Так другие люди смогут увидеть ваши предложения и предложить вам обмен!',
     alt: 'Доска для объяснения навыка',
   },
 } as const
@@ -103,21 +103,34 @@ export default function RegisterPage() {
     })),
   )
 
+  // кнопка «Готово» в модалке: регистрация + навык одним действием
   async function confirmRegistration() {
     setError('')
     const result = await dispatch(
-      registerUser({
-        ...credentials,
-        name: profile.name,
-        birthday: profile.birthday ? format(profile.birthday, 'yyyy-MM-dd') : '',
-        gender: profile.gender,
-        town: profile.cityId,
-        learn: profile.subcategoryIds,
-        avatarUrl: profile.avatarUrl,
+      completeRegistration({
+        register: {
+          ...credentials,
+          name: profile.name,
+          birthday: profile.birthday ? format(profile.birthday, 'yyyy-MM-dd') : '',
+          gender: profile.gender,
+          town: profile.cityId,
+          learn: profile.subcategoryIds,
+          avatarUrl: profile.avatarUrl,
+        },
+        step3: skill,
       }),
     )
-    if (registerUser.fulfilled.match(result)) navigate(ROUTES.HOME)
-    if (registerUser.rejected.match(result) && !result.meta.condition) {
+    if (completeRegistration.fulfilled.match(result)) {
+      navigate(ROUTES.HOME)
+      return
+    }
+    if (completeRegistration.rejected.match(result) && !result.meta.condition) {
+      if (result.payload === 'Пользователь с такой почтой уже зарегистрирован') {
+        setPreviewOpen(false)
+        setStep(1)
+        setError(result.payload)
+        return
+      }
       setError(result.payload ?? 'Не удалось зарегистрироваться. Попробуйте ещё раз.')
       setPreviewOpen(false)
     }
