@@ -1,6 +1,7 @@
 import type { Gender } from '@/shared/types'
 import type { SelectOption } from '@/shared/ui/Select'
 import type { MultiSelectOption } from '@/shared/ui/MultiSelect'
+import type { Category } from '@/shared/types'
 
 export interface RegisterStep2Values {
   avatarUrl?: string
@@ -22,4 +23,5 @@ export interface RegisterStep2FormProps {
   onAvatarAdd: () => void
   onBack: () => void
   onSubmit: () => void
+  categories: Category[]
 }

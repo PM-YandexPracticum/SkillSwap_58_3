@@ -1,4 +1,4 @@
-import { useId } from 'react'
+import { useId, useMemo } from 'react'
 import clsx from 'clsx'
 import type { Gender } from '@/shared/types'
 import { Avatar } from '@/shared/ui/Avatar'
@@ -24,12 +24,60 @@ export function RegisterStep2Form({
   cityOptions,
   categoryOptions,
   subcategoryOptions,
+  categories = [],
   onAvatarAdd,
   onBack,
   onSubmit,
 }: RegisterStep2FormProps) {
   const id = useId()
   const update = (next: Partial<RegisterStep2Values>) => onChange({ ...values, ...next })
+
+  // Мапа «id подкатегории → id категории» из исходных данных
+  const subcategoryToCategory = useMemo(() => {
+    const map = new Map<string, string>()
+
+    for (const category of categories) {
+      for (const subcategory of category.subcategories) {
+        map.set(subcategory.id, category.id)
+      }
+    }
+
+    return map
+  }, [categories])
+
+  // Показываем только подкатегории выбранных категорий (как на шаге 3)
+  const visibleSubcategoryOptions = subcategoryOptions.filter((option) =>
+    values.categoryIds.includes(subcategoryToCategory.get(option.value) ?? ''),
+  )
+
+  // Снятие категории убирает подкатегории этой категории
+  const handleCategoriesChange = (categoryIds: string[]) => {
+    const allowed = new Set(
+      [...subcategoryToCategory.entries()]
+        .filter(([, categoryId]) => categoryIds.includes(categoryId))
+        .map(([subcategoryId]) => subcategoryId),
+    )
+
+    update({
+      categoryIds,
+      subcategoryIds: values.subcategoryIds.filter((subId) => allowed.has(subId)),
+    })
+  }
+
+  // Выбор подкатегории отмечает её категорию
+  const handleSubcategoriesChange = (subcategoryIds: string[]) => {
+    const categoryIds = new Set(values.categoryIds)
+
+    for (const subId of subcategoryIds) {
+      const categoryId = subcategoryToCategory.get(subId)
+
+      if (categoryId) {
+        categoryIds.add(categoryId)
+      }
+    }
+
+    update({ categoryIds: [...categoryIds], subcategoryIds })
+  }
 
   return (
     <form
@@ -107,7 +155,7 @@ export function RegisterStep2Form({
             placeholder="Выберите категорию"
             options={categoryOptions}
             value={values.categoryIds}
-            onChange={(categoryIds) => update({ categoryIds })}
+            onChange={handleCategoriesChange}
           />
         </FormField>
         <FormField
@@ -119,9 +167,9 @@ export function RegisterStep2Form({
             id={`${id}-subcategories`}
             label="Подкатегория навыка, которому хотите научиться"
             placeholder="Выберите подкатегорию"
-            options={subcategoryOptions}
+            options={visibleSubcategoryOptions}
             value={values.subcategoryIds}
-            onChange={(subcategoryIds) => update({ subcategoryIds })}
+            onChange={handleSubcategoriesChange}
             disabled={values.categoryIds.length === 0}
           />
         </FormField>

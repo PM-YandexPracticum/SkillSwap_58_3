@@ -171,6 +171,7 @@ export default function RegisterPage() {
           )}
           {step === 2 && (
             <RegisterStep2Form
+              categories={categories}
               values={profile}
               onChange={setProfile}
               cityOptions={cityOptions}
