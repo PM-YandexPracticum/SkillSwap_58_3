@@ -97,3 +97,13 @@
   width: 100%;
   margin-top: var(--space-12, 12px);
 }
+
+.personalDataLayout {
+  display: flex;
+  align-items: flex-start;
+  justify-content: start;
+  gap: var(--space-40, 40px);
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+}
