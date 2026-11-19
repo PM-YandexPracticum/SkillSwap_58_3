@@ -132,17 +132,17 @@ describe('exchangeSlice: заявки', () => {
 
   it('добавляет заявку и уведомление вместе, не дублирует ту же пару отправителя и навыка', () => {
     const initial: ExchangeState = { requests: [], notifications: [] }
-    const payload = { request: makeRequest(), notification: makeNotification() }
+    const payload = { request: makeRequest(), notifications: [makeNotification()] }
     const next = exchangeReducer(initial, exchangeProposed(payload))
 
-    expect(next).toEqual({ requests: [payload.request], notifications: [payload.notification] })
+    expect(next).toEqual({ requests: [payload.request], notifications: payload.notifications })
     expect(initial).toEqual({ requests: [], notifications: [] })
     expect(
       exchangeReducer(
         next,
         exchangeProposed({
           request: makeRequest({ id: 'duplicate' }),
-          notification: makeNotification({ id: 'duplicate-notification' }),
+          notifications: [makeNotification({ id: 'duplicate-notification' })],
         }),
       ),
     ).toEqual(next)
@@ -155,7 +155,7 @@ describe('exchangeSlice: заявки', () => {
 
     const { requests, notifications } = store.getState().exchange
     expect(requests).toHaveLength(1)
-    expect(notifications).toHaveLength(1)
+    expect(notifications).toHaveLength(2)
     expect(requests[0]).toEqual({
       id: expect.any(String),
       skillId: skill.id,
@@ -179,6 +179,16 @@ describe('exchangeSlice: заявки', () => {
     expect(notifications[0].id).toEqual(expect.any(String))
     expect(fetchSkillById).toHaveBeenCalledWith(skill.id)
     expect(fetchUserById).toHaveBeenCalledWith(author.id)
+
+    expect(notifications[1]).toMatchObject({
+      userId: currentUser.id,
+      skillId: skill.id,
+      text: `Вы предложили обмен пользователю ${author.name}`,
+      description: 'Ожидайте ответа на предложение обмена',
+      dateLabel: expect.stringMatching(/\S/),
+      isNew: true,
+    })
+    expect(notifications[1].id).toEqual(expect.any(String))
   })
 
   it('повторный вызов не добавляет заявку и уведомление и не загружает навык заново', async () => {
@@ -203,7 +213,7 @@ describe('exchangeSlice: заявки', () => {
     await Promise.all([first, second])
 
     expect(store.getState().exchange.requests).toHaveLength(1)
-    expect(store.getState().exchange.notifications).toHaveLength(1)
+    expect(store.getState().exchange.notifications).toHaveLength(2)
   })
 
   it('разрешает другому пользователю предложить обмен по тому же навыку', async () => {
@@ -217,7 +227,7 @@ describe('exchangeSlice: заявки', () => {
       currentUser.id,
       anotherUser.id,
     ])
-    expect(store.getState().exchange.notifications).toHaveLength(2)
+    expect(store.getState().exchange.notifications).toHaveLength(4)
   })
 
   it('без авторизации не загружает данные и ничего не добавляет', async () => {
