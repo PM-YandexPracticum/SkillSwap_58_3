@@ -68,7 +68,13 @@ export const exchangeSlice = createSlice({
   reducers: {
     exchangeProposed(
       state,
-      { payload }: PayloadAction<{ request: SwapRequest; notification: StoredNotification }>,
+      {
+        payload,
+      }: PayloadAction<{
+        request: SwapRequest
+        notification?: StoredNotification
+        notifications?: StoredNotification[]
+      }>,
     ) {
       if (
         state.requests.some(
@@ -78,8 +84,14 @@ export const exchangeSlice = createSlice({
         )
       )
         return
+
       state.requests.push(payload.request)
-      state.notifications.push(payload.notification)
+
+      if (payload.notifications) {
+        state.notifications.push(...payload.notifications)
+      } else if (payload.notification) {
+        state.notifications.push(payload.notification)
+      }
     },
     markAllRead(state, { payload: userId }: PayloadAction<string>) {
       state.notifications.forEach((item) => {
@@ -115,6 +127,7 @@ export const proposeExchange = createAsyncThunk<void, string, { state: ExchangeR
 
     const now = new Date()
     const createdAt = now.toISOString()
+
     dispatch(
       exchangeProposed({
         request: {
@@ -126,17 +139,30 @@ export const proposeExchange = createAsyncThunk<void, string, { state: ExchangeR
           createdAt,
           updatedAt: createdAt,
         },
-        notification: {
-          id: crypto.randomUUID(),
-          userId: author.id,
-          skillId: skill.id,
-          isNew: true,
-          text: `${user.name} предлагает вам обмен`,
-          description: 'Примите обмен, чтобы обсудить детали',
-          dateLabel: new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'long' }).format(
-            now,
-          ),
-        },
+        notifications: [
+          {
+            id: crypto.randomUUID(),
+            userId: author.id,
+            skillId: skill.id,
+            isNew: true,
+            text: `${user.name} предлагает вам обмен`,
+            description: 'Примите обмен, чтобы обсудить детали',
+            dateLabel: new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'long' }).format(
+              now,
+            ),
+          },
+          {
+            id: crypto.randomUUID(),
+            userId: user.id,
+            skillId: skill.id,
+            isNew: true,
+            text: `Вы предложили обмен пользователю ${author.name}`,
+            description: 'Ожидайте ответа на предложение обмена',
+            dateLabel: new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'long' }).format(
+              now,
+            ),
+          },
+        ],
       }),
     )
   },
