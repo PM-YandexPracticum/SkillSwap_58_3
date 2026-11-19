@@ -10,6 +10,7 @@ export interface SkillCardProps {
   /** Если задан, статусом обмена управляет родитель. Иначе кнопка обновляется локально. */
   isExchanged?: boolean
   isLiked?: boolean
+  isOwnSkill?: boolean
   onAction: (action: SkillCardAction) => void
   className?: string
 }

@@ -262,4 +262,21 @@ describe('SkillPage', () => {
       within(recommendation).queryByRole('button', { name: 'Подробнее' }),
     ).not.toBeInTheDocument()
   })
+
+  it('не отображает кнопку предложения обмена на собственном навыке', async () => {
+    const authorUser: AuthUser = {
+      id: currentSkill.authorId,
+      email: 'ivan.petrov@example.com',
+      name: 'Иван Петров',
+      token: 'mock-token',
+    }
+    renderPage(currentSkill.id, { user: authorUser })
+
+    const card = await screen.findByRole('article', {
+      name: `${currentSkill.title}. Автор: Иван Петров`,
+    })
+
+    expect(within(card).queryByRole('button', { name: 'Предложить обмен' })).not.toBeInTheDocument()
+    expect(within(card).queryByRole('button', { name: 'Обмен предложен' })).not.toBeInTheDocument()
+  })
 })

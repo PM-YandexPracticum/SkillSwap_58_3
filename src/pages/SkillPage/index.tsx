@@ -44,7 +44,8 @@ export default function SkillPage() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { isFavorite, toggle } = useFavorites()
 
-  const isAuthorized = useAppSelector((rootState) => Boolean(rootState.auth?.user))
+  const currentUserId = useAppSelector((rootState) => rootState.auth?.user?.id)
+  const isAuthorized = Boolean(currentUserId)
   const isSkillRequested = useAppSelector(selectIsSkillRequested(id ?? ''))
   const proposedUserIds = useAppSelector(selectProposedUserIds)
 
@@ -105,6 +106,7 @@ export default function SkillPage() {
   }
 
   const { skill, author, skills, users, cities, categories } = state.data
+  const isOwnSkill = Boolean(currentUserId && skill.authorId === currentUserId)
   const dictionaries = { skills, cities, categories }
   const authorCard = mapUserToCardData(author, dictionaries)
   const category = categories.find((item) => item.id === skill.category)
@@ -138,9 +140,11 @@ export default function SkillPage() {
           subcategoryName={subcategory?.name ?? ''}
           isLiked={isFavorite(author.id)}
           isExchanged={isSkillRequested}
+          isOwnSkill={isOwnSkill}
           onAction={(action) => {
             if (action === 'like') toggle(author.id)
             if (action === 'exchange') {
+              if (isOwnSkill) return
               if (!isAuthorized) {
                 navigate(ROUTES.LOGIN, { state: { from: location } })
                 return
