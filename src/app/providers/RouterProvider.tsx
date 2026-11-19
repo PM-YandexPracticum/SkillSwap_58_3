@@ -15,6 +15,7 @@ const CreateSkillPage = lazy(() => import('@/pages/CreateSkillPage'))
 const LoginPage = lazy(() => import('@/pages/LoginPage'))
 const RegisterPage = lazy(() => import('@/pages/RegisterPage'))
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'))
+const AboutPage = lazy(() => import('@/pages/AboutPage/AboutPage'))
 
 export function AppRouter() {
   const dispatch = useAppDispatch()
@@ -37,6 +38,7 @@ export function AppRouter() {
             <Route path={ROUTES.HOME} element={<CatalogPage />} />
             <Route path={ROUTES.SKILL} element={<SkillPage />} />
             <Route path={ROUTES.FAVORITES} element={<FavoritesPage />} />
+            <Route path={ROUTES.ABOUT} element={<AboutPage />} />
 
             {/* Защищённые маршруты */}
             <Route element={<PrivateRoute />}>
