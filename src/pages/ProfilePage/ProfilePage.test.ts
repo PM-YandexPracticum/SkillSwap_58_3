@@ -14,6 +14,27 @@ vi.mock('@/api/users', () => ({
 describe('useProfilePage', () => {
   beforeEach(() => {
     localStorage.clear()
+
+    localStorage.setItem(
+      LOCAL_STORAGE_KEYS.AUTH_USER,
+      JSON.stringify({ id: '1', name: 'Test', email: 'test@mail.com', token: 'token' }),
+    )
+    localStorage.setItem(
+      LOCAL_STORAGE_KEYS.REGISTERED_USERS,
+      JSON.stringify([
+        {
+          id: '1',
+          email: 'test@mail.com',
+          name: 'Test',
+          password: 'password123',
+          birthday: '01.01.2000',
+          gender: 'unspecified',
+          town: 'Helsinki',
+          description: '',
+          avatarUrl: null,
+        },
+      ]),
+    )
   })
 
   it('сохраняет пользователя в localStorage', async () => {
@@ -23,11 +44,12 @@ describe('useProfilePage', () => {
       await new Promise((resolve) => setTimeout(resolve, 0))
     })
 
-    act(() => {
-      result.current.handleSave(
+    await act(async () => {
+      await result.current.handleSave(
         {
           email: 'new@mail.com',
           name: 'New Name',
+          password: 'password123',
           birthday: '01.01.2000',
           gender: 'female',
           town: 'Helsinki',
