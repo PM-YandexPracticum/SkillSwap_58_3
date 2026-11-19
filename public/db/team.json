@@ -62,5 +62,13 @@
     "role": "Frontend developer",
     "description": "Разработка UI-компонентов и форм, сборка страниц регистрации и ошибки сервера, работа со Storybook и SVG-спрайтом",
     "githubUrl": "https://github.com/GrigoriySemenov"
+  },
+  {
+    "id": "team-09",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/223256709?v=4",
+    "name": "Vladislav",
+    "role": "Помощник тимлида",
+    "description": "Победил конфликт слияния в турнире без правил. Защитил диссертацию «Почему тесты красные, а код работает». Назначен главным по фразе «а ты ветку от develop создал?»",
+    "githubUrl": "https://github.com/pvln-vlad"
   }
 ]
