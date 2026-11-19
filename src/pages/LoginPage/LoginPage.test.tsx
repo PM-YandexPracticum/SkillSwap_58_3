@@ -10,7 +10,7 @@ import LoginPage from './index'
 
 afterEach(() => {
   cleanup()
-  localStorage.clear()
+  globalThis.localStorage?.clear()
   vi.resetAllMocks()
 })
 

@@ -1,23 +1,24 @@
 import { useEffect, useState } from 'react'
 import { generatePath, Link, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { fetchCategories } from '@/api/categories'
+import { fetchCities } from '@/api/cities'
 import { fetchSkillById, fetchSkills } from '@/api/skills'
 import { fetchUserById, fetchUsers } from '@/api/users'
-import { fetchCities } from '@/api/cities'
-import { fetchCategories } from '@/api/categories'
-import { ROUTES } from '@/shared/lib/constants'
-import type { Category, City, Skill, User } from '@/shared/types'
-import { Loader } from '@/shared/ui/Loader'
-import { SkillCard } from '@/widgets/SkillCard'
-import { SkillsSection } from '@/widgets/SkillsSection'
-import { UserCard } from '@/widgets/UserCard'
-import { mapUserToCardData } from '@/widgets/UserCard/mapUserToCardData'
-import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import {
   proposeExchange,
   selectIsSkillRequested,
   selectProposedUserIds,
 } from '@/features/exchange/model/exchangeSlice'
+import { useFavorites } from '@/features/favorites/model/useFavorites'
+import { ROUTES } from '@/shared/lib/constants'
+import type { Category, City, Skill, User } from '@/shared/types'
+import { Loader } from '@/shared/ui/Loader'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { ExchangeProposedModal } from '@/widgets/ExchangeProposedModal'
+import { SkillCard } from '@/widgets/SkillCard'
+import { SkillsSection } from '@/widgets/SkillsSection'
+import { UserCard } from '@/widgets/UserCard'
+import { mapUserToCardData } from '@/widgets/UserCard/mapUserToCardData'
 import { selectSimilarSkills } from './selectSimilarSkills'
 import styles from './SkillPage.module.css'
 
@@ -40,8 +41,8 @@ export default function SkillPage() {
   const location = useLocation()
   const dispatch = useAppDispatch()
   const [state, setState] = useState<PageState>({ id, status: 'loading' })
-  const [likedAuthorIds, setLikedAuthorIds] = useState<string[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const { isFavorite, toggle } = useFavorites()
 
   const isAuthorized = useAppSelector((rootState) => Boolean(rootState.auth?.user))
   const isSkillRequested = useAppSelector(selectIsSkillRequested(id ?? ''))
@@ -84,12 +85,6 @@ export default function SkillPage() {
     }
   }, [id])
 
-  function toggleLike(authorId: string) {
-    setLikedAuthorIds((ids) =>
-      ids.includes(authorId) ? ids.filter((value) => value !== authorId) : [...ids, authorId],
-    )
-  }
-
   if (state.id !== id || state.status === 'loading') {
     return (
       <div className={styles.status}>
@@ -121,9 +116,9 @@ export default function SkillPage() {
       ? [
           {
             ...card,
-            isLiked: likedAuthorIds.includes(card.id),
+            isLiked: isFavorite(card.id),
             isExchangeProposed: proposedUserIds.includes(card.id),
-            onLike: () => toggleLike(card.id),
+            onLike: () => toggle(card.id),
             onDetails: () => navigate(generatePath(ROUTES.SKILL, { id: similarSkill.id })),
           },
         ]
@@ -141,10 +136,10 @@ export default function SkillPage() {
           author={author}
           categoryName={category?.name ?? ''}
           subcategoryName={subcategory?.name ?? ''}
-          isLiked={likedAuthorIds.includes(author.id)}
+          isLiked={isFavorite(author.id)}
           isExchanged={isSkillRequested}
           onAction={(action) => {
-            if (action === 'like') toggleLike(author.id)
+            if (action === 'like') toggle(author.id)
             if (action === 'exchange') {
               if (!isAuthorized) {
                 navigate(ROUTES.LOGIN, { state: { from: location } })
@@ -159,7 +154,10 @@ export default function SkillPage() {
         />
       </section>
       <SkillsSection title="Похожие предложения" items={similarItems} columns={4} />
-      <ExchangeProposedModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <ExchangeProposedModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   )
 }

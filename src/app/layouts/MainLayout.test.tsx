@@ -11,7 +11,8 @@ import { MainLayout } from './MainLayout'
 afterEach(() => {
   cleanup()
   vi.restoreAllMocks()
-  localStorage.clear()
+
+  globalThis.localStorage?.clear()
 })
 
 const createTestStore = (

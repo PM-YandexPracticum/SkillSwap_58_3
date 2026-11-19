@@ -4,12 +4,13 @@ import { fetchCategories } from '@/api/categories'
 import { fetchCities } from '@/api/cities'
 import { fetchSkills } from '@/api/skills'
 import { fetchUsers } from '@/api/users'
-import { useAppSelector } from '@/store/hooks'
+import { useFavorites } from '@/features/favorites/model/useFavorites'
 import { selectProposedUserIds } from '@/features/exchange/model/exchangeSlice'
 import { ROUTES } from '@/shared/lib/constants'
 import type { Category, City, Skill, User } from '@/shared/types'
 import { Button } from '@/shared/ui/Button'
 import { Loader } from '@/shared/ui/Loader'
+import { useAppSelector } from '@/store/hooks'
 import { Filters } from '@/widgets/Filters'
 import { SkillsSection } from '@/widgets/SkillsSection'
 import type { SkillsSectionItem } from '@/widgets/SkillsSection'
@@ -24,6 +25,8 @@ export default function FavoritesPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(false)
   const navigate = useNavigate()
+  const { favoriteIds, toggle } = useFavorites()
+  const proposedUserIds = useAppSelector(selectProposedUserIds)
 
   useEffect(() => {
     let isMounted = true
@@ -49,10 +52,7 @@ export default function FavoritesPage() {
     }
   }, [])
 
-  const proposedUserIds = useAppSelector(selectProposedUserIds)
-  const currentUser = users.find((user) => user.id === 'user-02')
-
-  const favoriteUsers = users.filter((user) => currentUser?.favourites.includes(user.id))
+  const favoriteUsers = users.filter((user) => favoriteIds.includes(user.id))
 
   const favoriteCards: SkillsSectionItem[] = favoriteUsers.flatMap((user) => {
     const card = mapUserToCardData(user, { skills, categories, cities })
@@ -63,6 +63,7 @@ export default function FavoritesPage() {
             ...card,
             isLiked: true,
             isExchangeProposed: proposedUserIds.includes(card.id),
+            onLike: () => toggle(user.id),
           },
         ]
       : []

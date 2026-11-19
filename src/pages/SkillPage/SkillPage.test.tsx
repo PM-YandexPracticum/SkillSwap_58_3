@@ -10,6 +10,7 @@ import { fetchSkillById, fetchSkills } from '@/api/skills'
 import { fetchUserById, fetchUsers } from '@/api/users'
 import authReducer from '@/features/auth/model/authSlice'
 import exchangeReducer from '@/features/exchange/model/exchangeSlice'
+import favoritesReducer from '@/features/favorites/model/favoritesSlice'
 import { ROUTES } from '@/shared/lib/constants'
 import type { AuthUser, Skill, SwapRequest, User } from '@/shared/types'
 import categories from '../../../public/db/categories.json'
@@ -52,6 +53,7 @@ function renderPage(id = currentSkill.id, options: RenderOptions = {}) {
   const store = configureStore({
     reducer: {
       auth: authReducer,
+      favorites: favoritesReducer,
       exchange: exchangeReducer,
     },
     preloadedState: {
@@ -60,6 +62,12 @@ function renderPage(id = currentSkill.id, options: RenderOptions = {}) {
         status: 'idle' as const,
         error: null,
         currentRequestId: null,
+      },
+      favorites: {
+        byUser: {
+          'user-02': [],
+          'user-03': [],
+        },
       },
       exchange: {
         requests: options.initialRequests ?? [],
