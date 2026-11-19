@@ -1,21 +1,19 @@
+import { Link } from 'react-router-dom'
 import { AuthFormProps } from './interface'
 import styles from './AuthForm.module.css'
 import { Button } from '@/shared/ui/Button'
 import { Divider } from '@/shared/ui/Divider'
 import { Input } from '@/shared/ui/Input'
 import { Icon } from '@/shared/ui/icons'
+import { ROUTES } from '@/shared/lib/constants'
 import { useState } from 'react'
 
 export const AuthForm = ({ variant, savedValues, onSubmit, errors }: AuthFormProps) => {
   const [formFields, setFormFields] = useState(savedValues)
-  const [variantState, setVariantState] = useState(variant)
+  const isLogin = variant === 'login'
 
   const handleChangeField = (value: string, key: string) => {
     setFormFields((prev) => ({ ...prev, [key]: value }))
-  }
-
-  const handleChangeAuth = () => {
-    setVariantState((prev) => (prev === 'login' ? 'registration' : 'login'))
   }
 
   return (
@@ -43,20 +41,26 @@ export const AuthForm = ({ variant, savedValues, onSubmit, errors }: AuthFormPro
           error={errors?.password}
           type="password"
           label="Пароль"
-          placeholder={variantState === 'login' ? 'Введите пароль' : 'Придумайте надежный пароль'}
+          placeholder={isLogin ? 'Введите пароль' : 'Придумайте надежный пароль'}
           value={formFields?.password ?? ''}
-          hint={variantState === 'registration' ? 'Пароль должен содержать не менее 8 знаков' : ''}
+          hint={isLogin ? '' : 'Пароль должен содержать не менее 8 знаков'}
           onChange={({ target }) => handleChangeField(target.value, 'password')}
         />
       </section>
 
       <section className={styles.bottomSection}>
         <Button onClick={() => onSubmit(formFields)} className={styles.button}>
-          {variantState === 'login' ? 'Войти' : 'Далее'}
+          {isLogin ? 'Войти' : 'Далее'}
         </Button>
-        <span onClick={handleChangeAuth} className={styles.autoToggleText}>
-          {variantState === 'registration' ? 'Уже есть аккаунт? Войти' : 'Зарегистрироваться'}
-        </span>
+        {isLogin ? (
+          <Link to={ROUTES.REGISTER} className={styles.autoToggleText}>
+            Зарегистрироваться
+          </Link>
+        ) : (
+          <Link to={ROUTES.LOGIN} className={styles.autoToggleText}>
+            Уже есть аккаунт? Войти
+          </Link>
+        )}
       </section>
     </div>
   )
