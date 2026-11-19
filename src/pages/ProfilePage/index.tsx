@@ -5,7 +5,15 @@ import { Loader } from '@/shared/ui/Loader'
 import { useProfilePage } from '@/pages/ProfilePage/useProfilePage'
 
 export default function ProfilePage() {
-  const { activeItem, currentUser, errors, handleSave, isLoading, setActiveItem } = useProfilePage()
+  const {
+    activeItem,
+    currentUser,
+    errors,
+    handleSave,
+    handleAvatarChange,
+    isLoading,
+    setActiveItem,
+  } = useProfilePage()
 
   if (isLoading) {
     return <Loader />
@@ -16,7 +24,12 @@ export default function ProfilePage() {
       <ProfileMenu activeItem={activeItem} onSelect={setActiveItem} />
       {activeItem === 'personal' ? (
         currentUser && (
-          <ProfileEditForm errors={errors} currentUser={currentUser} onSave={handleSave} />
+          <ProfileEditForm
+            errors={errors}
+            currentUser={currentUser}
+            onSave={handleSave}
+            onAvatarChange={handleAvatarChange}
+          />
         )
       ) : (
         <div>Раздел в разработке</div>

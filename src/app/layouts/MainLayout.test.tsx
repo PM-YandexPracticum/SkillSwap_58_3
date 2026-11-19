@@ -3,7 +3,7 @@ import { Provider } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
 import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { ROUTES } from '@/shared/lib/constants'
+import { LOCAL_STORAGE_KEYS, ROUTES } from '@/shared/lib/constants'
 import authReducer from '@/features/auth/model/authSlice'
 import * as usersApi from '@/api/users'
 import { MainLayout } from './MainLayout'
@@ -165,5 +165,82 @@ describe('MainLayout', () => {
     expect(store.getState().auth.user).toBeNull()
     expect(screen.getByRole('button', { name: 'Войти' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Зарегистрироваться' })).toBeInTheDocument()
+  })
+
+  it('обновляет аватар в хедере при получении события user-updated', async () => {
+    const store = createTestStore({
+      id: 'user-02',
+      name: 'Мария',
+      email: 'maria@example.com',
+      token: 'mock-token',
+    })
+
+    localStorage.setItem(
+      LOCAL_STORAGE_KEYS.REGISTERED_USERS,
+      JSON.stringify([
+        {
+          id: 'user-02',
+          name: 'Мария',
+          email: 'maria@example.com',
+          avatarUrl: '/img/avatars/avatar-old.png',
+          password: 'pass',
+          town: 'saint-petersburg',
+          birthday: '1989-01-16',
+          likedCount: 2,
+          description: '',
+          gender: 'female',
+          learn: [],
+          favourites: [],
+          createdAt: '2026-05-28T17:00:00Z',
+        },
+      ]),
+    )
+
+    render(
+      <Provider store={store}>
+        <MemoryRouter initialEntries={['/']}>
+          <Routes>
+            <Route element={<MainLayout searchValue="" onSearchChange={() => {}} />}>
+              <Route path="/" element={<LocationTracker />} />
+            </Route>
+          </Routes>
+        </MemoryRouter>
+      </Provider>,
+    )
+
+    await waitFor(() => {
+      const avatar = screen.getByRole('img', { name: 'Мария' })
+      expect(avatar).toHaveAttribute('src', '/img/avatars/avatar-old.png')
+    })
+
+    localStorage.setItem(
+      LOCAL_STORAGE_KEYS.REGISTERED_USERS,
+      JSON.stringify([
+        {
+          id: 'user-02',
+          name: 'Мария',
+          email: 'maria@example.com',
+          avatarUrl: 'data:image/png;base64,new-avatar',
+          password: 'pass',
+          town: 'saint-petersburg',
+          birthday: '1989-01-16',
+          likedCount: 2,
+          description: '',
+          gender: 'female',
+          learn: [],
+          favourites: [],
+          createdAt: '2026-05-28T17:00:00Z',
+        },
+      ]),
+    )
+
+    window.dispatchEvent(new CustomEvent('user-updated'))
+
+    await waitFor(() => {
+      expect(screen.getByRole('img', { name: 'Мария' })).toHaveAttribute(
+        'src',
+        'data:image/png;base64,new-avatar',
+      )
+    })
   })
 })

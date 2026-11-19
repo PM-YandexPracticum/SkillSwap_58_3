@@ -41,30 +41,40 @@ export const MainLayout = ({
   const [avatarUrl, setAvatarUrl] = useState<string | undefined>(undefined)
 
   useEffect(() => {
-    if (!authUser?.id) {
-      setAvatarUrl(undefined)
-      return
-    }
-
-    const localUser = getRegisteredUsers().find((user) => user.id === authUser.id)
-    if (localUser?.avatarUrl) {
-      setAvatarUrl(localUser.avatarUrl)
-      return
-    }
-
     let isMounted = true
-    fetchUserById(authUser.id)
-      .then((user) => {
-        if (isMounted && user?.avatarUrl) {
-          setAvatarUrl(user.avatarUrl)
-        }
-      })
-      .catch(() => {
-        // если аватар не найден в каталоге, остаётся дефолтная заглушка
-      })
+
+    const updateAvatar = () => {
+      if (!authUser?.id) {
+        setAvatarUrl(undefined)
+        return
+      }
+
+      const localUser = getRegisteredUsers().find((user) => user.id === authUser.id)
+      if (localUser?.avatarUrl) {
+        setAvatarUrl(localUser.avatarUrl)
+        return
+      }
+
+      fetchUserById(authUser.id)
+        .then((user) => {
+          if (isMounted && user?.avatarUrl) {
+            setAvatarUrl(user.avatarUrl)
+          }
+        })
+        .catch(() => {
+          // если аватар не найден в каталоге, остаётся дефолтная заглушка
+        })
+    }
+
+    updateAvatar()
+
+    window.addEventListener('user-updated', updateAvatar)
+    window.addEventListener('storage', updateAvatar)
 
     return () => {
       isMounted = false
+      window.removeEventListener('user-updated', updateAvatar)
+      window.removeEventListener('storage', updateAvatar)
     }
   }, [authUser?.id])
 

@@ -9,6 +9,59 @@
   border-radius: var(--border-radius-side-profile, 24px);
 }
 
+.avatarWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-8, 8px);
+}
+
+.avatarContainer {
+  position: relative;
+  display: inline-flex;
+}
+
+.avatarButton {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  place-items: center;
+  width: calc(var(--space-32, 32px) + var(--space-24, 24px));
+  height: calc(var(--space-32, 32px) + var(--space-24, 24px));
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  color: var(--color-text-main, #253017);
+  background-color: var(--color-bg-overlay, #deebc5);
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.avatarButton:hover {
+  opacity: 0.9;
+}
+
+.avatarButton:focus-visible {
+  outline: 2px solid var(--color-links, #508826);
+  outline-offset: 2px;
+}
+
+.avatarButton svg {
+  width: var(--space-24, 24px);
+  height: var(--space-24, 24px);
+}
+
+.fileInput {
+  display: none;
+}
+
+.avatarError {
+  color: var(--color-error, #bf3920);
+  font-size: var(--font-size-14, 14px);
+  text-align: center;
+}
+
 .passwordToggle {
   align-self: flex-start;
   margin-top: calc(-1 * var(--space-8, 8px));

@@ -41,6 +41,29 @@ export const useProfilePage = () => {
     saveRegisteredUser(mappedUser)
     saveAuthUser({ id: mappedUser.id, name: mappedUser.name, email: mappedUser.email })
     setCurrentUser(mappedUser)
+    window.dispatchEvent(new CustomEvent('user-updated'))
+  }
+
+  const handleAvatarChange = (avatarUrl: string) => {
+    if (!currentUser) return
+
+    const updatedUser: User = {
+      ...currentUser,
+      avatarUrl,
+      learn: currentUser.learn ?? [],
+      favourites: currentUser.favourites ?? [],
+      likedCount: currentUser.likedCount ?? 0,
+      createdAt: currentUser.createdAt ?? new Date().toISOString(),
+      gender: currentUser.gender ?? 'unspecified',
+      town: currentUser.town ?? '',
+      birthday: currentUser.birthday ?? '',
+      description: currentUser.description ?? '',
+      password: currentUser.password ?? '',
+    }
+
+    saveRegisteredUser(updatedUser)
+    setCurrentUser(updatedUser)
+    window.dispatchEvent(new CustomEvent('user-updated'))
   }
 
   const getUser = useCallback(async (currentUserId: string) => {
@@ -70,5 +93,6 @@ export const useProfilePage = () => {
     isLoading,
     errors,
     handleSave,
+    handleAvatarChange,
   }
 }

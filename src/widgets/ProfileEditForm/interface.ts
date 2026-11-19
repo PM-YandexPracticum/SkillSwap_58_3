@@ -17,6 +17,7 @@ export interface ProfileEditFormProps {
   currentUser: User | null
   errors?: Partial<Record<ProfileFormField, string>>
   onSave: (data: ProfileFormData, isPasswordBlockVisible: boolean) => void
+  onAvatarChange?: (avatarUrl: string) => void
   cityOptions?: SelectOption[]
   className?: string
 }

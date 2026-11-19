@@ -1,9 +1,12 @@
-import { useEffect, useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'react'
 import clsx from 'clsx'
 import type { Gender } from '@/shared/types'
+import { filesToDataUrls } from '@/shared/lib/filesToDataUrls'
+import { Avatar } from '@/shared/ui/Avatar'
 import { Button } from '@/shared/ui/Button'
 import { DatePicker } from '@/shared/ui/DatePicker'
 import { FormField } from '@/shared/ui/FormField'
+import { Icon } from '@/shared/ui/icons'
 import { Input } from '@/shared/ui/Input'
 import { Select, type SelectOption } from '@/shared/ui/Select'
 import { Textarea } from '@/shared/ui/Textarea'
@@ -49,9 +52,14 @@ export const ProfileEditForm = ({
   currentUser,
   errors,
   onSave,
+  onAvatarChange,
   cityOptions = DEFAULT_CITIES,
   className,
 }: ProfileEditFormProps) => {
+  const [avatarUrl, setAvatarUrl] = useState(currentUser?.avatarUrl ?? '')
+  const [avatarError, setAvatarError] = useState<string | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
   const [email, setEmail] = useState(currentUser?.email ?? '')
   const [name, setName] = useState(currentUser?.name ?? '')
   const [birthday, setBirthday] = useState<Date | null>(parseDate(currentUser?.birthday))
@@ -69,6 +77,7 @@ export const ProfileEditForm = ({
 
   useEffect(() => {
     if (currentUser) {
+      setAvatarUrl(currentUser.avatarUrl ?? '')
       setEmail(currentUser.email ?? '')
       setName(currentUser.name ?? '')
       setBirthday(parseDate(currentUser.birthday))
@@ -85,6 +94,32 @@ export const ProfileEditForm = ({
       }
     }
   }, [currentUser, cityOptions])
+
+  const handleUploadClick = () => {
+    fileInputRef.current?.click()
+  }
+
+  const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    if (file.size > 2 * 1024 * 1024) {
+      setAvatarError('Максимальный размер файла — 2 МБ')
+      event.target.value = ''
+      return
+    }
+
+    try {
+      const [dataUrl] = await filesToDataUrls([file])
+      setAvatarUrl(dataUrl)
+      setAvatarError(null)
+      onAvatarChange?.(dataUrl)
+    } catch {
+      setAvatarError('Ошибка при загрузке изображения')
+    } finally {
+      event.target.value = ''
+    }
+  }
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -110,6 +145,36 @@ export const ProfileEditForm = ({
 
   return (
     <form className={clsx(styles.form, className)} onSubmit={handleSubmit} noValidate>
+      <div className={styles.avatarWrapper}>
+        <div className={styles.avatarContainer}>
+          <Avatar
+            size="extraLarge"
+            src={avatarUrl || undefined}
+            alt={name || 'Аватар пользователя'}
+          />
+          <button
+            type="button"
+            className={styles.avatarButton}
+            aria-label="Изменить фото"
+            onClick={handleUploadClick}
+          >
+            <Icon name="gallery-add" focusable="false" />
+          </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/jpeg,image/png"
+            className={styles.fileInput}
+            onChange={handleFileChange}
+          />
+        </div>
+        {avatarError && (
+          <span className={styles.avatarError} role="alert">
+            {avatarError}
+          </span>
+        )}
+      </div>
+
       <FormField
         id="profile-email"
         label="Почта"
