@@ -1,10 +1,18 @@
 import { useEffect, useState } from 'react'
-import { Outlet, useNavigate } from 'react-router-dom'
+import { generatePath, Outlet, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchUserById } from '@/api/users'
 import { logout, selectAuthUser, selectIsAuthorized } from '@/features/auth'
 import { getRegisteredUsers } from '@/features/auth/model/authUtils'
+import {
+  clearViewed,
+  markAllRead,
+  selectHasNewNotifications,
+  selectNewNotifications,
+  selectViewedNotifications,
+} from '@/features/exchange/model/exchangeSlice'
 import { ROUTES } from '@/shared/lib/constants'
+import { NotificationPanel } from '@/shared/ui/NotificationPanel'
 import { Footer } from '@/widgets/Footer'
 import { Header } from '@/widgets/Header'
 import type { HeaderProps } from '@/widgets/Header'
@@ -26,6 +34,9 @@ export const MainLayout = ({
 
   const isAuthorized = useSelector(selectIsAuthorized)
   const authUser = useSelector(selectAuthUser)
+  const hasNewNotifications = useSelector(selectHasNewNotifications)
+  const newNotifications = useSelector(selectNewNotifications)
+  const viewedNotifications = useSelector(selectViewedNotifications)
   const [avatarUrl, setAvatarUrl] = useState<string | undefined>(undefined)
 
   useEffect(() => {
@@ -69,6 +80,27 @@ export const MainLayout = ({
     navigate(ROUTES.HOME)
   }
 
+  const handleNotificationGo = (id: string) => {
+    const item = [...newNotifications, ...viewedNotifications].find((n) => n.id === id)
+    if (item?.skillId) {
+      navigate(generatePath(ROUTES.SKILL, { id: item.skillId }))
+    }
+  }
+
+  const notificationPanel = restProps.notificationPanel ?? (
+    <NotificationPanel
+      newItems={newNotifications}
+      viewedItems={viewedNotifications}
+      onGo={handleNotificationGo}
+      onReadAll={() => {
+        if (authUser?.id) dispatch(markAllRead(authUser.id))
+      }}
+      onClear={() => {
+        if (authUser?.id) dispatch(clearViewed(authUser.id))
+      }}
+    />
+  )
+
   return (
     <div className={styles.layoutContainer}>
       <Header
@@ -80,6 +112,8 @@ export const MainLayout = ({
         onLogin={handleLogin}
         onRegister={handleRegister}
         onLogout={handleLogout}
+        hasNewNotifications={restProps.hasNewNotifications ?? hasNewNotifications}
+        notificationPanel={notificationPanel}
         {...restProps}
       />
       <main className={styles.mainContent}>

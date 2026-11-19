@@ -1,68 +1,47 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { format } from 'date-fns'
 import clsx from 'clsx'
 import { fetchCities } from '@/api/cities'
 import { fetchCategories } from '@/api/categories'
 import { completeRegistration } from '@/features/auth/model/completeRegistration'
+import { isEmailTaken } from '@/features/auth/model/authUtils'
+import { getPasswordError } from '@/shared/lib/passwordValidation'
 import { ROUTES } from '@/shared/lib/constants'
 import type { Category, City } from '@/shared/types'
 import { useAppDispatch } from '@/store/hooks'
 import { AuthLayout } from '@/widgets/AuthLayout'
 import { AuthForm } from '@/widgets/AuthForm'
-import type { AuthFormValues } from '@/widgets/AuthForm/interface'
-import { RegisterStep2Form, type RegisterStep2Values } from '@/widgets/RegisterStep2Form'
-import { RegisterStep3Form, type RegisterStep3Values } from '@/widgets/RegisterStep3Form'
+import type { AuthFormProps, AuthFormValues } from '@/widgets/AuthForm/interface'
+import { RegisterStep2Form, type RegisterStep2FormProps } from '@/widgets/RegisterStep2Form'
+import { RegisterStep3Form, type RegisterStep3Errors } from '@/widgets/RegisterStep3Form'
 import { SkillPreviewModal, type SkillPreviewModalSkill } from '@/widgets/SkillPreviewModal'
+import { REGISTER_ERRORS, STEP_INFO, type RegisterStep } from './constants'
+import {
+  buildRegisterPayload,
+  INITIAL_CREDENTIALS,
+  INITIAL_STEP2,
+  INITIAL_STEP3,
+  validateStep2,
+  validateStep3,
+} from './helpers'
 import styles from './RegisterPage.module.css'
-
-const STEP_INFO = {
-  1: {
-    image: 'light-bulb',
-    title: 'Добро пожаловать в SkillSwap!',
-    description: 'Присоединяйтесь к SkillSwap и обменивайтесь знаниями и навыками с другими людьми',
-    alt: 'Лампочка как символ обмена знаниями',
-  },
-  2: {
-    image: 'user-info',
-    title: 'Расскажите немного о себе',
-    description: 'Это поможет другим людям лучше вас узнать, чтобы выбрать для обмена',
-    alt: 'Пользователь рассказывает о себе',
-  },
-  3: {
-    image: 'school-board',
-    title: 'Укажите, чем вы готовы поделиться',
-    description: 'Так другие люди смогут увидеть ваши предложения и предложить вам обмен!',
-    alt: 'Доска для объяснения навыка',
-  },
-} as const
 
 export default function RegisterPage() {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
-  const avatarInput = useRef<HTMLInputElement>(null)
-  const [step, setStep] = useState<1 | 2 | 3>(1)
-  const [credentials, setCredentials] = useState<AuthFormValues>({ email: '', password: '' })
-  const [profile, setProfile] = useState<RegisterStep2Values>({
-    name: '',
-    birthday: null,
-    gender: 'unspecified',
-    cityId: '',
-    categoryIds: [],
-    subcategoryIds: [],
-  })
-  const [skill, setSkill] = useState<RegisterStep3Values>({
-    title: '',
-    categoryId: '',
-    subcategoryId: '',
-    description: '',
-    images: [],
-  })
+  const [step, setStep] = useState<RegisterStep>(1)
+  const [credentials, setCredentials] = useState<AuthFormValues>(INITIAL_CREDENTIALS)
+  const [profile, setProfile] = useState(INITIAL_STEP2)
+  const [skill, setSkill] = useState(INITIAL_STEP3)
   const [cities, setCities] = useState<City[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [previewImages, setPreviewImages] = useState<SkillPreviewModalSkill['images']>([])
   const [isPreviewOpen, setPreviewOpen] = useState(false)
   const [error, setError] = useState('')
+  const [step1Errors, setStep1Errors] = useState<AuthFormProps['errors']>()
+  const [step2Errors, setStep2Errors] = useState<RegisterStep2FormProps['errors']>()
+  const [step3Errors, setStep3Errors] = useState<RegisterStep3Errors>()
+  const [submitError, setSubmitError] = useState('')
 
   useEffect(() => {
     let active = true
@@ -73,7 +52,7 @@ export default function RegisterPage() {
         setCategories(nextCategories)
       })
       .catch(() => {
-        if (active) setError('Не удалось загрузить списки. Обновите страницу и попробуйте ещё раз.')
+        if (active) setError(REGISTER_ERRORS.dictionariesFailed)
       })
     return () => {
       active = false
@@ -103,36 +82,63 @@ export default function RegisterPage() {
     })),
   )
 
-  // кнопка «Готово» в модалке: регистрация + навык одним действием
-  async function confirmRegistration() {
-    setError('')
-    const result = await dispatch(
-      completeRegistration({
-        register: {
-          ...credentials,
-          name: profile.name,
-          birthday: profile.birthday ? format(profile.birthday, 'yyyy-MM-dd') : '',
-          gender: profile.gender,
-          town: profile.cityId,
-          learn: profile.subcategoryIds,
-          avatarUrl: profile.avatarUrl,
-        },
-        step3: skill,
-      }),
-    )
-    if (completeRegistration.fulfilled.match(result)) {
-      navigate(ROUTES.HOME)
+  async function handleStep1Submit({ email = '', password = '' }: Partial<AuthFormValues>) {
+    const trimmedEmail = email.trim()
+    if (!trimmedEmail) {
+      setStep1Errors({ email: REGISTER_ERRORS.emailRequired })
       return
     }
-    if (completeRegistration.rejected.match(result) && !result.meta.condition) {
-      if (result.payload === 'Пользователь с такой почтой уже зарегистрирован') {
-        setPreviewOpen(false)
-        setStep(1)
-        setError(result.payload)
+    try {
+      if (await isEmailTaken(trimmedEmail)) {
+        setStep1Errors({ email: REGISTER_ERRORS.emailTaken })
         return
       }
-      setError(result.payload ?? 'Не удалось зарегистрироваться. Попробуйте ещё раз.')
-      setPreviewOpen(false)
+    } catch {
+      setStep1Errors({ email: REGISTER_ERRORS.registerFailed })
+      return
+    }
+    const passwordError = getPasswordError(password)
+    if (passwordError) {
+      setStep1Errors({ password: passwordError })
+      return
+    }
+    setCredentials({ email: trimmedEmail, password })
+    setStep1Errors(undefined)
+    setStep(2)
+  }
+
+  function handleStep2Submit() {
+    const { errors, isValid } = validateStep2(profile)
+    setStep2Errors(errors)
+    if (isValid) setStep(3)
+  }
+
+  function handleStep3Submit() {
+    const { errors, isValid } = validateStep3(skill)
+    setStep3Errors(errors)
+    if (isValid) setPreviewOpen(true)
+  }
+
+  // кнопка «Готово» в модалке: регистрация + сохранение навыка одним действием
+  async function confirmRegistration() {
+    setSubmitError('')
+    try {
+      await dispatch(
+        completeRegistration({
+          register: buildRegisterPayload(credentials, profile),
+          step3: skill,
+        }),
+      ).unwrap()
+      navigate(ROUTES.HOME)
+    } catch (rejected) {
+      const message = typeof rejected === 'string' ? rejected : REGISTER_ERRORS.registerFailed
+      if (message === 'Пользователь с такой почтой уже зарегистрирован') {
+        setPreviewOpen(false)
+        setStep(1)
+        setStep1Errors({ email: message })
+        return
+      }
+      setSubmitError(message)
     }
   }
 
@@ -159,10 +165,8 @@ export default function RegisterPage() {
             <AuthForm
               variant="registration"
               savedValues={credentials}
-              onSubmit={(values) => {
-                setCredentials({ email: values.email ?? '', password: values.password ?? '' })
-                setStep(2)
-              }}
+              errors={step1Errors}
+              onSubmit={handleStep1Submit}
             />
           )}
           {step === 2 && (
@@ -172,9 +176,10 @@ export default function RegisterPage() {
               cityOptions={cityOptions}
               categoryOptions={categoryOptions}
               subcategoryOptions={subcategoryOptions}
-              onAvatarAdd={() => avatarInput.current?.click()}
+              errors={step2Errors}
+              onAvatarAdd={() => {}}
               onBack={() => setStep(1)}
-              onSubmit={() => setStep(3)}
+              onSubmit={handleStep2Submit}
             />
           )}
           {step === 3 && (
@@ -183,33 +188,16 @@ export default function RegisterPage() {
               onChange={setSkill}
               categoryOptions={categoryOptions}
               subcategoryOptions={subcategoryOptions}
+              errors={step3Errors}
               onBack={() => setStep(2)}
-              onSubmit={() => setPreviewOpen(true)}
+              onSubmit={handleStep3Submit}
             />
           )}
         </div>
       </AuthLayout>
-      <input
-        ref={avatarInput}
-        type="file"
-        accept="image/*"
-        aria-label="Загрузить аватар"
-        hidden
-        onChange={(event) => {
-          const file = event.currentTarget.files?.[0]
-          event.currentTarget.value = ''
-          if (!file) return
-          const reader = new FileReader()
-          reader.onload = () => {
-            const avatarUrl = reader.result
-            if (typeof avatarUrl === 'string') setProfile((value) => ({ ...value, avatarUrl }))
-          }
-          reader.onerror = () => setError('Не удалось загрузить фото. Попробуйте ещё раз.')
-          reader.readAsDataURL(file)
-        }}
-      />
       <SkillPreviewModal
         isOpen={isPreviewOpen}
+        error={submitError}
         skill={{
           title: skill.title,
           categoryName:

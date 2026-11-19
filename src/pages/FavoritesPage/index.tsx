@@ -1,18 +1,20 @@
-import { mapUserToCardData } from '@/widgets/UserCard/mapUserToCardData'
-import type { SkillsSectionItem } from '@/widgets/SkillsSection'
-import { useNavigate } from 'react-router-dom'
-import { ROUTES } from '@/shared/lib/constants'
-import { Filters } from '@/widgets/Filters'
-import { SkillsSection } from '@/widgets/SkillsSection'
-import { Button } from '@/shared/ui/Button'
 import { useEffect, useState } from 'react'
-import { fetchUsers } from '@/api/users'
-import { fetchSkills } from '@/api/skills'
+import { useNavigate } from 'react-router-dom'
 import { fetchCategories } from '@/api/categories'
 import { fetchCities } from '@/api/cities'
-import type { User, Skill, Category, City } from '@/shared/types'
-import { Loader } from '@/shared/ui/Loader'
+import { fetchSkills } from '@/api/skills'
+import { fetchUsers } from '@/api/users'
 import { useFavorites } from '@/features/favorites/model/useFavorites'
+import { selectProposedUserIds } from '@/features/exchange/model/exchangeSlice'
+import { ROUTES } from '@/shared/lib/constants'
+import type { Category, City, Skill, User } from '@/shared/types'
+import { Button } from '@/shared/ui/Button'
+import { Loader } from '@/shared/ui/Loader'
+import { useAppSelector } from '@/store/hooks'
+import { Filters } from '@/widgets/Filters'
+import { SkillsSection } from '@/widgets/SkillsSection'
+import type { SkillsSectionItem } from '@/widgets/SkillsSection'
+import { mapUserToCardData } from '@/widgets/UserCard/mapUserToCardData'
 import styles from './FavoritesPage.module.css'
 
 export default function FavoritesPage() {
@@ -24,6 +26,7 @@ export default function FavoritesPage() {
   const [error, setError] = useState(false)
   const navigate = useNavigate()
   const { favoriteIds, toggle } = useFavorites()
+  const proposedUserIds = useAppSelector(selectProposedUserIds)
 
   useEffect(() => {
     let isMounted = true
@@ -59,6 +62,7 @@ export default function FavoritesPage() {
           {
             ...card,
             isLiked: true,
+            isExchangeProposed: proposedUserIds.includes(card.id),
             onLike: () => toggle(user.id),
           },
         ]
