@@ -119,7 +119,6 @@ export default function RegisterPage() {
     if (isValid) setPreviewOpen(true)
   }
 
-  // кнопка «Готово» в модалке: регистрация + сохранение навыка одним действием
   async function confirmRegistration() {
     setSubmitError('')
     try {
@@ -132,12 +131,6 @@ export default function RegisterPage() {
       navigate(ROUTES.HOME)
     } catch (rejected) {
       const message = typeof rejected === 'string' ? rejected : REGISTER_ERRORS.registerFailed
-      if (message === 'Пользователь с такой почтой уже зарегистрирован') {
-        setPreviewOpen(false)
-        setStep(1)
-        setStep1Errors({ email: message })
-        return
-      }
       setSubmitError(message)
     }
   }
