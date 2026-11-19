@@ -31,13 +31,20 @@ const filtersSlice = createSlice({
     setFilters(state, action: PayloadAction<FiltersValues>) {
       state.values = cloneFilters(action.payload)
     },
+    // фильтр по одной подкатегории: остальные фильтры и поиск сбрасываются
+    filterBySubcategory(_state, action: PayloadAction<string>) {
+      return {
+        search: '',
+        values: { ...cloneFilters(DEFAULT_FILTERS), subcategoryIds: [action.payload] },
+      }
+    },
     resetFilters() {
       return { search: '', values: cloneFilters(DEFAULT_FILTERS) }
     },
   },
 })
 
-export const { setSearch, setFilters, resetFilters } = filtersSlice.actions
+export const { setSearch, setFilters, filterBySubcategory, resetFilters } = filtersSlice.actions
 export const selectSearch = (state: { filters: FiltersState }) => state.filters.search
 export const selectFilters = (state: { filters: FiltersState }) => state.filters.values
 export default filtersSlice.reducer

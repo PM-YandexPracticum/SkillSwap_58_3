@@ -1,0 +1,14 @@
+.root {
+  width: 668px;
+  max-width: 100%;
+  padding: var(--space-40, 40px) var(--space-60, 60px);
+  border: var(--border-inactive, 1px solid #e4e8df);
+  border-radius: var(--border-radius-main, 12px);
+  background-color: var(--color-bg-card, #fff);
+  box-sizing: border-box;
+}
+
+.error {
+  margin: 0;
+  color: var(--color-error, #bf3920);
+}

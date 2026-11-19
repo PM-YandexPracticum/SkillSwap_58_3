@@ -80,7 +80,9 @@ export const Header = ({
               </Button>
             }
           >
-            {skillsMenu}
+            {typeof skillsMenu === 'function'
+              ? skillsMenu(() => setIsSkillsOpen(false))
+              : skillsMenu}
           </Dropdown>
         </nav>
 
