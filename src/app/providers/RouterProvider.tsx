@@ -10,6 +10,7 @@ import { selectSearch, setSearch } from '@/store/slices/filtersSlice'
 const CatalogPage = lazy(() => import('@/pages/CatalogPage'))
 const SkillPage = lazy(() => import('@/pages/SkillPage'))
 const ProfilePage = lazy(() => import('@/pages/ProfilePage'))
+const SkillsPage = lazy(() => import('@/pages/SkillsPage'))
 const FavoritesPage = lazy(() => import('@/pages/FavoritesPage'))
 const CreateSkillPage = lazy(() => import('@/pages/CreateSkillPage'))
 const LoginPage = lazy(() => import('@/pages/LoginPage'))
@@ -36,6 +37,7 @@ export function AppRouter() {
           >
             <Route path={ROUTES.HOME} element={<CatalogPage />} />
             <Route path={ROUTES.SKILL} element={<SkillPage />} />
+            <Route path={ROUTES.SKILLS} element={<SkillsPage />} />
             <Route path={ROUTES.FAVORITES} element={<FavoritesPage />} />
 
             {/* Защищённые маршруты */}

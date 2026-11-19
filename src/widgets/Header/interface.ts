@@ -12,5 +12,6 @@ export interface HeaderProps {
   onRegister?: () => void
   onLogout?: () => void
   notificationPanel?: ReactNode
-  skillsMenu?: ReactNode
+  // меню навыков; функция получает closeMenu, чтобы закрыть выпадающий список
+  skillsMenu?: ReactNode | ((closeMenu: () => void) => ReactNode)
 }

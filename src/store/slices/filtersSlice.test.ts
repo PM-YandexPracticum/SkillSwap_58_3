@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { DEFAULT_FILTERS } from '@/widgets/Filters/constants'
 import type { FiltersValues } from '@/widgets/Filters/interface'
 import filtersReducer, {
+  filterBySubcategory,
   resetFilters,
   selectFilters,
   selectSearch,
@@ -108,5 +109,14 @@ describe('filtersSlice', () => {
 
     expect(selectSearch(state)).toBe('барабаны')
     expect(selectFilters(state)).toBe(state.filters.values)
+  })
+  it('filterBySubcategory оставляет только выбранную подкатегорию и сбрасывает остальное', () => {
+    const before = filtersReducer(undefined, setFilters(makeFilters()))
+    const withSearch = filtersReducer(before, setSearch('гитара'))
+
+    const state = filtersReducer(withSearch, filterBySubcategory('business-sales'))
+
+    expect(state.search).toBe('')
+    expect(state.values).toEqual({ ...DEFAULT_FILTERS, subcategoryIds: ['business-sales'] })
   })
 })

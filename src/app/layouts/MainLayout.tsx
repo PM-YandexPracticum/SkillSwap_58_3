@@ -15,6 +15,7 @@ import { ROUTES } from '@/shared/lib/constants'
 import { NotificationPanel } from '@/shared/ui/NotificationPanel'
 import { Footer } from '@/widgets/Footer'
 import { Header } from '@/widgets/Header'
+import { SkillsMenu } from '@/widgets/SkillsMenu'
 import type { HeaderProps } from '@/widgets/Header'
 import type { AppDispatch } from '@/store'
 import styles from './MainLayout.module.css'
@@ -114,6 +115,7 @@ export const MainLayout = ({
         onLogout={handleLogout}
         hasNewNotifications={restProps.hasNewNotifications ?? hasNewNotifications}
         notificationPanel={notificationPanel}
+        skillsMenu={(closeMenu) => <SkillsMenu onSelect={closeMenu} />}
         {...restProps}
       />
       <main className={styles.mainContent}>
