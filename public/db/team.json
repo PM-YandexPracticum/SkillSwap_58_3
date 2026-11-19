@@ -54,5 +54,13 @@
     "role": "Frontend develope",
     "description": "«Создание интерфейса платформы для обмена навыками: от верстки страниц до настройки клиентской логики и работы с данными»",
     "githubUrl": "https://github.com/Arkuk"
+  },
+  {
+    "id": "team-08",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/222091325?v=4",
+    "name": "Grigoriy",
+    "role": "Frontend developer",
+    "description": "Разработка UI-компонентов и форм, сборка страниц регистрации и ошибки сервера, работа со Storybook и SVG-спрайтом",
+    "githubUrl": "https://github.com/GrigoriySemenov"
   }
 ]
