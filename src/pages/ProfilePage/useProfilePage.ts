@@ -4,7 +4,7 @@ import {
   getRegisteredUsers,
   saveRegisteredUser,
 } from '@/features/auth/model/authUtils'
-import { checkSomeFieldsAndReturnError } from '@/shared/lib/helpers'
+import { checkSomeFieldsAndReturnError, mapFormDataToUser } from '@/shared/lib/helpers'
 import { User } from '@/shared/types'
 import { ProfileFormData } from '@/widgets/ProfileEditForm'
 import { ProfileMenuItemId } from '@/widgets/ProfileMenu'
@@ -18,13 +18,21 @@ export const useProfilePage = () => {
 
   const handleSave = (formdata: ProfileFormData, isPasswordVisible: boolean) => {
     const registredUsers = getRegisteredUsers()
-    const errors = checkSomeFieldsAndReturnError(formdata, isPasswordVisible, registredUsers)
+    const errors = checkSomeFieldsAndReturnError(
+      formdata,
+      isPasswordVisible,
+      registredUsers,
+      currentUser?.id,
+    )
 
     if (Object.keys(errors).length > 0) {
       setErrors(errors)
     } else {
-      saveRegisteredUser(formdata as User)
-      setCurrentUser((prev) => (prev ? { ...prev, ...formdata } : null))
+      if (currentUser) {
+        const mappedUser = mapFormDataToUser(formdata, currentUser)
+        saveRegisteredUser(mappedUser)
+        setCurrentUser((prev) => (prev ? { ...prev, ...mappedUser } : null))
+      }
     }
   }
 
@@ -33,6 +41,8 @@ export const useProfilePage = () => {
       setIsloading(true)
       const user = await fetchUserById(currentUserId)
       setCurrentUser(user || null)
+    } catch (err) {
+      console.error(err)
     } finally {
       setIsloading(false)
     }

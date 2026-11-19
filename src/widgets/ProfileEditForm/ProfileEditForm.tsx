@@ -96,6 +96,7 @@ export const ProfileEditForm = ({
       gender,
       town,
       description,
+      password: '',
     }
 
     if (isPasswordBlockVisible && password) {

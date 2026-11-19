@@ -3,7 +3,7 @@ import type { SelectOption } from '@/shared/ui/Select'
 
 export interface ProfileFormData {
   email: string
-  password?: string
+  password: string
   name: string
   birthday: string
   gender: Gender
