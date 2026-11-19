@@ -121,4 +121,11 @@ describe('SkillCard', () => {
     expect(screen.getByRole('status')).toHaveTextContent('Изображения отсутствуют')
     expect(screen.getByRole('button', { name: 'Предложить обмен' })).toBeEnabled()
   })
+
+  it('не отображает кнопку предложения обмена для собственного навыка', () => {
+    render(<SkillCard {...baseProps} isOwnSkill onAction={vi.fn()} />)
+
+    expect(screen.queryByRole('button', { name: 'Предложить обмен' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Обмен предложен' })).not.toBeInTheDocument()
+  })
 })

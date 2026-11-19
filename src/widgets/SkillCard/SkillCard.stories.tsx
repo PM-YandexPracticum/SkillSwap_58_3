@@ -101,6 +101,13 @@ export const LongContent: Story = {
   },
 }
 
+export const OwnSkill: Story = {
+  name: 'Собственный навык',
+  args: {
+    isOwnSkill: true,
+  },
+}
+
 export const Interactions: Story = {
   name: 'Лайк и предложение обмена',
   play: async ({ canvasElement, args }) => {

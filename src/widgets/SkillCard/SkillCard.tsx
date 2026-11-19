@@ -14,6 +14,7 @@ export function SkillCard({
   subcategoryName,
   isExchanged,
   isLiked = false,
+  isOwnSkill = false,
   onAction,
   className,
 }: SkillCardProps) {
@@ -26,7 +27,7 @@ export function SkillCard({
   }))
 
   function handleExchange() {
-    if (exchangeProposed) return
+    if (isOwnSkill || exchangeProposed) return
     setRequestedSkillId(skill.id)
     onAction('exchange')
   }
@@ -65,15 +66,17 @@ export function SkillCard({
             </p>
           </header>
           <p className={styles.description}>{skill.description}</p>
-          <Button
-            className={styles.exchangeButton}
-            variant={exchangeProposed ? 'outline' : 'primary'}
-            iconLeft={exchangeProposed ? <Icon name="clock" /> : undefined}
-            disabled={exchangeProposed}
-            onClick={handleExchange}
-          >
-            {exchangeProposed ? 'Обмен предложен' : 'Предложить обмен'}
-          </Button>
+          {!isOwnSkill && (
+            <Button
+              className={styles.exchangeButton}
+              variant={exchangeProposed ? 'outline' : 'primary'}
+              iconLeft={exchangeProposed ? <Icon name="clock" /> : undefined}
+              disabled={exchangeProposed}
+              onClick={handleExchange}
+            >
+              {exchangeProposed ? 'Обмен предложен' : 'Предложить обмен'}
+            </Button>
+          )}
         </div>
         <Carousel className={styles.gallery} images={images} />
       </div>
