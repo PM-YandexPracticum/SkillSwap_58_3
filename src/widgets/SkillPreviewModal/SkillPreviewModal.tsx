@@ -14,6 +14,7 @@ export const SkillPreviewModal = ({
   onEdit,
   onConfirm,
   onClose,
+  error,
 }: SkillPreviewModalProps) => {
   const headingId = useId()
   const { title, categoryName, subcategoryName, description, images } = skill
@@ -42,6 +43,11 @@ export const SkillPreviewModal = ({
             </p>
             <p className={styles.description}>{description}</p>
           </div>
+          {error && (
+            <p className={styles.error} role="alert">
+              {error}
+            </p>
+          )}
           <div className={styles.actions}>
             <Button
               variant="outline"

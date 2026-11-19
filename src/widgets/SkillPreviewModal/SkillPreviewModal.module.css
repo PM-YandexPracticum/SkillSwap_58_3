@@ -82,3 +82,9 @@
 .gallery {
   align-self: start;
 }
+
+.error {
+  margin: 0;
+  font-size: var(--font-size-16, 16px);
+  color: var(--color-error, #bf3920);
+}
