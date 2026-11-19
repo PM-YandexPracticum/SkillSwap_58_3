@@ -14,6 +14,7 @@ import filtersReducer, {
   setFilters,
   setSearch,
 } from '@/store/slices/filtersSlice'
+import catalogReducer from '@/store/slices/catalogSlice'
 import { DEFAULT_FILTERS } from '@/widgets/Filters/constants'
 import type { FiltersValues } from '@/widgets/Filters/interface'
 import { MemoryRouter } from 'react-router-dom'
@@ -36,6 +37,7 @@ function renderPage({ search = '', values }: { search?: string; values?: Filters
       auth: authReducer,
       favorites: favoritesReducer,
       filters: filtersReducer,
+      catalog: catalogReducer,
     },
   })
 

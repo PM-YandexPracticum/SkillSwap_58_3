@@ -4,6 +4,7 @@ import { Provider } from 'react-redux'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { Category, City, Skill, User } from '@/shared/types'
 import filtersReducer, { resetFilters, setFilters } from '@/store/slices/filtersSlice'
+import catalogReducer from '@/store/slices/catalogSlice'
 import { DEFAULT_FILTERS } from '@/widgets/Filters/constants'
 import CatalogPage from './index'
 import { MemoryRouter } from 'react-router-dom'
@@ -93,6 +94,7 @@ async function renderPage() {
       auth: authReducer,
       favorites: favoritesReducer,
       filters: filtersReducer,
+      catalog: catalogReducer,
     },
   })
 
