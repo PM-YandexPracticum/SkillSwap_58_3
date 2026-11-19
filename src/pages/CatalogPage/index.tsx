@@ -17,6 +17,7 @@ import type { Dictionaries } from '@/widgets/UserCard/types'
 import { useFavorites } from '@/features/favorites/model/useFavorites'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { resetFilters, selectFilters, selectSearch, setFilters } from '@/store/slices/filtersSlice'
+import { selectProposedUserIds } from '@/features/exchange/model/exchangeSlice'
 import { PaginatedSkillsSection } from './PaginatedSkillsSection'
 import styles from './CatalogPage.module.css'
 
@@ -36,6 +37,7 @@ export default function CatalogPage() {
   const dispatch = useAppDispatch()
   const filters = useAppSelector(selectFilters)
   const search = useAppSelector(selectSearch)
+  const proposedUserIds = useAppSelector(selectProposedUserIds)
   const [users, setUsers] = useState<User[]>([])
   const [skills, setSkills] = useState<Skill[]>([])
   const [categories, setCategories] = useState<Category[]>([])
@@ -80,8 +82,9 @@ export default function CatalogPage() {
           ...card,
           isLiked: isFavorite(card.id),
           onLike: () => toggle(card.id),
+          isExchangeProposed: proposedUserIds.includes(card.id),
         })),
-    [users, filters, search, skills, categories, dictionaries, isFavorite, toggle],
+    [users, filters, search, skills, categories, dictionaries, isFavorite, toggle, proposedUserIds],
   )
 
   // секции считаем до ранних возвратов и в useMemo: usePaginatedList сбрасывает показ,
