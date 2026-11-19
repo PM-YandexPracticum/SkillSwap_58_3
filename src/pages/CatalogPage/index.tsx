@@ -17,6 +17,8 @@ import { useCatalogData } from '@/store/useCatalogData'
 import { selectProposedUserIds } from '@/features/exchange/model/exchangeSlice'
 import { PaginatedSkillsSection } from './PaginatedSkillsSection'
 import styles from './CatalogPage.module.css'
+import { ROUTES } from '@/shared/lib/constants'
+import { generatePath, useNavigate } from 'react-router-dom'
 
 // количество карточек в секциях вынесено в именованные константы по требованию задачи
 const POPULAR_SECTION_SIZE = 3
@@ -36,6 +38,7 @@ export default function CatalogPage() {
   const search = useAppSelector(selectSearch)
   const proposedUserIds = useAppSelector(selectProposedUserIds)
   const { isFavorite, toggle } = useFavorites()
+  const navigate = useNavigate()
 
   // данные каталога берём из Redux-слайса через хук
   const { users, skills, categories, cities, isLoading, hasError } = useCatalogData()
@@ -51,13 +54,30 @@ export default function CatalogPage() {
       filterUsers({ users, filters, search, skills, categories })
         .map((user) => mapUserToCardData(user, dictionaries))
         .filter((card): card is CardData => card !== null)
-        .map((card) => ({
-          ...card,
-          isLiked: isFavorite(card.id),
-          onLike: () => toggle(card.id),
-          isExchangeProposed: proposedUserIds.includes(card.id),
-        })),
-    [users, filters, search, skills, categories, dictionaries, isFavorite, toggle, proposedUserIds],
+        .map((card) => {
+          const userSkill = skills.find((skill) => skill.authorId === card.id)
+          return {
+            ...card,
+            isLiked: isFavorite(card.id),
+            onLike: () => toggle(card.id),
+            onDetails: userSkill
+              ? () => navigate(generatePath(ROUTES.SKILL, { id: userSkill.id }))
+              : undefined,
+            isExchangeProposed: proposedUserIds.includes(card.id),
+          }
+        }),
+    [
+      users,
+      filters,
+      search,
+      skills,
+      categories,
+      dictionaries,
+      isFavorite,
+      toggle,
+      proposedUserIds,
+      navigate,
+    ],
   )
 
   // секции считаем до ранних возвратов и в useMemo: usePaginatedList сбрасывает показ,

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, generatePath } from 'react-router-dom'
 import { fetchCategories } from '@/api/categories'
 import { fetchCities } from '@/api/cities'
 import { fetchSkills } from '@/api/skills'
@@ -56,6 +56,7 @@ export default function FavoritesPage() {
 
   const favoriteCards: SkillsSectionItem[] = favoriteUsers.flatMap((user) => {
     const card = mapUserToCardData(user, { skills, categories, cities })
+    const userSkill = skills.find((skill) => skill.authorId === user.id)
 
     return card
       ? [
@@ -64,6 +65,9 @@ export default function FavoritesPage() {
             isLiked: true,
             isExchangeProposed: proposedUserIds.includes(card.id),
             onLike: () => toggle(user.id),
+            onDetails: userSkill
+              ? () => navigate(generatePath(ROUTES.SKILL, { id: userSkill.id }))
+              : undefined,
           },
         ]
       : []
