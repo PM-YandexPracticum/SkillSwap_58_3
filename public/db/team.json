@@ -1,5 +1,6 @@
 [
   {
+    "id": "team-01",
     "avatarUrl": "https://img.magnific.com/premium-photo/portrait-white-cat-floor_857956-339.jpg?semt=ais_hybrid",
     "name": "Anastasia",
     "role": "Frontend developer",
@@ -7,6 +8,7 @@
     "githubUrl": "https://github.com/AnastasiyaAlaska2001"
   },
   {
+    "id": "team-02",
     "avatarUrl": "https://avatars.githubusercontent.com/u/254585016?v=4",
     "name": "Alex",
     "role": "Frontend разработчик на все случаи жизни",
@@ -14,6 +16,7 @@
     "githubUrl": "https://github.com/alexzh323"
   },
   {
+    "id": "team-03",
     "avatarUrl": null,
     "name": "Artem",
     "role": "Frontend developer",
@@ -21,6 +24,7 @@
     "githubUrl": "https://github.com/qdjk6xbjby-source"
   },
   {
+    "id": "team-04",
     "avatarUrl": "https://avatars.githubusercontent.com/u/254094738?s=400&v=4",
     "name": "Daniil",
     "role": "Frontend developer",
@@ -28,10 +32,19 @@
     "githubUrl": "https://github.com/DaniilLysyy"
   },
   {
+    "id": "team-05",
     "avatarUrl": "https://avatars.githubusercontent.com/u/229342634?v=4",
     "name": "Mikhail",
     "role": "Frontend developer",
     "description": "Разработка виджетов и страниц, работа с формами, фильтрацией и пагинацией каталога, подключение регистрации и логики страниц",
     "githubUrl": "https://github.com/Mikhail-Varlamov"
+  },
+  {
+    "id": "team-06",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/253577231?v=4",
+    "name": "Tema",
+    "role": "Босс(Тимлид)",
+    "description": "В 16 лет занял второе место в турнире по боям без правил в тяжёлом весе - среди младенцев.В 17 лет окончил бакалавриат по специальности «Юрист»: специализация - разрешение ДТП между конями на МКАД.В 18 лет урегулировал международный конфликт между медведями и верблюдами.",
+    "githubUrl": "https://github.com/ElPeso228"
   }
 ]
