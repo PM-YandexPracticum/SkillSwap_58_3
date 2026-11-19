@@ -3,7 +3,7 @@ import type { SelectOption } from '@/shared/ui/Select'
 
 export interface ProfileFormData {
   email: string
-  password?: string
+  password: string
   name: string
   birthday: string
   gender: Gender
@@ -16,7 +16,7 @@ export type ProfileFormField = keyof ProfileFormData
 export interface ProfileEditFormProps {
   currentUser: User | null
   errors?: Partial<Record<ProfileFormField, string>>
-  onSave: (data: ProfileFormData) => void
+  onSave: (data: ProfileFormData, isPasswordBlockVisible: boolean) => void
   cityOptions?: SelectOption[]
   className?: string
 }

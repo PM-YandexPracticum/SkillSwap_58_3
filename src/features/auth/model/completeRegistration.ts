@@ -23,12 +23,6 @@ interface ThunkConfig {
   rejectValue: string
 }
 
-/**
- * Завершение регистрации: регистрирует пользователя, собирает навык из шага 3,
- * сохраняет навык в localStorage и добавляет обоих в каталог.
- * Если сохранение навыка не удалось — откатываем регистрацию,
- * пользователь не должен остаться наполовину созданным.
- */
 export const completeRegistration = createAsyncThunk<
   CompleteRegistrationResult,
   CompleteRegistrationArg,
@@ -45,7 +39,6 @@ export const completeRegistration = createAsyncThunk<
     return rejectWithValue('Не удалось найти созданного пользователя')
   }
 
-  // откат: убираем пользователя из реестра и сбрасываем сессию через редьюсер
   const rollback = () => {
     removeRegisteredUser(createdUser.id)
     dispatch(logout())

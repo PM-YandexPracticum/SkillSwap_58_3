@@ -81,12 +81,18 @@ export function getRegisteredUsers(): User[] {
   }
 }
 
-/** Добавляет mock-пользователя, сохраняя предыдущие регистрации. */
+/** Добавляет mock-пользователя или обновляет существующего по id. */
 export function saveRegisteredUser(user: User): void {
-  localStorage.setItem(
-    LOCAL_STORAGE_KEYS.REGISTERED_USERS,
-    JSON.stringify([...getRegisteredUsers(), user]),
-  )
+  const users = getRegisteredUsers()
+  const index = users.findIndex((existing) => existing.id === user.id)
+
+  if (index >= 0) {
+    users[index] = user
+  } else {
+    users.push(user)
+  }
+
+  localStorage.setItem(LOCAL_STORAGE_KEYS.REGISTERED_USERS, JSON.stringify(users))
 }
 
 /** Проверяет email среди исходных и зарегистрированных mock-пользователей. */
