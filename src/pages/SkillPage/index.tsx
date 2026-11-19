@@ -154,10 +154,7 @@ export default function SkillPage() {
         />
       </section>
       <SkillsSection title="Похожие предложения" items={similarItems} columns={4} />
-      <ExchangeProposedModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
+      <ExchangeProposedModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   )
 }

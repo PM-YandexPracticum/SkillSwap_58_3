@@ -4,6 +4,7 @@ import { fetchCategories } from '@/api/categories'
 import { fetchCities } from '@/api/cities'
 import { fetchSkills } from '@/api/skills'
 import { fetchUsers } from '@/api/users'
+import { getRegisteredSkills, getRegisteredUsers } from '@/features/auth/model/authUtils'
 import type { Category, City, LoadingStatus, Skill, User } from '@/shared/types'
 
 export interface CatalogState {
@@ -31,8 +32,8 @@ type CatalogPayload = {
   cities: City[]
 }
 
-// асинхронное действие загрузка всех данных каталога параллельно
-
+// асинхронное действие загрузка всех данных каталога параллельно;
+// к мокам подмешиваются зарегистрированные в этом браузере пользователи и навыки
 export const loadCatalogData = createAsyncThunk<
   CatalogPayload,
   void,
@@ -46,7 +47,12 @@ export const loadCatalogData = createAsyncThunk<
       fetchCategories(),
       fetchCities(),
     ])
-    return { users, skills, categories, cities }
+    return {
+      users: [...users, ...getRegisteredUsers()],
+      skills: [...skills, ...getRegisteredSkills()],
+      categories,
+      cities,
+    }
   },
   {
     condition: (_arg, { getState }) => {
@@ -59,7 +65,14 @@ export const loadCatalogData = createAsyncThunk<
 const catalogSlice = createSlice({
   name: 'catalog',
   initialState,
-  reducers: {},
+  reducers: {
+    userAdded(state, action: PayloadAction<User>) {
+      state.users.push(action.payload)
+    },
+    skillAdded(state, action: PayloadAction<Skill>) {
+      state.skills.push(action.payload)
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(loadCatalogData.pending, (state) => {
@@ -83,7 +96,9 @@ const catalogSlice = createSlice({
   },
 })
 
-// cелекторы сигнатура { catalog: CatalogState } совместима и с тестовым store, и с RootState
+export const { userAdded, skillAdded } = catalogSlice.actions
+
+// сигнатура { catalog: CatalogState } совместима и с тестовым store, и с RootState
 export const selectUsers = (state: { catalog: CatalogState }) => state.catalog.users
 export const selectSkills = (state: { catalog: CatalogState }) => state.catalog.skills
 export const selectCategories = (state: { catalog: CatalogState }) => state.catalog.categories

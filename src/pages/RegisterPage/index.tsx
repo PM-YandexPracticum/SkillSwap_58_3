@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import clsx from 'clsx'
 import { fetchCities } from '@/api/cities'
 import { fetchCategories } from '@/api/categories'
-import { registerUser } from '@/features/auth/model/authSlice'
+import { completeRegistration } from '@/features/auth/model/completeRegistration'
 import { isEmailTaken } from '@/features/auth/model/authUtils'
 import { getPasswordError } from '@/shared/lib/passwordValidation'
 import { ROUTES } from '@/shared/lib/constants'
@@ -119,14 +119,26 @@ export default function RegisterPage() {
     if (isValid) setPreviewOpen(true)
   }
 
+  // кнопка «Готово» в модалке: регистрация + сохранение навыка одним действием
   async function confirmRegistration() {
     setSubmitError('')
     try {
-      await dispatch(registerUser(buildRegisterPayload(credentials, profile))).unwrap()
+      await dispatch(
+        completeRegistration({
+          register: buildRegisterPayload(credentials, profile),
+          step3: skill,
+        }),
+      ).unwrap()
       navigate(ROUTES.HOME)
     } catch (rejected) {
-      // registerUser отклоняется строкой с текстом ошибки
-      setSubmitError(typeof rejected === 'string' ? rejected : REGISTER_ERRORS.registerFailed)
+      const message = typeof rejected === 'string' ? rejected : REGISTER_ERRORS.registerFailed
+      if (message === 'Пользователь с такой почтой уже зарегистрирован') {
+        setPreviewOpen(false)
+        setStep(1)
+        setStep1Errors({ email: message })
+        return
+      }
+      setSubmitError(message)
     }
   }
 
