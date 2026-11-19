@@ -1,3 +1,4 @@
+import { getRegisteredUsers } from '@/features/auth/model/authUtils'
 import type { User } from '@/shared/types'
 
 const BASE_URL = '/db'
@@ -9,6 +10,10 @@ export async function fetchUsers(): Promise<User[]> {
 }
 
 export async function fetchUserById(id: string): Promise<User | undefined> {
+  const saved = getRegisteredUsers().find((user) => user.id === id)
+
+  if (saved) return saved
+
   const users = await fetchUsers()
   return users.find((user) => user.id === id)
 }

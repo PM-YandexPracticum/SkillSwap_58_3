@@ -87,4 +87,16 @@ describe('SkillPreviewModal', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
     expect(screen.queryByText('Рисование акварелью')).not.toBeInTheDocument()
   })
+
+  it('shows the error text when error is passed', () => {
+    render(<SkillPreviewModal {...createProps()} error="Не удалось зарегистрироваться" />)
+
+    expect(screen.getByRole('alert')).toHaveTextContent('Не удалось зарегистрироваться')
+  })
+
+  it('shows no alert without error', () => {
+    render(<SkillPreviewModal {...createProps()} />)
+
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+  })
 })

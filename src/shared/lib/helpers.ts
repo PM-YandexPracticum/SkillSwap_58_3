@@ -27,7 +27,7 @@ export function checkSomeFieldsAndReturnError(
   formData: ProfileFormData,
   isPasswordVisible: boolean,
   allUsers: User[],
-  currentUserId: string | undefined,
+  currentUserId?: string,
 ) {
   const errors = {} as Partial<Record<ProfileFormField, string>>
 
@@ -35,14 +35,20 @@ export function checkSomeFieldsAndReturnError(
 
   if (errorEmail) {
     errors.email = errorEmail
-  } else if (allUsers.some((user) => user.email === formData.email && user.id !== currentUserId)) {
+  } else if (
+    allUsers.some(
+      (user) =>
+        user.id !== currentUserId &&
+        user.email.trim().toLowerCase() === formData.email.trim().toLowerCase(),
+    )
+  ) {
     errors.email = 'Почта уже существует'
   }
 
-  if (!formData.name) errors.name = 'Введите имя'
+  if (!formData.name.trim()) errors.name = 'Введите имя'
 
-  if (isPasswordVisible) {
-    const errorPassword = getPasswordError(formData.password ?? '')
+  if (isPasswordVisible && formData.password) {
+    const errorPassword = getPasswordError(formData.password)
     if (errorPassword) errors.password = errorPassword
   }
 
@@ -50,11 +56,7 @@ export function checkSomeFieldsAndReturnError(
 }
 
 export const mapFormDataToUser = (formData: ProfileFormData, user: User): User => ({
-  avatarUrl: user.avatarUrl,
-  id: user.id,
-  createdAt: user.createdAt,
-  likedCount: user.likedCount,
-  favourites: user.favourites,
-  learn: user.learn,
+  ...user,
   ...formData,
+  password: formData.password || user.password,
 })

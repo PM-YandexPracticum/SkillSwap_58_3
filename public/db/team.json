@@ -1,0 +1,82 @@
+[
+  {
+    "id": "team-01",
+    "avatarUrl": "https://img.magnific.com/premium-photo/portrait-white-cat-floor_857956-339.jpg?semt=ais_hybrid",
+    "name": "Anastasia",
+    "role": "Frontend developer",
+    "description": "Frontend разработчик (React, Redux, TypeScript), создаю устойчивые компоненты, покрываю их историями в Storybook",
+    "githubUrl": "https://github.com/AnastasiyaAlaska2001"
+  },
+  {
+    "id": "team-02",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/254585016?v=4",
+    "name": "Alex",
+    "role": "Frontend разработчик на все случаи жизни",
+    "description": "Подключение шрифтов, настройка css-переменных, создание компонентов, сборка виджетов и страниц, настройка логики страницы, маршрутизация, поиск багов, работа со Storybook и юнит-тестами",
+    "githubUrl": "https://github.com/alexzh323"
+  },
+  {
+    "id": "team-03",
+    "avatarUrl": null,
+    "name": "Artem",
+    "role": "Frontend developer",
+    "description": "Разработка компонентов, верстка страниц, интеграция данных обмена навыками и клиентской логики",
+    "githubUrl": "https://github.com/qdjk6xbjby-source"
+  },
+  {
+    "id": "team-04",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/254094738?s=400&v=4",
+    "name": "Daniil",
+    "role": "Frontend developer",
+    "description": "Реализация функциональности избранного, работа с Redux и localStorage, подключение интерактивных элементов интерфейса",
+    "githubUrl": "https://github.com/DaniilLysyy"
+  },
+  {
+    "id": "team-05",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/229342634?v=4",
+    "name": "Mikhail",
+    "role": "Frontend developer",
+    "description": "Разработка виджетов и страниц, работа с формами, фильтрацией и пагинацией каталога, подключение регистрации и логики страниц",
+    "githubUrl": "https://github.com/Mikhail-Varlamov"
+  },
+  {
+    "id": "team-06",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/253577231?v=4",
+    "name": "Tema",
+    "role": "Босс(Тимлид)",
+    "description": "В 16 лет занял второе место в турнире по боям без правил в тяжёлом весе - среди младенцев.В 17 лет окончил бакалавриат по специальности «Юрист»: специализация - разрешение ДТП между конями на МКАД.В 18 лет урегулировал международный конфликт между медведями и верблюдами.",
+    "githubUrl": "https://github.com/ElPeso228"
+  },
+  {
+    "id": "team-07",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/36478605?v=4",
+    "name": "Artur",
+    "role": "Frontend develope",
+    "description": "«Создание интерфейса платформы для обмена навыками: от верстки страниц до настройки клиентской логики и работы с данными»",
+    "githubUrl": "https://github.com/Arkuk"
+  },
+  {
+    "id": "team-08",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/222091325?v=4",
+    "name": "Grigoriy",
+    "role": "Frontend developer",
+    "description": "Разработка UI-компонентов и форм, сборка страниц регистрации и ошибки сервера, работа со Storybook и SVG-спрайтом",
+    "githubUrl": "https://github.com/GrigoriySemenov"
+  },
+  {
+    "id": "team-09",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/223256709?v=4",
+    "name": "Vladislav",
+    "role": "Помощник тимлида",
+    "description": "Победил конфликт слияния в турнире без правил. Защитил диссертацию «Почему тесты красные, а код работает». Назначен главным по фразе «а ты ветку от develop создал?»",
+    "githubUrl": "https://github.com/pvln-vlad"
+  },
+  {
+    "id": "team-10",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/112405335?v=4",
+    "name": "Ilia",
+    "role": "Тот кто всегда находит себе задачи (Frontend developer)",
+    "description": "Поднял всем настроение в чате, посмотрел мемы с котами, но и не забыл насладиться кодом в своей ветке",
+    "githubUrl": "https://github.com/IliaShadilow"
+  }
+]

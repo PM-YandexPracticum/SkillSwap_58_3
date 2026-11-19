@@ -1,9 +1,5 @@
-import { useEffect, useMemo, useState } from 'react'
-import { fetchCategories } from '@/api/categories'
-import { fetchCities } from '@/api/cities'
-import { fetchSkills } from '@/api/skills'
-import { fetchUsers } from '@/api/users'
-import type { Category, City, Skill, User } from '@/shared/types'
+import { useMemo } from 'react'
+import type { User } from '@/shared/types'
 import { Button } from '@/shared/ui/Button'
 import { FilterChip } from '@/shared/ui/FilterChip'
 import { Icon } from '@/shared/ui/icons'
@@ -17,6 +13,8 @@ import type { Dictionaries } from '@/widgets/UserCard/types'
 import { useFavorites } from '@/features/favorites/model/useFavorites'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { resetFilters, selectFilters, selectSearch, setFilters } from '@/store/slices/filtersSlice'
+import { useCatalogData } from '@/store/useCatalogData'
+import { selectProposedUserIds } from '@/features/exchange/model/exchangeSlice'
 import { PaginatedSkillsSection } from './PaginatedSkillsSection'
 import styles from './CatalogPage.module.css'
 
@@ -36,34 +34,11 @@ export default function CatalogPage() {
   const dispatch = useAppDispatch()
   const filters = useAppSelector(selectFilters)
   const search = useAppSelector(selectSearch)
-  const [users, setUsers] = useState<User[]>([])
-  const [skills, setSkills] = useState<Skill[]>([])
-  const [categories, setCategories] = useState<Category[]>([])
-  const [cities, setCities] = useState<City[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [hasError, setHasError] = useState(false)
+  const proposedUserIds = useAppSelector(selectProposedUserIds)
   const { isFavorite, toggle } = useFavorites()
 
-  useEffect(() => {
-    let isMounted = true
-    Promise.all([fetchUsers(), fetchSkills(), fetchCategories(), fetchCities()])
-      .then(([usersData, skillsData, categoriesData, citiesData]) => {
-        if (!isMounted) return
-        setUsers(usersData)
-        setSkills(skillsData)
-        setCategories(categoriesData)
-        setCities(citiesData)
-      })
-      .catch(() => {
-        if (isMounted) setHasError(true)
-      })
-      .finally(() => {
-        if (isMounted) setIsLoading(false)
-      })
-    return () => {
-      isMounted = false
-    }
-  }, [])
+  // данные каталога берём из Redux-слайса через хук
+  const { users, skills, categories, cities, isLoading, hasError } = useCatalogData()
 
   // словари для преобразования пользователей в карточки
   const dictionaries: Dictionaries = useMemo(
@@ -80,8 +55,9 @@ export default function CatalogPage() {
           ...card,
           isLiked: isFavorite(card.id),
           onLike: () => toggle(card.id),
+          isExchangeProposed: proposedUserIds.includes(card.id),
         })),
-    [users, filters, search, skills, categories, dictionaries, isFavorite, toggle],
+    [users, filters, search, skills, categories, dictionaries, isFavorite, toggle, proposedUserIds],
   )
 
   // секции считаем до ранних возвратов и в useMemo: usePaginatedList сбрасывает показ,

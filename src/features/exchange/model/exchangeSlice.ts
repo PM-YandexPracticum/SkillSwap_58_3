@@ -14,9 +14,14 @@ interface ExchangeRootState {
   exchange: ExchangeState
 }
 
-const selectRequests = (state: ExchangeRootState) => state.exchange.requests
-const selectNotifications = (state: ExchangeRootState) => state.exchange.notifications
-const selectCurrentUserId = (state: ExchangeRootState) => state.auth.user?.id
+const EMPTY_REQUESTS: SwapRequest[] = []
+const EMPTY_NOTIFICATIONS: StoredNotification[] = []
+
+const selectRequests = (state: { exchange?: ExchangeState }) =>
+  state.exchange?.requests ?? EMPTY_REQUESTS
+const selectNotifications = (state: { exchange?: ExchangeState }) =>
+  state.exchange?.notifications ?? EMPTY_NOTIFICATIONS
+const selectCurrentUserId = (state: { auth?: { user: AuthUser | null } }) => state.auth?.user?.id
 
 export const selectProposedUserIds = createSelector(
   [selectRequests, selectCurrentUserId],

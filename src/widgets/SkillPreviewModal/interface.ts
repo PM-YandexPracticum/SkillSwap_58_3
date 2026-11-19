@@ -18,4 +18,6 @@ export interface SkillPreviewModalProps {
   /** Вызывается по кнопке «Готово» */
   onConfirm: () => void
   onClose: () => void
+  /** Текст ошибки, показывается над кнопками */
+  error?: string
 }

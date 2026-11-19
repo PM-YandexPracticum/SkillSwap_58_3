@@ -5,6 +5,7 @@ import { fetchCities } from '@/api/cities'
 import { fetchSkills } from '@/api/skills'
 import { fetchUsers } from '@/api/users'
 import type { Category, City, Skill, User } from '@/shared/types'
+import { LOCAL_STORAGE_KEYS } from '@/shared/lib/constants'
 import catalogReducer, {
   loadCatalogData,
   selectCatalogError,
@@ -125,5 +126,39 @@ describe('catalogSlice', () => {
     expect(fetchCategories).toHaveBeenCalledTimes(1)
     expect(fetchCities).toHaveBeenCalledTimes(1)
     expect(selectCatalogStatus(store.getState())).toBe('succeeded')
+  })
+
+  it('подмешивает зарегистрированных пользователей и навыки к мокам при загрузке', async () => {
+    const values = new Map<string, string>()
+    const storage = {
+      get length() {
+        return values.size
+      },
+      key: (index: number) => [...values.keys()][index] ?? null,
+      getItem: (key: string) => values.get(key) ?? null,
+      setItem: (key: string, value: string) => {
+        values.set(key, value)
+      },
+      removeItem: (key: string) => {
+        values.delete(key)
+      },
+      clear: () => values.clear(),
+    } satisfies Storage
+    vi.stubGlobal('localStorage', storage)
+    const registeredUser: User = {
+      ...seededUser,
+      id: 'registered-user',
+      email: 'local@example.com',
+    }
+    const registeredSkill: Skill = { ...seededSkill, id: 'skill-2', authorId: 'registered-user' }
+    storage.setItem(LOCAL_STORAGE_KEYS.REGISTERED_USERS, JSON.stringify([registeredUser]))
+    storage.setItem(LOCAL_STORAGE_KEYS.REGISTERED_SKILLS, JSON.stringify([registeredSkill]))
+
+    const store = createStore()
+    await store.dispatch(loadCatalogData())
+
+    expect(selectUsers(store.getState())).toEqual([seededUser, registeredUser])
+    expect(selectSkills(store.getState())).toEqual([seededSkill, registeredSkill])
+    vi.unstubAllGlobals()
   })
 })

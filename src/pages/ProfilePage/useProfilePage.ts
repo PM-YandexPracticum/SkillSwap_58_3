@@ -2,6 +2,7 @@ import { fetchUserById } from '@/api/users'
 import {
   getAuthUser,
   getRegisteredUsers,
+  saveAuthUser,
   saveRegisteredUser,
 } from '@/features/auth/model/authUtils'
 import { checkSomeFieldsAndReturnError, mapFormDataToUser } from '@/shared/lib/helpers'
@@ -13,46 +14,52 @@ import { useCallback, useEffect, useState } from 'react'
 export const useProfilePage = () => {
   const [activeItem, setActiveItem] = useState<ProfileMenuItemId>('personal')
   const [currentUser, setCurrentUser] = useState<User | null>(null)
-  const [isLoading, setIsloading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const [errors, setErrors] = useState<Partial<Record<keyof ProfileFormData, string>> | undefined>()
 
-  const handleSave = (formdata: ProfileFormData, isPasswordVisible: boolean) => {
-    const registredUsers = getRegisteredUsers()
-    const errors = checkSomeFieldsAndReturnError(
-      formdata,
+  const handleSave = (formData: ProfileFormData, isPasswordVisible: boolean) => {
+    if (!currentUser) return
+
+    const registeredUsers = getRegisteredUsers()
+
+    const validationErrors = checkSomeFieldsAndReturnError(
+      formData,
       isPasswordVisible,
-      registredUsers,
-      currentUser?.id,
+      registeredUsers,
+      currentUser.id,
     )
 
-    if (Object.keys(errors).length > 0) {
-      setErrors(errors)
-    } else {
-      if (currentUser) {
-        const mappedUser = mapFormDataToUser(formdata, currentUser)
-        saveRegisteredUser(mappedUser)
-        setCurrentUser((prev) => (prev ? { ...prev, ...mappedUser } : null))
-      }
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors)
+      return
     }
+
+    setErrors(undefined)
+
+    const mappedUser = mapFormDataToUser(formData, currentUser)
+
+    saveRegisteredUser(mappedUser)
+    saveAuthUser({ id: mappedUser.id, name: mappedUser.name, email: mappedUser.email })
+    setCurrentUser(mappedUser)
   }
 
   const getUser = useCallback(async (currentUserId: string) => {
     try {
-      setIsloading(true)
+      setIsLoading(true)
       const user = await fetchUserById(currentUserId)
-      setCurrentUser(user || null)
-    } catch (err) {
-      console.error(err)
+      setCurrentUser(user ?? null)
+    } catch {
+      setCurrentUser(null)
     } finally {
-      setIsloading(false)
+      setIsLoading(false)
     }
   }, [])
 
   useEffect(() => {
-    const currentUser = getAuthUser()
+    const authUser = getAuthUser()
 
-    if (currentUser) {
-      getUser(currentUser.id)
+    if (authUser) {
+      getUser(authUser.id)
     }
   }, [getUser])
 
@@ -61,7 +68,6 @@ export const useProfilePage = () => {
     setActiveItem,
     currentUser,
     isLoading,
-    setIsloading,
     errors,
     handleSave,
   }
