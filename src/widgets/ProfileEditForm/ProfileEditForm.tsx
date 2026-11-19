@@ -1,9 +1,12 @@
-import { useEffect, useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'react'
 import clsx from 'clsx'
 import type { Gender } from '@/shared/types'
+import { filesToDataUrls } from '@/shared/lib/filesToDataUrls'
+import { Avatar } from '@/shared/ui/Avatar'
 import { Button } from '@/shared/ui/Button'
 import { DatePicker } from '@/shared/ui/DatePicker'
 import { FormField } from '@/shared/ui/FormField'
+import { Icon } from '@/shared/ui/icons'
 import { Input } from '@/shared/ui/Input'
 import { Select, type SelectOption } from '@/shared/ui/Select'
 import { Textarea } from '@/shared/ui/Textarea'
@@ -49,9 +52,14 @@ export const ProfileEditForm = ({
   currentUser,
   errors,
   onSave,
+  onAvatarChange,
   cityOptions = DEFAULT_CITIES,
   className,
 }: ProfileEditFormProps) => {
+  const [avatarUrl, setAvatarUrl] = useState(currentUser?.avatarUrl ?? '')
+  const [avatarError, setAvatarError] = useState<string | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
   const [email, setEmail] = useState(currentUser?.email ?? '')
   const [name, setName] = useState(currentUser?.name ?? '')
   const [birthday, setBirthday] = useState<Date | null>(parseDate(currentUser?.birthday))
@@ -69,6 +77,7 @@ export const ProfileEditForm = ({
 
   useEffect(() => {
     if (currentUser) {
+      setAvatarUrl(currentUser.avatarUrl ?? '')
       setEmail(currentUser.email ?? '')
       setName(currentUser.name ?? '')
       setBirthday(parseDate(currentUser.birthday))
@@ -85,6 +94,32 @@ export const ProfileEditForm = ({
       }
     }
   }, [currentUser, cityOptions])
+
+  const handleUploadClick = () => {
+    fileInputRef.current?.click()
+  }
+
+  const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    if (file.size > 2 * 1024 * 1024) {
+      setAvatarError('Максимальный размер файла — 2 МБ')
+      event.target.value = ''
+      return
+    }
+
+    try {
+      const [dataUrl] = await filesToDataUrls([file])
+      setAvatarUrl(dataUrl)
+      setAvatarError(null)
+      onAvatarChange?.(dataUrl)
+    } catch {
+      setAvatarError('Ошибка при загрузке изображения')
+    } finally {
+      event.target.value = ''
+    }
+  }
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -109,125 +144,163 @@ export const ProfileEditForm = ({
   }
 
   return (
-    <form className={clsx(styles.form, className)} onSubmit={handleSubmit} noValidate>
-      <FormField
-        id="profile-email"
-        label="Почта"
-        error={errors?.email}
-        className={clsx(styles.fieldWrapper, errors?.email && styles.hasError)}
-      >
-        <Input
-          id="profile-email"
-          label=""
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          iconRight="edit"
-          readOnly={!isEditable.email}
-          onRightIconClick={() => setIsEditable((prev) => ({ ...prev, email: !prev.email }))}
-        />
-      </FormField>
-
-      <Button
-        variant="link"
-        type="button"
-        className={styles.passwordToggle}
-        onClick={() => setIsPasswordBlockVisible((prev) => !prev)}
-      >
-        Изменить пароль
-      </Button>
-
-      {isPasswordBlockVisible && (
+    <div className={clsx(styles.personalDataLayout, className)}>
+      <form className={styles.form} onSubmit={handleSubmit} noValidate>
         <FormField
-          id="profile-password"
-          label="Пароль"
-          error={errors?.password}
-          className={clsx(styles.fieldWrapper, errors?.password && styles.hasError)}
+          id="profile-email"
+          label="Почта"
+          error={errors?.email}
+          className={clsx(styles.fieldWrapper, errors?.email && styles.hasError)}
         >
           <Input
-            id="profile-password"
+            id="profile-email"
             label=""
-            type="password"
-            placeholder="Введите новый пароль"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            iconRight="edit"
+            readOnly={!isEditable.email}
+            onRightIconClick={() => setIsEditable((prev) => ({ ...prev, email: !prev.email }))}
           />
         </FormField>
-      )}
 
-      <FormField
-        id="profile-name"
-        label="Имя"
-        error={errors?.name}
-        className={clsx(styles.fieldWrapper, errors?.name && styles.hasError)}
-      >
-        <Input
-          id="profile-name"
-          label=""
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          iconRight="edit"
-          readOnly={!isEditable.name}
-          onRightIconClick={() => setIsEditable((prev) => ({ ...prev, name: !prev.name }))}
-        />
-      </FormField>
-
-      <div className={styles.row}>
-        <FormField
-          id="profile-birthday"
-          label="Дата рождения"
-          error={errors?.birthday}
-          className={clsx(styles.fieldWrapper, errors?.birthday && styles.hasError)}
+        <Button
+          variant="link"
+          type="button"
+          className={styles.passwordToggle}
+          onClick={() => setIsPasswordBlockVisible((prev) => !prev)}
         >
-          <DatePicker label="" value={birthday} onChange={setBirthday} placeholder="дд.мм.гггг" />
+          Изменить пароль
+        </Button>
+
+        {isPasswordBlockVisible && (
+          <FormField
+            id="profile-password"
+            label="Пароль"
+            error={errors?.password}
+            className={clsx(styles.fieldWrapper, errors?.password && styles.hasError)}
+          >
+            <Input
+              id="profile-password"
+              label=""
+              type="password"
+              placeholder="Введите новый пароль"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </FormField>
+        )}
+
+        <FormField
+          id="profile-name"
+          label="Имя"
+          error={errors?.name}
+          className={clsx(styles.fieldWrapper, errors?.name && styles.hasError)}
+        >
+          <Input
+            id="profile-name"
+            label=""
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            iconRight="edit"
+            readOnly={!isEditable.name}
+            onRightIconClick={() => setIsEditable((prev) => ({ ...prev, name: !prev.name }))}
+          />
         </FormField>
 
+        <div className={styles.row}>
+          <FormField
+            id="profile-birthday"
+            label="Дата рождения"
+            error={errors?.birthday}
+            className={clsx(styles.fieldWrapper, errors?.birthday && styles.hasError)}
+          >
+            <DatePicker label="" value={birthday} onChange={setBirthday} placeholder="дд.мм.гггг" />
+          </FormField>
+
+          <FormField
+            id="profile-gender"
+            label="Пол"
+            error={errors?.gender}
+            className={clsx(styles.fieldWrapper, errors?.gender && styles.hasError)}
+          >
+            <Select
+              id="profile-gender"
+              label=""
+              options={GENDER_OPTIONS}
+              value={gender}
+              onChange={(val) => setGender(val as Gender)}
+            />
+          </FormField>
+        </div>
+
         <FormField
-          id="profile-gender"
-          label="Пол"
-          error={errors?.gender}
-          className={clsx(styles.fieldWrapper, errors?.gender && styles.hasError)}
+          id="profile-town"
+          label="Город"
+          error={errors?.town}
+          className={clsx(styles.fieldWrapper, errors?.town && styles.hasError)}
         >
           <Select
-            id="profile-gender"
+            id="profile-town"
             label=""
-            options={GENDER_OPTIONS}
-            value={gender}
-            onChange={(val) => setGender(val as Gender)}
+            options={cityOptions}
+            value={town}
+            onChange={setTown}
           />
         </FormField>
+
+        <FormField
+          id="profile-description"
+          label="О себе"
+          error={errors?.description}
+          className={clsx(styles.fieldWrapper, errors?.description && styles.hasError)}
+        >
+          <Textarea
+            label=""
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            iconRight="edit"
+            readOnly={!isEditable.description}
+            onIconRightClick={() =>
+              setIsEditable((prev) => ({ ...prev, description: !prev.description }))
+            }
+            rows={4}
+          />
+        </FormField>
+
+        <Button type="submit" variant="primary" className={styles.submitButton}>
+          Сохранить
+        </Button>
+      </form>
+
+      <div className={styles.avatarWrapper}>
+        <div className={styles.avatarContainer}>
+          <Avatar
+            size="extraLarge"
+            src={avatarUrl || undefined}
+            alt={name || 'Аватар пользователя'}
+          />
+          <button
+            type="button"
+            className={styles.avatarButton}
+            aria-label="Изменить фото"
+            onClick={handleUploadClick}
+          >
+            <Icon name="gallery-add" focusable="false" />
+          </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/jpeg,image/png"
+            className={styles.fileInput}
+            onChange={handleFileChange}
+          />
+        </div>
+        {avatarError && (
+          <span className={styles.avatarError} role="alert">
+            {avatarError}
+          </span>
+        )}
       </div>
-
-      <FormField
-        id="profile-town"
-        label="Город"
-        error={errors?.town}
-        className={clsx(styles.fieldWrapper, errors?.town && styles.hasError)}
-      >
-        <Select id="profile-town" label="" options={cityOptions} value={town} onChange={setTown} />
-      </FormField>
-
-      <FormField
-        id="profile-description"
-        label="О себе"
-        error={errors?.description}
-        className={clsx(styles.fieldWrapper, errors?.description && styles.hasError)}
-      >
-        <Textarea
-          label=""
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          iconRight="edit"
-          readOnly={!isEditable.description}
-          onIconRightClick={() =>
-            setIsEditable((prev) => ({ ...prev, description: !prev.description }))
-          }
-          rows={4}
-        />
-      </FormField>
-
-      <Button type="submit" variant="primary" className={styles.submitButton}>
-        Сохранить
-      </Button>
-    </form>
+    </div>
   )
 }

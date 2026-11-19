@@ -23,5 +23,5 @@ export interface RegisterStep2FormProps {
   onAvatarAdd: () => void
   onBack: () => void
   onSubmit: () => void
-  categories: Category[]
+  categories?: Category[]
 }

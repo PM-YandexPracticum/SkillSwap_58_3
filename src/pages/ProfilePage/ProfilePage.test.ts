@@ -68,4 +68,26 @@ describe('useProfilePage', () => {
       }),
     )
   })
+
+  it('обновляет аватар и сохраняет его в localStorage', async () => {
+    const { result } = renderHook(() => useProfilePage())
+
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0))
+    })
+
+    await act(async () => {
+      result.current.handleAvatarChange('data:image/png;base64,new-avatar')
+    })
+
+    const users = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEYS.REGISTERED_USERS) || '[]')
+
+    expect(users).toContainEqual(
+      expect.objectContaining({
+        id: '1',
+        avatarUrl: 'data:image/png;base64,new-avatar',
+      }),
+    )
+    expect(result.current.currentUser?.avatarUrl).toBe('data:image/png;base64,new-avatar')
+  })
 })
