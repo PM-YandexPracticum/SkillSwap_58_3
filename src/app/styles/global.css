@@ -140,6 +140,7 @@ body {
   background-color: var(--color-bg-main);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  width: 1400px;
 }
 
 a {
